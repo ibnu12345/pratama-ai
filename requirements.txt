@@ -2,3 +2,5 @@ flask
 groq
 gunicorn
 python-dotenv
+flask-sqlalchemy
+fpdf2

@@ -1,516 +1,252 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PratamaAI — Asisten PAI</title>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <style>
-    :root {
-      --green-deep:   #1a3a2a;
-      --green-mid:    #2d6a4f;
-      --green-light:  #52b788;
-      --green-pale:   #d8f3dc;
-      --gold:         #c9a84c;
-      --gold-light:   #f0d080;
-      --cream:        #faf7f0;
-      --cream-dark:   #f0ebe0;
-      --text-dark:    #1c1c1c;
-      --text-mid:     #4a4a4a;
-      --text-muted:   #8a8a8a;
-      --white:        #ffffff;
-      --shadow:       0 4px 24px rgba(26,58,42,0.10);
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background: var(--cream);
-      color: var(--text-dark);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    body::before {
-      content: '';
-      position: fixed; inset: 0;
-      background:
-        radial-gradient(ellipse 60% 40% at 10% 0%, rgba(82,183,136,0.10) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 50% at 90% 100%, rgba(201,168,76,0.08) 0%, transparent 60%);
-      pointer-events: none; z-index: 0;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PratamaAI - Asisten Pembelajaran Islam</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f5f0; height: 100vh; display: flex; flex-direction: column; }
 
-    header {
-      background: var(--green-deep);
-      color: var(--white);
-      padding: 0 1.5rem;
-      display: flex; align-items: center; justify-content: space-between;
-      height: 68px;
-      position: sticky; top: 0; z-index: 100;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.25);
-    }
-    .header-brand { display: flex; align-items: center; gap: 12px; }
-    .logo-icon {
-      width: 40px; height: 40px;
-      background: linear-gradient(135deg, var(--gold), var(--gold-light));
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem;
-      box-shadow: 0 2px 8px rgba(201,168,76,0.4);
-      flex-shrink: 0;
-    }
-    .brand-text h1 { font-family: 'Amiri', serif; font-size: 1.3rem; color: var(--gold-light); line-height: 1; }
-    .brand-text p { font-size: 0.68rem; color: rgba(255,255,255,0.55); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
-    .header-arabic { font-family: 'Amiri', serif; font-size: 1.1rem; color: var(--gold); opacity: 0.8; }
+        .header { background: linear-gradient(135deg, #1a5c38, #2d8653); color: white; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .logo { width: 42px; height: 42px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .header-text h1 { font-size: 18px; font-weight: 700; }
+        .header-text p { font-size: 11px; opacity: 0.85; }
+        .header-right { display: flex; gap: 8px; }
+        .btn-header { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: white; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 12px; }
+        .btn-header:hover { background: rgba(255,255,255,0.3); }
 
-    main {
-      flex: 1; display: flex; flex-direction: column;
-      max-width: 820px; width: 100%;
-      margin: 0 auto; padding: 1.5rem 1rem 0;
-      position: relative; z-index: 1;
-    }
+        .chat-area { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
 
-    #chat-window {
-      flex: 1; overflow-y: auto;
-      padding: 0.5rem 0 1rem;
-      display: flex; flex-direction: column; gap: 1rem;
-      min-height: 300px; max-height: calc(100vh - 220px);
-      scroll-behavior: smooth;
-    }
-    #chat-window::-webkit-scrollbar { width: 5px; }
-    #chat-window::-webkit-scrollbar-thumb { background: var(--green-light); border-radius: 10px; }
+        .bubble-wrap { display: flex; flex-direction: column; }
+        .bubble-wrap.user { align-items: flex-end; }
+        .bubble-wrap.ai { align-items: flex-start; }
 
-    .welcome-card {
-      background: var(--white);
-      border: 1px solid rgba(82,183,136,0.2);
-      border-radius: 20px; padding: 2rem;
-      text-align: center; box-shadow: var(--shadow);
-      animation: fadeUp 0.5s ease;
-    }
-    .welcome-arabic { font-family: 'Amiri', serif; font-size: 2rem; color: var(--green-mid); margin-bottom: 0.5rem; line-height: 1.4; }
-    .welcome-card h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.4rem; }
-    .welcome-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.7; max-width: 480px; margin: 0 auto 0.4rem; }
-    .welcome-dev { font-size: 0.74rem; color: var(--gold); font-weight: 600; margin-bottom: 1.2rem; }
-    .welcome-topics { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-    .topic-chip {
-      background: var(--green-pale); color: var(--green-mid);
-      font-size: 0.75rem; font-weight: 500;
-      padding: 5px 14px; border-radius: 20px;
-      cursor: pointer; transition: all 0.2s; border: 1px solid transparent;
-    }
-    .topic-chip:hover { background: var(--green-mid); color: var(--white); transform: translateY(-1px); }
+        .bubble { max-width: 78%; padding: 14px 18px; border-radius: 18px; font-size: 14px; line-height: 1.8; }
+        .bubble.user { background: #2d8653; color: white; border-bottom-right-radius: 4px; }
+        .bubble.ai { background: white; color: #2c2c2c; border-bottom-left-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
 
-    .msg-row { display: flex; gap: 10px; animation: fadeUp 0.3s ease; }
-    .msg-row.user { flex-direction: row-reverse; }
+        .nama-ai { font-size: 11px; font-weight: 700; color: #1a5c38; margin-bottom: 6px; display: flex; align-items: center; gap: 4px; }
 
-    .avatar {
-      width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center; font-size: 1rem;
-    }
-    .avatar.ai  { background: linear-gradient(135deg, var(--green-mid), var(--green-light)); }
-    .avatar.usr { background: linear-gradient(135deg, var(--gold), var(--gold-light)); }
+        .bubble.ai p { margin-bottom: 10px; }
+        .bubble.ai p:last-child { margin-bottom: 0; }
+        .bubble.ai .arab { font-family: 'Traditional Arabic', 'Arial Unicode MS', serif; font-size: 18px; direction: rtl; text-align: right; display: block; margin: 8px 0; color: #1a5c38; line-height: 2; }
+        .bubble.ai .dalil { background: #f0f7f0; border-left: 3px solid #2d8653; padding: 8px 12px; border-radius: 4px; margin: 8px 0; font-style: italic; font-size: 13px; }
 
-    .bubble {
-      max-width: 78%; padding: 0.85rem 1.1rem;
-      border-radius: 18px; font-size: 0.88rem; line-height: 1.75;
-      box-shadow: var(--shadow);
-    }
-    .bubble.ai {
-      background: var(--white);
-      border: 1px solid rgba(82,183,136,0.15);
-      border-top-left-radius: 4px; color: var(--text-dark);
-    }
-    .bubble.user { background: var(--green-deep); color: var(--white); border-top-right-radius: 4px; }
+        .rating-area { display: flex; align-items: center; gap: 6px; margin-top: 10px; }
+        .rating-area span { font-size: 11px; color: #888; }
+        .star { font-size: 18px; cursor: pointer; color: #ccc; transition: color 0.2s; }
+        .star:hover, .star.active { color: #f5a623; }
+        .rating-done { font-size: 11px; color: #2d8653; margin-top: 6px; }
 
-    .bubble-name {
-      font-size: 0.72rem; font-weight: 600; color: var(--green-light);
-      letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px;
-    }
+        .loading { display: none; align-items: flex-start; gap: 10px; }
+        .loading-bubble { background: white; padding: 14px 18px; border-radius: 18px; border-bottom-left-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .dots span { display: inline-block; width: 7px; height: 7px; background: #2d8653; border-radius: 50%; animation: bounce 1.2s infinite; margin: 0 2px; }
+        .dots span:nth-child(2) { animation-delay: 0.2s; }
+        .dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-8px)} }
 
-    /* Format konten AI */
-    .bubble-content p { margin-bottom: 0.6rem; }
-    .bubble-content p:last-child { margin-bottom: 0; }
-    .bubble-content ol { padding-left: 1.3rem; margin: 0.4rem 0 0.6rem; }
-    .bubble-content ol li { margin-bottom: 0.35rem; line-height: 1.7; }
+        .input-area { background: white; padding: 14px 20px; display: flex; gap: 10px; border-top: 1px solid #e0e0e0; align-items: center; }
+        .input-area input { flex: 1; padding: 11px 18px; border: 1.5px solid #ddd; border-radius: 24px; font-size: 14px; outline: none; transition: border 0.2s; }
+        .input-area input:focus { border-color: #2d8653; }
+        .btn-kirim { background: #2d8653; color: white; border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; }
+        .btn-kirim:hover { background: #1a5c38; }
 
-    /* Blok dalil Arab */
-    .dalil-block {
-      background: linear-gradient(135deg, rgba(26,58,42,0.04), rgba(201,168,76,0.07));
-      border-right: 3px solid var(--gold);
-      border-radius: 10px;
-      padding: 0.9rem 1rem;
-      margin: 0.75rem 0;
-    }
-    .dalil-arab {
-      font-family: 'Amiri', serif;
-      font-size: 1.4rem; line-height: 2.3;
-      color: var(--green-deep);
-      direction: rtl; text-align: right;
-      display: block; margin-bottom: 0.5rem;
-    }
-    .dalil-latin {
-      font-style: italic; font-size: 0.81rem;
-      color: var(--text-mid); display: block;
-      margin-bottom: 0.3rem; line-height: 1.6;
-    }
-    .dalil-terjemah {
-      font-size: 0.84rem; color: var(--text-dark);
-      display: block; font-weight: 500; line-height: 1.6;
-    }
-    .dalil-sumber {
-      font-size: 0.74rem; color: var(--gold);
-      font-weight: 600; display: block; margin-top: 0.4rem;
-    }
+        .sambutan { text-align: center; padding: 30px 20px; color: #666; }
+        .sambutan h2 { color: #1a5c38; font-size: 20px; margin-bottom: 8px; }
+        .sambutan p { font-size: 13px; margin-bottom: 16px; }
+        .contoh-btn { display: inline-block; background: #f0f7f0; border: 1px solid #2d8653; color: #1a5c38; padding: 6px 14px; border-radius: 16px; font-size: 12px; cursor: pointer; margin: 4px; }
+        .contoh-btn:hover { background: #2d8653; color: white; }
 
-    .typing-dots { display: flex; gap: 5px; align-items: center; padding: 4px 0; }
-    .typing-dots span {
-      width: 7px; height: 7px; background: var(--green-light);
-      border-radius: 50%; animation: bounce 1.2s infinite;
-    }
-    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-
-    .input-area {
-      background: var(--white);
-      border: 1.5px solid rgba(82,183,136,0.25);
-      border-radius: 20px; padding: 0.75rem 1rem;
-      margin: 1rem 0; display: flex; align-items: flex-end; gap: 10px;
-      box-shadow: var(--shadow); transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    .input-area:focus-within {
-      border-color: var(--green-light);
-      box-shadow: 0 0 0 3px rgba(82,183,136,0.12), var(--shadow);
-    }
-    #input-msg {
-      flex: 1; border: none; outline: none;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 0.88rem; resize: none; background: transparent;
-      color: var(--text-dark); line-height: 1.5; max-height: 120px; overflow-y: auto;
-    }
-    #input-msg::placeholder { color: var(--text-muted); }
-    .input-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-    .btn-reset {
-      background: none; border: 1.5px solid var(--cream-dark); color: var(--text-muted);
-      width: 36px; height: 36px; border-radius: 10px; cursor: pointer;
-      font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
-    }
-    .btn-reset:hover { border-color: var(--gold); color: var(--gold); }
-    .btn-send {
-      background: linear-gradient(135deg, var(--green-mid), var(--green-light));
-      color: var(--white); border: none; width: 40px; height: 40px;
-      border-radius: 12px; cursor: pointer; font-size: 1.1rem;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s; box-shadow: 0 2px 8px rgba(45,106,79,0.3);
-    }
-    .btn-send:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(45,106,79,0.4); }
-    .btn-send:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-    footer {
-      text-align: center; font-size: 0.7rem; color: var(--text-muted);
-      padding: 0.5rem 1rem 1rem; position: relative; z-index: 1;
-    }
-    footer a { color: var(--green-light); text-decoration: none; }
-
-    #toast {
-      position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
-      background: #c0392b; color: white; padding: 0.7rem 1.4rem;
-      border-radius: 12px; font-size: 0.82rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2); display: none; z-index: 999;
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes bounce {
-      0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
-      40%           { transform: scale(1);   opacity: 1; }
-    }
-
-    @media (max-width: 600px) {
-      .header-arabic { display: none; }
-      .bubble { max-width: 92%; font-size: 0.85rem; }
-      main { padding: 1rem 0.75rem 0; }
-      .dalil-arab { font-size: 1.15rem; }
-    }
-  </style>
+        .footer { text-align: center; padding: 6px; font-size: 11px; color: #aaa; background: white; border-top: 1px solid #eee; }
+        .footer a { color: #2d8653; text-decoration: none; }
+    </style>
 </head>
 <body>
-
-<header>
-  <div class="header-brand">
-    <div class="logo-icon">🕌</div>
-    <div class="brand-text">
-      <h1>PratamaAI</h1>
-      <p>Asisten Pembelajaran PAI</p>
-    </div>
-  </div>
-  <div class="header-arabic">بِسْمِ اللّٰهِ</div>
-</header>
-
-<main>
-  <div id="chat-window">
-    <div class="welcome-card" id="welcome-card">
-      <div class="welcome-arabic">اَلسَّلاَمُ عَلَيْكُمْ وَرَحْمَةُ اللّٰهِ وَبَرَكَاتُهُ</div>
-      <h2>Selamat Datang di PratamaAI</h2>
-      <p>Asisten cerdas untuk pembelajaran Pendidikan Agama Islam. Setiap jawaban dilengkapi dalil dari Al-Qur'an dan Hadist.</p>
-      <div class="welcome-dev">✦ Dikembangkan oleh Muhammad Ibnu Setiawan Pratama · Tesis S2 PAI ✦</div>
-      <div class="welcome-topics">
-        <span class="topic-chip" onclick="kirimTopik(this)">Rukun Islam</span>
-        <span class="topic-chip" onclick="kirimTopik(this)">Hukum sholat berjamaah</span>
-        <span class="topic-chip" onclick="kirimTopik(this)">Keutamaan membaca Al-Qur'an</span>
-        <span class="topic-chip" onclick="kirimTopik(this)">Adab dalam Islam</span>
-        <span class="topic-chip" onclick="kirimTopik(this)">Puasa Ramadhan</span>
-        <span class="topic-chip" onclick="kirimTopik(this)">Zakat fitrah</span>
-        <span class="topic-chip" onclick="kirimTopik(this)">Kamu siapa?</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="input-area">
-    <textarea
-      id="input-msg"
-      rows="1"
-      placeholder="Tanyakan seputar Islam…"
-      maxlength="1000"
-      onkeydown="handleKey(event)"
-      oninput="autoResize(this)"
-    ></textarea>
-    <div class="input-actions">
-      <button class="btn-reset" onclick="resetChat()" title="Reset percakapan">🔄</button>
-      <button class="btn-send" id="btn-send" onclick="kirimPesan()" title="Kirim">➤</button>
-    </div>
-  </div>
-</main>
-
-<footer>
-  PratamaAI © 2024 · Dikembangkan oleh <strong>Muhammad Ibnu Setiawan Pratama</strong> · S2 PAI · Didukung <a href="https://groq.com" target="_blank">Groq LLM</a>
-</footer>
-
-<div id="toast"></div>
-
-<script>
-  const chatWindow  = document.getElementById('chat-window');
-  const inputMsg    = document.getElementById('input-msg');
-  const btnSend     = document.getElementById('btn-send');
-
-  let isLoading = false;
-
-  function autoResize(el) {
-    el.style.height = 'auto';
-    el.style.height = Math.min(el.scrollHeight, 120) + 'px';
-  }
-
-  function handleKey(e) {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); kirimPesan(); }
-  }
-
-  function kirimTopik(el) {
-    inputMsg.value = el.textContent;
-    autoResize(inputMsg);
-    kirimPesan();
-  }
-
-  // Deteksi teks Arab
-  function adaArab(str) {
-    return /[\u0600-\u06FF]{3,}/.test(str);
-  }
-
-  // Format jawaban AI menjadi HTML yang rapi
-  function formatJawaban(teks) {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'bubble-content';
-
-    // Pisah per paragraf (baris kosong)
-    const paragraf = teks.split(/\n{2,}/);
-
-    paragraf.forEach(blok => {
-      blok = blok.trim();
-      if (!blok) return;
-
-      const baris = blok.split('\n').map(b => b.trim()).filter(b => b);
-
-      // Jika blok mengandung teks Arab → render sebagai dalil
-      if (adaArab(blok)) {
-        const dalilEl = document.createElement('div');
-        dalilEl.className = 'dalil-block';
-
-        baris.forEach(line => {
-          if (adaArab(line)) {
-            const el = document.createElement('span');
-            el.className = 'dalil-arab';
-            el.textContent = line;
-            dalilEl.appendChild(el);
-          } else if (/^(QS\.|HR\.|Hadits|Hadist|Riwayat|Diriwayatkan|Surah|Al-|An-|Ar-|At-)/i.test(line)) {
-            const el = document.createElement('span');
-            el.className = 'dalil-sumber';
-            el.textContent = '📖 ' + line;
-            dalilEl.appendChild(el);
-          } else if (/^(Artinya|Terjemah|")/i.test(line) || line.startsWith('"')) {
-            const el = document.createElement('span');
-            el.className = 'dalil-terjemah';
-            el.textContent = line;
-            dalilEl.appendChild(el);
-          } else {
-            const el = document.createElement('span');
-            el.className = 'dalil-latin';
-            el.textContent = line;
-            dalilEl.appendChild(el);
-          }
-        });
-
-        wrapper.appendChild(dalilEl);
-        return;
-      }
-
-      // Cek apakah semua baris adalah item bernomor
-      const semuaBernomor = baris.every(b => /^\d+[\.\)]\s/.test(b));
-      if (semuaBernomor && baris.length > 1) {
-        const ol = document.createElement('ol');
-        baris.forEach(item => {
-          const li = document.createElement('li');
-          li.textContent = item.replace(/^\d+[\.\)]\s*/, '');
-          ol.appendChild(li);
-        });
-        wrapper.appendChild(ol);
-        return;
-      }
-
-      // Paragraf biasa — render tiap baris
-      baris.forEach(line => {
-        if (/^\d+[\.\)]\s/.test(line)) {
-          // Baris bernomor tunggal
-          const ol = document.createElement('ol');
-          const li = document.createElement('li');
-          li.textContent = line.replace(/^\d+[\.\)]\s*/, '');
-          ol.appendChild(li);
-          wrapper.appendChild(ol);
-        } else {
-          const p = document.createElement('p');
-          p.textContent = line;
-          wrapper.appendChild(p);
-        }
-      });
-    });
-
-    return wrapper;
-  }
-
-  function tambahBubble(role, teks) {
-    const wc = document.getElementById('welcome-card');
-    if (wc) wc.remove();
-
-    const row = document.createElement('div');
-    row.className = `msg-row ${role === 'user' ? 'user' : 'ai'}`;
-
-    const avatar = document.createElement('div');
-    avatar.className = `avatar ${role === 'user' ? 'usr' : 'ai'}`;
-    avatar.textContent = role === 'user' ? '👤' : '🕌';
-
-    const bubble = document.createElement('div');
-    bubble.className = `bubble ${role === 'user' ? 'user' : 'ai'}`;
-
-    if (role === 'ai') {
-      const name = document.createElement('div');
-      name.className = 'bubble-name';
-      name.textContent = 'PratamaAI';
-      bubble.appendChild(name);
-      bubble.appendChild(formatJawaban(teks));
-    } else {
-      const p = document.createElement('p');
-      p.textContent = teks;
-      bubble.appendChild(p);
-    }
-
-    row.appendChild(avatar);
-    row.appendChild(bubble);
-    chatWindow.appendChild(row);
-    chatWindow.scrollTop = chatWindow.scrollHeight;
-  }
-
-  function tampilTyping() {
-    const row = document.createElement('div');
-    row.className = 'msg-row ai';
-    row.id = 'typing-row';
-    const avatar = document.createElement('div');
-    avatar.className = 'avatar ai';
-    avatar.textContent = '🕌';
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble ai';
-    bubble.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
-    row.appendChild(avatar);
-    row.appendChild(bubble);
-    chatWindow.appendChild(row);
-    chatWindow.scrollTop = chatWindow.scrollHeight;
-  }
-
-  function hapusTyping() {
-    const el = document.getElementById('typing-row');
-    if (el) el.remove();
-  }
-
-  function tampilToast(pesan) {
-    const toast = document.getElementById('toast');
-    toast.textContent = pesan;
-    toast.style.display = 'block';
-    setTimeout(() => { toast.style.display = 'none'; }, 3500);
-  }
-
-  async function kirimPesan() {
-    if (isLoading) return;
-    const teks = inputMsg.value.trim();
-    if (!teks) return;
-
-    isLoading = true;
-    btnSend.disabled = true;
-    inputMsg.value = '';
-    autoResize(inputMsg);
-
-    tambahBubble('user', teks);
-    tampilTyping();
-
-    try {
-      const res = await fetch('/tanya', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ pertanyaan: teks })
-      });
-      const data = await res.json();
-      hapusTyping();
-      if (!res.ok || data.error) {
-        tampilToast(data.error || 'Terjadi kesalahan. Coba lagi.');
-      } else {
-        tambahBubble('ai', data.jawaban);
-      }
-    } catch (err) {
-      hapusTyping();
-      tampilToast('Koneksi bermasalah. Periksa jaringan Anda.');
-    } finally {
-      isLoading = false;
-      btnSend.disabled = false;
-      inputMsg.focus();
-    }
-  }
-
-  async function resetChat() {
-    if (!confirm('Reset percakapan? Riwayat akan dihapus.')) return;
-    try { await fetch('/reset', { method: 'POST' }); } catch (_) {}
-    chatWindow.innerHTML = `
-      <div class="welcome-card" id="welcome-card">
-        <div class="welcome-arabic">اَلسَّلاَمُ عَلَيْكُمْ وَرَحْمَةُ اللّٰهِ وَبَرَكَاتُهُ</div>
-        <h2>Selamat Datang di PratamaAI</h2>
-        <p>Asisten cerdas untuk pembelajaran Pendidikan Agama Islam. Setiap jawaban dilengkapi dalil dari Al-Qur'an dan Hadist.</p>
-        <div class="welcome-dev">✦ Dikembangkan oleh Muhammad Ibnu Setiawan Pratama · Tesis S2 PAI ✦</div>
-        <div class="welcome-topics">
-          <span class="topic-chip" onclick="kirimTopik(this)">Rukun Islam</span>
-          <span class="topic-chip" onclick="kirimTopik(this)">Hukum sholat berjamaah</span>
-          <span class="topic-chip" onclick="kirimTopik(this)">Keutamaan membaca Al-Qur'an</span>
-          <span class="topic-chip" onclick="kirimTopik(this)">Adab dalam Islam</span>
-          <span class="topic-chip" onclick="kirimTopik(this)">Puasa Ramadhan</span>
-          <span class="topic-chip" onclick="kirimTopik(this)">Zakat fitrah</span>
-          <span class="topic-chip" onclick="kirimTopik(this)">Kamu siapa?</span>
+    <div class="header">
+        <div class="header-left">
+            <div class="logo">🕌</div>
+            <div class="header-text">
+                <h1>PratamaAI</h1>
+                <p>Asisten Pembelajaran PAI</p>
+            </div>
         </div>
-      </div>`;
-  }
-</script>
+        <div class="header-right">
+            <button class="btn-header" onclick="exportPDF()">⬇ Export PDF</button>
+            <button class="btn-header" onclick="resetChat()">↺ Reset</button>
+        </div>
+    </div>
+
+    <div class="chat-area" id="chatArea">
+        <div class="sambutan">
+            <h2>Assalamu'alaikum Warahmatullahi Wabarakatuh</h2>
+            <p>Selamat datang di PratamaAI. Silakan ajukan pertanyaan seputar Islam.</p>
+            <div>
+                <span class="contoh-btn" onclick="tanyaContoh('Apa itu rukun Islam?')">Apa itu rukun Islam?</span>
+                <span class="contoh-btn" onclick="tanyaContoh('Bagaimana cara sholat yang benar?')">Cara sholat yang benar</span>
+                <span class="contoh-btn" onclick="tanyaContoh('Apa keutamaan membaca Al-Quran?')">Keutamaan membaca Al-Quran</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="loading" id="loading">
+        <div style="width:32px;height:32px;background:#e8f5e9;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;">🕌</div>
+        <div class="loading-bubble">
+            <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+    </div>
+
+    <div class="input-area">
+        <input type="text" id="inputPertanyaan" placeholder="Tanyakan seputar Islam..." />
+        <button class="btn-kirim" id="btnKirim">➤</button>
+    </div>
+
+    <div class="footer">
+        PratamaAI &copy; 2024 &middot; Penelitian Tesis S2 PAI &middot; <a href="/admin">Admin</a>
+    </div>
+
+    <script>
+        document.getElementById("btnKirim").addEventListener("click", kirim);
+        document.getElementById("inputPertanyaan").addEventListener("keypress", e => { if(e.key==="Enter") kirim(); });
+
+        function tanyaContoh(teks) {
+            document.getElementById("inputPertanyaan").value = teks;
+            kirim();
+        }
+
+        async function kirim() {
+            const input = document.getElementById("inputPertanyaan");
+            const pertanyaan = input.value.trim();
+            if (!pertanyaan) return;
+            tambahBubbleUser(pertanyaan);
+            input.value = "";
+            document.getElementById("loading").style.display = "flex";
+            scrollBawah();
+            try {
+                const res = await fetch("/tanya", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({pertanyaan})
+                });
+                const data = await res.json();
+                document.getElementById("loading").style.display = "none";
+                if (data.error) {
+                    tambahBubbleAI("Maaf, terjadi kesalahan: " + data.error, null);
+                } else {
+                    tambahBubbleAI(data.jawaban, data.id);
+                }
+            } catch(e) {
+                document.getElementById("loading").style.display = "none";
+                tambahBubbleAI("Maaf, tidak dapat terhubung ke server.", null);
+            }
+        }
+
+        function tambahBubbleUser(teks) {
+            const area = document.getElementById("chatArea");
+            const wrap = document.createElement("div");
+            wrap.className = "bubble-wrap user";
+            const bub = document.createElement("div");
+            bub.className = "bubble user";
+            bub.textContent = teks;
+            wrap.appendChild(bub);
+            area.appendChild(wrap);
+            scrollBawah();
+        }
+
+        function tambahBubbleAI(teks, id) {
+            const area = document.getElementById("chatArea");
+            const wrap = document.createElement("div");
+            wrap.className = "bubble-wrap ai";
+
+            const nama = document.createElement("div");
+            nama.className = "nama-ai";
+            nama.innerHTML = "🕌 PratamaAI";
+            wrap.appendChild(nama);
+
+            const bub = document.createElement("div");
+            bub.className = "bubble ai";
+            bub.innerHTML = formatJawaban(teks);
+            wrap.appendChild(bub);
+
+            if (id) {
+                const ratingArea = document.createElement("div");
+                ratingArea.className = "rating-area";
+                ratingArea.innerHTML = `<span>Nilai jawaban:</span>`;
+                for (let i = 1; i <= 5; i++) {
+                    const star = document.createElement("span");
+                    star.className = "star";
+                    star.innerHTML = "★";
+                    star.dataset.val = i;
+                    star.addEventListener("click", function() {
+                        kirimRating(id, i, ratingArea);
+                    });
+                    star.addEventListener("mouseover", function() {
+                        ratingArea.querySelectorAll(".star").forEach((s,idx) => {
+                            s.style.color = idx < i ? "#f5a623" : "#ccc";
+                        });
+                    });
+                    star.addEventListener("mouseout", function() {
+                        ratingArea.querySelectorAll(".star").forEach(s => {
+                            if (!s.classList.contains("active")) s.style.color = "#ccc";
+                        });
+                    });
+                    ratingArea.appendChild(star);
+                }
+                wrap.appendChild(ratingArea);
+            }
+
+            area.appendChild(wrap);
+            scrollBawah();
+        }
+
+        function formatJawaban(teks) {
+            // Pisah per paragraf
+            let paragraf = teks.split(/\n\n+/);
+            let html = "";
+            paragraf.forEach(p => {
+                p = p.trim();
+                if (!p) return;
+                // Deteksi teks Arab
+                if (/[\u0600-\u06FF]/.test(p)) {
+                    html += `<span class="arab">${p}</span>`;
+                } else if (p.startsWith("QS.") || p.startsWith("HR.") || p.startsWith("(QS") || p.startsWith("(HR")) {
+                    html += `<div class="dalil">${p}</div>`;
+                } else {
+                    // Handle newline tunggal dalam paragraf
+                    let baris = p.replace(/\n/g, "<br>");
+                    html += `<p>${baris}</p>`;
+                }
+            });
+            return html;
+        }
+
+        async function kirimRating(id, nilai, ratingArea) {
+            await fetch("/rating", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({id, rating: nilai})
+            });
+            ratingArea.innerHTML = `<span class="rating-done">✓ Terima kasih atas penilaian Anda! (${nilai}/5 ★)</span>`;
+        }
+
+        async function resetChat() {
+            await fetch("/reset", {method: "POST"});
+            const area = document.getElementById("chatArea");
+            area.innerHTML = `<div class="sambutan">
+                <h2>Assalamu'alaikum Warahmatullahi Wabarakatuh</h2>
+                <p>Percakapan direset. Silakan ajukan pertanyaan baru.</p>
+            </div>`;
+        }
+
+        function exportPDF() {
+            window.location.href = "/export-pdf";
+        }
+
+        function scrollBawah() {
+            const area = document.getElementById("chatArea");
+            area.scrollTop = area.scrollHeight;
+        }
+    </script>
 </body>
 </html>
