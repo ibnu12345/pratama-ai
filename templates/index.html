@@ -4,249 +4,533 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PratamaAI - Asisten Pembelajaran Islam</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f5f5f0; height: 100vh; display: flex; flex-direction: column; }
+        :root {
+            --hijau-tua:   #1a4a2e;
+            --hijau-mid:   #2d6a4f;
+            --hijau-light: #52b788;
+            --hijau-pale:  #e8f5ee;
+            --emas:        #c9a84c;
+            --emas-light:  #f0d080;
+            --krem:        #faf8f3;
+            --putih:       #ffffff;
+            --teks:        #1e1e1e;
+            --teks-mid:    #555;
+            --teks-muted:  #999;
+            --shadow:      0 2px 12px rgba(26,74,46,0.10);
+        }
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
-        .header { background: linear-gradient(135deg, #1a5c38, #2d8653); color: white; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-        .header-left { display: flex; align-items: center; gap: 12px; }
-        .logo { width: 42px; height: 42px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-        .header-text h1 { font-size: 18px; font-weight: 700; }
-        .header-text p { font-size: 11px; opacity: 0.85; }
-        .header-right { display: flex; gap: 8px; }
-        .btn-header { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: white; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 12px; }
-        .btn-header:hover { background: rgba(255,255,255,0.3); }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--krem);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
 
-        .chat-area { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
+        /* ── HEADER ── */
+        .header {
+            background: var(--hijau-tua);
+            color: #fff;
+            padding: 0 20px;
+            height: 60px;
+            display: flex; align-items: center; justify-content: space-between;
+            flex-shrink: 0;
+            box-shadow: 0 2px 14px rgba(0,0,0,0.22);
+            z-index: 10;
+        }
+        .header-left { display:flex; align-items:center; gap:11px; }
+        .logo {
+            width:40px; height:40px;
+            background: linear-gradient(135deg, var(--emas), var(--emas-light));
+            border-radius:10px;
+            display:flex; align-items:center; justify-content:center;
+            font-size:18px; flex-shrink:0;
+            box-shadow: 0 2px 8px rgba(201,168,76,0.35);
+        }
+        .header-text h1 { font-family:'Amiri',serif; font-size:17px; color:var(--emas-light); line-height:1.1; }
+        .header-text p  { font-size:10px; color:rgba(255,255,255,0.5); margin-top:1px; letter-spacing:.05em; }
+        .header-right { display:flex; gap:8px; }
+        .btn-hdr {
+            background:rgba(255,255,255,0.12);
+            border:1px solid rgba(255,255,255,0.25);
+            color:#fff; padding:5px 13px; border-radius:20px;
+            cursor:pointer; font-size:11.5px;
+            font-family:'Plus Jakarta Sans',sans-serif;
+            transition:background .2s;
+        }
+        .btn-hdr:hover { background:rgba(255,255,255,0.22); }
 
-        .bubble-wrap { display: flex; flex-direction: column; }
-        .bubble-wrap.user { align-items: flex-end; }
-        .bubble-wrap.ai { align-items: flex-start; }
+        /* ── CHAT AREA ── */
+        .chat-area {
+            flex:1; overflow-y:auto;
+            padding:18px 16px;
+            display:flex; flex-direction:column; gap:16px;
+        }
+        .chat-area::-webkit-scrollbar { width:4px; }
+        .chat-area::-webkit-scrollbar-thumb { background:var(--hijau-light); border-radius:10px; }
 
-        .bubble { max-width: 78%; padding: 14px 18px; border-radius: 18px; font-size: 14px; line-height: 1.8; }
-        .bubble.user { background: #2d8653; color: white; border-bottom-right-radius: 4px; }
-        .bubble.ai { background: white; color: #2c2c2c; border-bottom-left-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        /* ── SAMBUTAN ── */
+        .sambutan {
+            background:var(--putih);
+            border:1px solid rgba(82,183,136,0.2);
+            border-radius:18px; padding:22px;
+            text-align:center; box-shadow:var(--shadow);
+            max-width:600px; margin:0 auto; width:100%;
+        }
+        .sambutan-arab { font-family:'Amiri',serif; font-size:1.65rem; color:var(--hijau-mid); line-height:1.6; margin-bottom:10px; }
+        .sambutan h2   { font-size:15px; color:var(--hijau-tua); margin-bottom:4px; }
+        .sambutan p    { font-size:12.5px; color:var(--teks-muted); line-height:1.6; margin-bottom:4px; }
+        .sambutan-dev  { font-size:11px; color:var(--emas); font-weight:600; margin:6px 0 14px; }
+        .contoh-wrap   { display:flex; flex-wrap:wrap; gap:7px; justify-content:center; }
+        .contoh-btn {
+            background:var(--hijau-pale); border:1px solid rgba(45,106,79,0.2);
+            color:var(--hijau-mid); padding:5px 13px; border-radius:16px;
+            font-size:11.5px; cursor:pointer;
+            font-family:'Plus Jakarta Sans',sans-serif; transition:all .2s;
+        }
+        .contoh-btn:hover { background:var(--hijau-mid); color:#fff; }
 
-        .nama-ai { font-size: 11px; font-weight: 700; color: #1a5c38; margin-bottom: 6px; display: flex; align-items: center; gap: 4px; }
+        /* ── BUBBLE WRAPPER ── */
+        .bubble-wrap { display:flex; flex-direction:column; max-width:82%; }
+        .bubble-wrap.user { align-items:flex-end;   align-self:flex-end; }
+        .bubble-wrap.ai   { align-items:flex-start; align-self:flex-start; }
 
-        .bubble.ai p { margin-bottom: 10px; }
-        .bubble.ai p:last-child { margin-bottom: 0; }
-        .bubble.ai .arab { font-family: 'Traditional Arabic', 'Arial Unicode MS', serif; font-size: 18px; direction: rtl; text-align: right; display: block; margin: 8px 0; color: #1a5c38; line-height: 2; }
-        .bubble.ai .dalil { background: #f0f7f0; border-left: 3px solid #2d8653; padding: 8px 12px; border-radius: 4px; margin: 8px 0; font-style: italic; font-size: 13px; }
+        .nama-ai {
+            font-size:10.5px; font-weight:700; color:var(--hijau-light);
+            margin-bottom:5px; letter-spacing:.07em; text-transform:uppercase;
+        }
 
-        .rating-area { display: flex; align-items: center; gap: 6px; margin-top: 10px; }
-        .rating-area span { font-size: 11px; color: #888; }
-        .star { font-size: 18px; cursor: pointer; color: #ccc; transition: color 0.2s; }
-        .star:hover, .star.active { color: #f5a623; }
-        .rating-done { font-size: 11px; color: #2d8653; margin-top: 6px; }
+        .bubble {
+            padding:12px 16px; border-radius:18px;
+            font-size:13.5px; line-height:1.85; box-shadow:var(--shadow);
+        }
+        .bubble.user {
+            background:var(--hijau-tua); color:#fff;
+            border-bottom-right-radius:4px;
+        }
+        .bubble.ai {
+            background:var(--putih); color:var(--teks);
+            border-bottom-left-radius:4px;
+            border:1px solid rgba(82,183,136,0.13);
+            min-width:60px;
+        }
 
-        .loading { display: none; align-items: flex-start; gap: 10px; }
-        .loading-bubble { background: white; padding: 14px 18px; border-radius: 18px; border-bottom-left-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-        .dots span { display: inline-block; width: 7px; height: 7px; background: #2d8653; border-radius: 50%; animation: bounce 1.2s infinite; margin: 0 2px; }
-        .dots span:nth-child(2) { animation-delay: 0.2s; }
-        .dots span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-8px)} }
+        /* ── KONTEN JAWABAN ── */
+        .isi { display:flex; flex-direction:column; gap:10px; }
 
-        .input-area { background: white; padding: 14px 20px; display: flex; gap: 10px; border-top: 1px solid #e0e0e0; align-items: center; }
-        .input-area input { flex: 1; padding: 11px 18px; border: 1.5px solid #ddd; border-radius: 24px; font-size: 14px; outline: none; transition: border 0.2s; }
-        .input-area input:focus { border-color: #2d8653; }
-        .btn-kirim { background: #2d8653; color: white; border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; }
-        .btn-kirim:hover { background: #1a5c38; }
+        .isi p { line-height:1.85; color:var(--teks); }
 
-        .sambutan { text-align: center; padding: 30px 20px; color: #666; }
-        .sambutan h2 { color: #1a5c38; font-size: 20px; margin-bottom: 8px; }
-        .sambutan p { font-size: 13px; margin-bottom: 16px; }
-        .contoh-btn { display: inline-block; background: #f0f7f0; border: 1px solid #2d8653; color: #1a5c38; padding: 6px 14px; border-radius: 16px; font-size: 12px; cursor: pointer; margin: 4px; }
-        .contoh-btn:hover { background: #2d8653; color: white; }
+        /* Blok dalil */
+        .blok-dalil {
+            background:linear-gradient(135deg,rgba(26,74,46,.04),rgba(201,168,76,.06));
+            border-right:3px solid var(--emas);
+            border-radius:10px;
+            padding:12px 14px;
+            display:flex; flex-direction:column; gap:7px;
+        }
+        .teks-arab {
+            font-family:'Amiri',serif;
+            font-size:1.45rem; line-height:2.2;
+            color:var(--hijau-tua);
+            direction:rtl; text-align:right;
+            unicode-bidi: bidi-override;
+        }
+        .teks-latin   { font-style:italic; font-size:12.5px; color:var(--teks-mid); line-height:1.6; }
+        .teks-terjemah{ font-size:13px; color:var(--teks); font-weight:500; line-height:1.65; }
+        .teks-sumber  { font-size:11.5px; color:var(--emas); font-weight:700; }
 
-        .footer { text-align: center; padding: 6px; font-size: 11px; color: #aaa; background: white; border-top: 1px solid #eee; }
-        .footer a { color: #2d8653; text-decoration: none; }
+        /* List bernomor */
+        .isi ol { padding-left:18px; display:flex; flex-direction:column; gap:5px; }
+        .isi ol li { line-height:1.75; color:var(--teks); }
+
+        /* ── KURSOR KETIK ── */
+        .kursor {
+            display:inline-block;
+            width:2px; height:1em;
+            background:var(--hijau-light);
+            margin-left:2px;
+            vertical-align:text-bottom;
+            animation:kedip .7s infinite;
+        }
+        @keyframes kedip { 0%,100%{opacity:1} 50%{opacity:0} }
+
+        /* ── RATING ── */
+        .rating-wrap {
+            display:flex; align-items:center; gap:7px;
+            margin-top:8px; padding-top:8px;
+            border-top:1px solid var(--hijau-pale);
+        }
+        .rating-label { font-size:11px; color:var(--teks-muted); }
+        .bintang {
+            font-size:20px; cursor:pointer; color:#ddd;
+            transition:color .15s, transform .15s; line-height:1;
+        }
+        .bintang:hover { transform:scale(1.2); }
+        .bintang.aktif { color:#f5a623; }
+        .rating-done   { font-size:11px; color:var(--hijau-mid); font-weight:600; }
+
+        /* ── LOADING ── */
+        #loading {
+            display:none; align-items:flex-start; gap:10px;
+            align-self:flex-start; padding:0 0 4px;
+        }
+        .loading-avatar {
+            width:32px; height:32px; background:var(--hijau-pale);
+            border-radius:50%; display:flex; align-items:center; justify-content:center;
+            font-size:15px; flex-shrink:0;
+        }
+        .loading-bubble {
+            background:var(--putih); padding:13px 17px;
+            border-radius:18px; border-bottom-left-radius:4px;
+            box-shadow:var(--shadow); border:1px solid rgba(82,183,136,0.13);
+        }
+        .dots span {
+            display:inline-block; width:7px; height:7px;
+            background:var(--hijau-light); border-radius:50%;
+            animation:bounce 1.2s infinite; margin:0 2px;
+        }
+        .dots span:nth-child(2){animation-delay:.2s}
+        .dots span:nth-child(3){animation-delay:.4s}
+        @keyframes bounce{0%,80%,100%{transform:scale(.6);opacity:.5}40%{transform:scale(1.1);opacity:1}}
+
+        /* ── INPUT ── */
+        .input-area {
+            background:var(--putih);
+            border-top:1px solid rgba(0,0,0,0.07);
+            padding:11px 16px;
+            display:flex; gap:10px; align-items:flex-end;
+            flex-shrink:0;
+        }
+        #inputPertanyaan {
+            flex:1; padding:10px 16px;
+            border:1.5px solid #e0e0e0; border-radius:22px;
+            font-size:13.5px;
+            font-family:'Plus Jakarta Sans',sans-serif;
+            outline:none; resize:none;
+            max-height:110px; line-height:1.5;
+            background:var(--krem); transition:border .2s;
+        }
+        #inputPertanyaan:focus { border-color:var(--hijau-light); background:#fff; }
+        .btn-kirim {
+            background:var(--hijau-mid); color:#fff; border:none;
+            width:44px; height:44px; border-radius:50%;
+            cursor:pointer; font-size:17px;
+            display:flex; align-items:center; justify-content:center;
+            flex-shrink:0; transition:background .2s, transform .15s;
+            box-shadow:0 2px 8px rgba(45,106,79,.3);
+        }
+        .btn-kirim:hover   { background:var(--hijau-tua); transform:scale(1.05); }
+        .btn-kirim:disabled{ opacity:.5; cursor:not-allowed; transform:none; }
+
+        /* ── FOOTER ── */
+        .footer {
+            text-align:center; font-size:10.5px; color:var(--teks-muted);
+            padding:5px 12px 7px; background:var(--putih);
+            border-top:1px solid #f0f0f0; flex-shrink:0;
+        }
+        .footer a { color:var(--hijau-light); text-decoration:none; }
+
+        /* ── TOAST ── */
+        #toast {
+            position:fixed; bottom:80px; left:50%; transform:translateX(-50%);
+            background:#c0392b; color:#fff; padding:8px 18px;
+            border-radius:20px; font-size:12px; display:none; z-index:100;
+            box-shadow:0 4px 16px rgba(0,0,0,.2);
+        }
+
+        @media(max-width:600px){
+            .bubble-wrap{max-width:95%;}
+            .bubble{font-size:13px;}
+            .teks-arab{font-size:1.2rem;}
+            .sambutan{padding:16px 12px;}
+        }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="header-left">
-            <div class="logo">🕌</div>
-            <div class="header-text">
-                <h1>PratamaAI</h1>
-                <p>Asisten Pembelajaran PAI</p>
-            </div>
-        </div>
-        <div class="header-right">
-            <button class="btn-header" onclick="exportPDF()">⬇ Export PDF</button>
-            <button class="btn-header" onclick="resetChat()">↺ Reset</button>
+
+<div class="header">
+    <div class="header-left">
+        <div class="logo">🕌</div>
+        <div class="header-text">
+            <h1>PratamaAI</h1>
+            <p>ASISTEN PEMBELAJARAN PAI</p>
         </div>
     </div>
+    <div class="header-right">
+        <button class="btn-hdr" onclick="exportPDF()">⬇ Export PDF</button>
+        <button class="btn-hdr" onclick="resetChat()">↺ Reset</button>
+    </div>
+</div>
 
-    <div class="chat-area" id="chatArea">
-        <div class="sambutan">
-            <h2>Assalamu'alaikum Warahmatullahi Wabarakatuh</h2>
-            <p>Selamat datang di PratamaAI. Silakan ajukan pertanyaan seputar Islam.</p>
-            <div>
-                <span class="contoh-btn" onclick="tanyaContoh('Apa itu rukun Islam?')">Apa itu rukun Islam?</span>
-                <span class="contoh-btn" onclick="tanyaContoh('Bagaimana cara sholat yang benar?')">Cara sholat yang benar</span>
-                <span class="contoh-btn" onclick="tanyaContoh('Apa keutamaan membaca Al-Quran?')">Keutamaan membaca Al-Quran</span>
-            </div>
+<div class="chat-area" id="chatArea">
+    <div class="sambutan" id="kartuSambutan">
+        <div class="sambutan-arab">اَلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللّٰهِ وَبَرَكَاتُهُ</div>
+        <h2>Selamat Datang di PratamaAI</h2>
+        <p>Asisten cerdas berbasis AI untuk pembelajaran Pendidikan Agama Islam.<br>Setiap jawaban dilengkapi dalil dari Al-Qur'an dan Hadist.</p>
+        <div class="sambutan-dev">✦ Dikembangkan oleh Muhammad Ibnu Setiawan Pratama ✦</div>
+        <div class="contoh-wrap">
+            <span class="contoh-btn" onclick="tanyaContoh(this)">Apa itu rukun Islam?</span>
+            <span class="contoh-btn" onclick="tanyaContoh(this)">Keutamaan membaca Al-Qur'an</span>
+            <span class="contoh-btn" onclick="tanyaContoh(this)">Hukum sholat berjamaah</span>
+            <span class="contoh-btn" onclick="tanyaContoh(this)">Adab kepada orang tua</span>
+            <span class="contoh-btn" onclick="tanyaContoh(this)">Kamu siapa?</span>
         </div>
     </div>
+</div>
 
-    <div class="loading" id="loading">
-        <div style="width:32px;height:32px;background:#e8f5e9;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;">🕌</div>
-        <div class="loading-bubble">
-            <div class="dots"><span></span><span></span><span></span></div>
-        </div>
+<div id="loading" style="padding:0 16px 8px; display:none; align-items:flex-start; gap:10px;">
+    <div class="loading-avatar">🕌</div>
+    <div class="loading-bubble">
+        <div class="dots"><span></span><span></span><span></span></div>
     </div>
+</div>
 
-    <div class="input-area">
-        <input type="text" id="inputPertanyaan" placeholder="Tanyakan seputar Islam..." />
-        <button class="btn-kirim" id="btnKirim">➤</button>
-    </div>
+<div class="input-area">
+    <textarea
+        id="inputPertanyaan" rows="1"
+        placeholder="Tanyakan seputar Islam…"
+        maxlength="1000"
+        onkeydown="handleEnter(event)"
+        oninput="autoResize(this)"
+    ></textarea>
+    <button class="btn-kirim" id="btnKirim" onclick="kirim()">➤</button>
+</div>
 
-    <div class="footer">
-        PratamaAI &copy; 2026 &middot; Penelitian Tesis S2 PAI &middot; <a href="/admin">Admin</a>
-    </div>
+<div class="footer">
+    PratamaAI &copy; 2026 &middot;
+    <strong>Muhammad Ibnu Setiawan Pratama</strong> &middot;
+    <a href="/admin">Admin Panel</a>
+</div>
 
-    <script>
-        document.getElementById("btnKirim").addEventListener("click", kirim);
-        document.getElementById("inputPertanyaan").addEventListener("keypress", e => { if(e.key==="Enter") kirim(); });
+<div id="toast"></div>
 
-        function tanyaContoh(teks) {
-            document.getElementById("inputPertanyaan").value = teks;
-            kirim();
+<script>
+const chatArea = document.getElementById("chatArea");
+const inputEl  = document.getElementById("inputPertanyaan");
+const btnKirim = document.getElementById("btnKirim");
+let sedangLoading = false;
+
+// ── Helpers ───────────────────────────────────────────────
+function autoResize(el) {
+    el.style.height = "auto";
+    el.style.height = Math.min(el.scrollHeight, 110) + "px";
+}
+function handleEnter(e) {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); kirim(); }
+}
+function scrollBawah() { chatArea.scrollTop = chatArea.scrollHeight; }
+function toast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg; t.style.display = "block";
+    setTimeout(() => t.style.display = "none", 3000);
+}
+function tanyaContoh(el) {
+    inputEl.value = el.textContent.trim();
+    autoResize(inputEl); kirim();
+}
+
+// ── Deteksi Arab ──────────────────────────────────────────
+function adaArab(str) { return /[\u0600-\u06FF]{3,}/.test(str); }
+
+// ── Format teks FINAL menjadi DOM (setelah streaming selesai) ──
+function buatBlokDalil(baris) {
+    const lines = baris.split("\n").map(l => l.trim()).filter(l => l);
+    const blok  = document.createElement("div");
+    blok.className = "blok-dalil";
+    lines.forEach(line => {
+        if (adaArab(line)) {
+            const el = document.createElement("div");
+            el.className = "teks-arab"; el.textContent = line;
+            blok.appendChild(el);
+        } else if (/^(QS\.|HR\.|Hadis|Riwayat|Shahih|Sunan)/i.test(line) || /^\(QS|^\(HR/i.test(line)) {
+            const el = document.createElement("div");
+            el.className = "teks-sumber"; el.textContent = "📖 " + line.replace(/^\(|\)$/g,"");
+            blok.appendChild(el);
+        } else if (/^(Artinya|Terjemah|Maknanya)\s*:/i.test(line) || /^[""]/.test(line)) {
+            const el = document.createElement("div");
+            el.className = "teks-terjemah"; el.textContent = line;
+            blok.appendChild(el);
+        } else {
+            const el = document.createElement("div");
+            el.className = "teks-latin"; el.textContent = line;
+            blok.appendChild(el);
         }
+    });
+    return blok;
+}
 
-        async function kirim() {
-            const input = document.getElementById("inputPertanyaan");
-            const pertanyaan = input.value.trim();
-            if (!pertanyaan) return;
-            tambahBubbleUser(pertanyaan);
-            input.value = "";
-            document.getElementById("loading").style.display = "flex";
-            scrollBawah();
-            try {
-                const res = await fetch("/tanya", {
-                    method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({pertanyaan})
-                });
-                const data = await res.json();
-                document.getElementById("loading").style.display = "none";
-                if (data.error) {
-                    tambahBubbleAI("Maaf, terjadi kesalahan: " + data.error, null);
+function formatJawaban(teks) {
+    const wadah  = document.createElement("div");
+    wadah.className = "isi";
+    const paragraf = teks.split(/\n{2,}/);
+    paragraf.forEach(blok => {
+        blok = blok.trim(); if (!blok) return;
+        if (adaArab(blok)) { wadah.appendChild(buatBlokDalil(blok)); return; }
+        const baris = blok.split("\n").map(b=>b.trim()).filter(b=>b);
+        const semuaBernomor = baris.length >= 2 && baris.every(b=>/^\d+[\.\)]\s/.test(b));
+        if (semuaBernomor) {
+            const ol = document.createElement("ol");
+            baris.forEach(item=>{ const li=document.createElement("li"); li.textContent=item.replace(/^\d+[\.\)]\s*/,""); ol.appendChild(li); });
+            wadah.appendChild(ol); return;
+        }
+        let olGroup = null;
+        baris.forEach(line => {
+            if (/^\d+[\.\)]\s/.test(line)) {
+                if (!olGroup) { olGroup=document.createElement("ol"); wadah.appendChild(olGroup); }
+                const li=document.createElement("li"); li.textContent=line.replace(/^\d+[\.\)]\s*/,""); olGroup.appendChild(li);
+            } else {
+                olGroup = null;
+                if (adaArab(line)) { wadah.appendChild(buatBlokDalil(line)); }
+                else if (/^(QS\.|HR\.|\(QS|\(HR)/i.test(line)) {
+                    const el=document.createElement("div"); el.className="teks-sumber"; el.textContent="📖 "+line.replace(/^\(|\)$/g,""); wadah.appendChild(el);
                 } else {
-                    tambahBubbleAI(data.jawaban, data.id);
+                    const p=document.createElement("p"); p.textContent=line; wadah.appendChild(p);
                 }
-            } catch(e) {
-                document.getElementById("loading").style.display = "none";
-                tambahBubbleAI("Maaf, tidak dapat terhubung ke server.", null);
+            }
+        });
+    });
+    return wadah;
+}
+
+// ── Tambah bubble user ────────────────────────────────────
+function tambahBubbleUser(teks) {
+    document.getElementById("kartuSambutan")?.remove();
+    const wrap = document.createElement("div"); wrap.className="bubble-wrap user";
+    const bub  = document.createElement("div"); bub.className="bubble user"; bub.textContent=teks;
+    wrap.appendChild(bub); chatArea.appendChild(wrap); scrollBawah();
+}
+
+// ── Tambah bubble AI kosong (untuk diisi streaming) ───────
+function buatBubbleAI() {
+    document.getElementById("kartuSambutan")?.remove();
+    const wrap  = document.createElement("div"); wrap.className="bubble-wrap ai";
+    const nama  = document.createElement("div"); nama.className="nama-ai"; nama.textContent="🕌 PratamaAI";
+    const bub   = document.createElement("div"); bub.className="bubble ai";
+    const rawEl = document.createElement("span"); rawEl.id="streaming-raw"; rawEl.style.whiteSpace="pre-wrap";
+    const kursor= document.createElement("span"); kursor.className="kursor";
+    bub.appendChild(rawEl); bub.appendChild(kursor);
+    wrap.appendChild(nama); wrap.appendChild(bub);
+    chatArea.appendChild(wrap); scrollBawah();
+    return { wrap, bub, rawEl, kursor };
+}
+
+// ── Selesai streaming → ganti teks mentah dengan DOM rapi ─
+function selesaiStreaming(bub, rawEl, kursor, teksLengkap, id) {
+    kursor.remove(); rawEl.remove();
+    bub.appendChild(formatJawaban(teksLengkap));
+
+    // Rating
+    if (id) {
+        const rWrap = document.createElement("div"); rWrap.className="rating-wrap";
+        const lbl   = document.createElement("span"); lbl.className="rating-label"; lbl.textContent="Nilai jawaban ini:";
+        rWrap.appendChild(lbl);
+        for (let i=1; i<=5; i++) {
+            const b = document.createElement("span"); b.className="bintang"; b.textContent="★"; b.dataset.val=i;
+            b.addEventListener("mouseover",()=>{ rWrap.querySelectorAll(".bintang").forEach((s,idx)=>{ s.style.color=idx<i?"#f5a623":"#ddd"; }); });
+            b.addEventListener("mouseout", ()=>{ rWrap.querySelectorAll(".bintang").forEach(s=>{ s.style.color=s.classList.contains("aktif")?"#f5a623":"#ddd"; }); });
+            b.addEventListener("click",()=>kirimRating(id,i,rWrap));
+            rWrap.appendChild(b);
+        }
+        bub.parentElement.appendChild(rWrap);
+    }
+    scrollBawah();
+}
+
+// ── Kirim pesan ───────────────────────────────────────────
+async function kirim() {
+    if (sedangLoading) return;
+    const pertanyaan = inputEl.value.trim(); if (!pertanyaan) return;
+
+    sedangLoading=true; btnKirim.disabled=true;
+    inputEl.value=""; autoResize(inputEl);
+
+    tambahBubbleUser(pertanyaan);
+    document.getElementById("loading").style.display="flex";
+    scrollBawah();
+
+    try {
+        const res = await fetch("/tanya-stream", {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body: JSON.stringify({pertanyaan})
+        });
+
+        document.getElementById("loading").style.display="none";
+
+        if (!res.ok) { toast("Terjadi kesalahan, coba lagi."); return; }
+
+        const { wrap, bub, rawEl, kursor } = buatBubbleAI();
+        const reader  = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = ""; let teksLengkap = ""; let idPercakapan = null;
+
+        while (true) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream:true });
+            const lines = buffer.split("\n");
+            buffer = lines.pop(); // simpan baris tidak lengkap
+
+            for (const line of lines) {
+                if (!line.startsWith("data:")) continue;
+                const payload = line.slice(5).trim();
+                if (!payload) continue;
+                try {
+                    const obj = JSON.parse(payload);
+                    if (obj.error) { toast(obj.error); break; }
+                    if (obj.token) {
+                        teksLengkap += obj.token;
+                        rawEl.textContent = teksLengkap;
+                        scrollBawah();
+                    }
+                    if (obj.done) { idPercakapan = obj.id; }
+                } catch(e) {}
             }
         }
 
-        function tambahBubbleUser(teks) {
-            const area = document.getElementById("chatArea");
-            const wrap = document.createElement("div");
-            wrap.className = "bubble-wrap user";
-            const bub = document.createElement("div");
-            bub.className = "bubble user";
-            bub.textContent = teks;
-            wrap.appendChild(bub);
-            area.appendChild(wrap);
-            scrollBawah();
-        }
+        selesaiStreaming(bub, rawEl, kursor, teksLengkap, idPercakapan);
 
-        function tambahBubbleAI(teks, id) {
-            const area = document.getElementById("chatArea");
-            const wrap = document.createElement("div");
-            wrap.className = "bubble-wrap ai";
+    } catch(e) {
+        document.getElementById("loading").style.display="none";
+        toast("Koneksi bermasalah. Coba lagi.");
+    } finally {
+        sedangLoading=false; btnKirim.disabled=false; inputEl.focus();
+    }
+}
 
-            const nama = document.createElement("div");
-            nama.className = "nama-ai";
-            nama.innerHTML = "🕌 PratamaAI";
-            wrap.appendChild(nama);
+// ── Rating ────────────────────────────────────────────────
+async function kirimRating(id, nilai, rWrap) {
+    try {
+        await fetch("/rating",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id,rating:nilai})});
+        rWrap.innerHTML=`<span class="rating-done">✓ Terima kasih! Penilaian ${nilai}/5 ★ tersimpan.</span>`;
+    } catch(e) { toast("Gagal menyimpan rating."); }
+}
 
-            const bub = document.createElement("div");
-            bub.className = "bubble ai";
-            bub.innerHTML = formatJawaban(teks);
-            wrap.appendChild(bub);
+// ── Reset ─────────────────────────────────────────────────
+async function resetChat() {
+    if (!confirm("Reset percakapan? Riwayat sesi ini akan dihapus.")) return;
+    await fetch("/reset",{method:"POST"}).catch(()=>{});
+    chatArea.innerHTML=`
+        <div class="sambutan" id="kartuSambutan">
+            <div class="sambutan-arab">اَلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللّٰهِ وَبَرَكَاتُهُ</div>
+            <h2>Percakapan Direset</h2>
+            <p>Silakan mulai percakapan baru.</p>
+            <div class="sambutan-dev">✦ Dikembangkan oleh Muhammad Ibnu Setiawan Pratama ✦</div>
+            <div class="contoh-wrap">
+                <span class="contoh-btn" onclick="tanyaContoh(this)">Apa itu rukun Islam?</span>
+                <span class="contoh-btn" onclick="tanyaContoh(this)">Keutamaan membaca Al-Qur'an</span>
+                <span class="contoh-btn" onclick="tanyaContoh(this)">Hukum sholat berjamaah</span>
+                <span class="contoh-btn" onclick="tanyaContoh(this)">Adab kepada orang tua</span>
+            </div>
+        </div>`;
+}
 
-            if (id) {
-                const ratingArea = document.createElement("div");
-                ratingArea.className = "rating-area";
-                ratingArea.innerHTML = `<span>Nilai jawaban:</span>`;
-                for (let i = 1; i <= 5; i++) {
-                    const star = document.createElement("span");
-                    star.className = "star";
-                    star.innerHTML = "★";
-                    star.dataset.val = i;
-                    star.addEventListener("click", function() {
-                        kirimRating(id, i, ratingArea);
-                    });
-                    star.addEventListener("mouseover", function() {
-                        ratingArea.querySelectorAll(".star").forEach((s,idx) => {
-                            s.style.color = idx < i ? "#f5a623" : "#ccc";
-                        });
-                    });
-                    star.addEventListener("mouseout", function() {
-                        ratingArea.querySelectorAll(".star").forEach(s => {
-                            if (!s.classList.contains("active")) s.style.color = "#ccc";
-                        });
-                    });
-                    ratingArea.appendChild(star);
-                }
-                wrap.appendChild(ratingArea);
-            }
-
-            area.appendChild(wrap);
-            scrollBawah();
-        }
-
-        function formatJawaban(teks) {
-            // Pisah per paragraf
-            let paragraf = teks.split(/\n\n+/);
-            let html = "";
-            paragraf.forEach(p => {
-                p = p.trim();
-                if (!p) return;
-                // Deteksi teks Arab
-                if (/[\u0600-\u06FF]/.test(p)) {
-                    html += `<span class="arab">${p}</span>`;
-                } else if (p.startsWith("QS.") || p.startsWith("HR.") || p.startsWith("(QS") || p.startsWith("(HR")) {
-                    html += `<div class="dalil">${p}</div>`;
-                } else {
-                    // Handle newline tunggal dalam paragraf
-                    let baris = p.replace(/\n/g, "<br>");
-                    html += `<p>${baris}</p>`;
-                }
-            });
-            return html;
-        }
-
-        async function kirimRating(id, nilai, ratingArea) {
-            await fetch("/rating", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({id, rating: nilai})
-            });
-            ratingArea.innerHTML = `<span class="rating-done">✓ Terima kasih atas penilaian Anda! (${nilai}/5 ★)</span>`;
-        }
-
-        async function resetChat() {
-            await fetch("/reset", {method: "POST"});
-            const area = document.getElementById("chatArea");
-            area.innerHTML = `<div class="sambutan">
-                <h2>Assalamu'alaikum Warahmatullahi Wabarakatuh</h2>
-                <p>Percakapan direset. Silakan ajukan pertanyaan baru.</p>
-            </div>`;
-        }
-
-        function exportPDF() {
-            window.location.href = "/export-pdf";
-        }
-
-        function scrollBawah() {
-            const area = document.getElementById("chatArea");
-            area.scrollTop = area.scrollHeight;
-        }
-    </script>
+// ── Export PDF ────────────────────────────────────────────
+function exportPDF() { window.location.href="/export-pdf"; }
+</script>
 </body>
 </html>

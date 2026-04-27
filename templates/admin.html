@@ -4,112 +4,191 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin PratamaAI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f5f5f0; min-height: 100vh; }
-        .header { background: linear-gradient(135deg, #1a5c38, #2d8653); color: white; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
-        .header h1 { font-size: 18px; }
-        .header a { color: white; text-decoration: none; background: rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 20px; font-size: 12px; }
-        .container { max-width: 1000px; margin: 24px auto; padding: 0 16px; }
-        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
-        .stat-card { background: white; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
-        .stat-card .angka { font-size: 36px; font-weight: 700; color: #2d8653; }
-        .stat-card .label { font-size: 13px; color: #888; margin-top: 4px; }
-        .section { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-bottom: 20px; }
-        .section h2 { font-size: 15px; color: #1a5c38; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #e8f5e9; }
-        .rating-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-        .rating-bar .label { width: 40px; font-size: 13px; color: #555; }
-        .bar-track { flex: 1; background: #f0f0f0; border-radius: 8px; height: 20px; overflow: hidden; }
-        .bar-fill { height: 100%; background: linear-gradient(90deg, #2d8653, #5cb87a); border-radius: 8px; transition: width 0.6s; }
-        .bar-count { width: 30px; font-size: 12px; color: #888; text-align: right; }
-        table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        th { background: #f0f7f0; color: #1a5c38; padding: 10px 12px; text-align: left; font-weight: 600; }
-        td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
-        tr:hover td { background: #fafff8; }
-        .rating-stars { color: #f5a623; }
-        .no-rating { color: #ccc; font-size: 12px; }
-        .pertanyaan-col { max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .jawaban-col { max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #555; }
-        .waktu-col { color: #aaa; font-size: 11px; white-space: nowrap; }
-        .empty { text-align: center; color: #aaa; padding: 30px; font-size: 14px; }
+        :root {
+            --hijau-tua:   #1a4a2e;
+            --hijau-mid:   #2d6a4f;
+            --hijau-light: #52b788;
+            --hijau-pale:  #e8f5ee;
+            --emas:        #c9a84c;
+            --krem:        #faf8f3;
+            --putih:       #ffffff;
+            --shadow:      0 2px 12px rgba(26,74,46,0.09);
+        }
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--krem); min-height:100vh; }
+
+        .header {
+            background:var(--hijau-tua); color:#fff;
+            padding:0 24px; height:58px;
+            display:flex; align-items:center; justify-content:space-between;
+            box-shadow:0 2px 10px rgba(0,0,0,0.18);
+        }
+        .header h1 { font-size:15px; display:flex; align-items:center; gap:8px; }
+        .header-actions { display:flex; gap:10px; }
+        .btn {
+            padding:6px 15px; border-radius:20px; font-size:12px;
+            font-family:'Plus Jakarta Sans',sans-serif;
+            cursor:pointer; border:none; font-weight:500; transition:all .2s;
+            text-decoration:none; display:inline-flex; align-items:center;
+        }
+        .btn-outline { background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.3); color:#fff; }
+        .btn-outline:hover { background:rgba(255,255,255,0.22); }
+        .btn-emas { background:var(--emas); color:#fff; }
+        .btn-emas:hover { opacity:.88; }
+
+        .container { max-width:1100px; margin:24px auto; padding:0 20px 48px; }
+
+        /* Stat cards */
+        .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:22px; }
+        .stat-card {
+            background:var(--putih); border-radius:14px; padding:18px 20px;
+            box-shadow:var(--shadow); border:1px solid rgba(82,183,136,0.12);
+        }
+        .stat-card .ikon   { font-size:22px; margin-bottom:8px; }
+        .stat-card .angka  { font-size:30px; font-weight:700; color:var(--hijau-mid); line-height:1; }
+        .stat-card .label  { font-size:11.5px; color:#888; margin-top:5px; }
+
+        /* Section */
+        .section {
+            background:var(--putih); border-radius:14px; padding:20px;
+            box-shadow:var(--shadow); border:1px solid rgba(82,183,136,0.10);
+            margin-bottom:18px;
+        }
+        .section-head {
+            display:flex; align-items:center; justify-content:space-between;
+            margin-bottom:16px; padding-bottom:10px;
+            border-bottom:1.5px solid var(--hijau-pale);
+        }
+        .section-head h2 { font-size:14px; color:var(--hijau-tua); font-weight:700; }
+        .section-head span { font-size:11.5px; color:#aaa; }
+
+        /* Rating bar */
+        .rating-row { display:flex; align-items:center; gap:10px; margin-bottom:9px; }
+        .rating-row .lbl { width:42px; font-size:12.5px; color:#555; }
+        .bar-track { flex:1; background:#f0f0f0; border-radius:8px; height:18px; overflow:hidden; }
+        .bar-fill  { height:100%; background:linear-gradient(90deg,var(--hijau-mid),var(--hijau-light)); border-radius:8px; transition:width .7s ease; }
+        .bar-count { width:30px; font-size:11.5px; color:#999; text-align:right; }
+
+        /* Table */
+        .tbl-wrap { overflow-x:auto; }
+        table { width:100%; border-collapse:collapse; font-size:12.5px; }
+        th { background:var(--hijau-pale); color:var(--hijau-tua); padding:10px 13px; text-align:left; font-weight:600; white-space:nowrap; }
+        td { padding:10px 13px; border-bottom:1px solid #f3f3f3; vertical-align:top; }
+        tr:hover td { background:#fafff8; }
+        .col-q { max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; cursor:help; }
+        .col-a { max-width:260px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#555; cursor:help; }
+        .col-waktu { color:#aaa; font-size:11px; white-space:nowrap; }
+        .stars-on  { color:#f5a623; }
+        .stars-off { color:#ccc; font-size:11px; }
+
+        .kosong { text-align:center; color:#bbb; padding:30px; font-size:13px; }
+
+        @media(max-width:700px){
+            .stats { grid-template-columns:repeat(2,1fr); }
+            .col-a { display:none; }
+        }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>🕌 Admin PratamaAI</h1>
-        <a href="/">← Kembali ke Chat</a>
+
+<div class="header">
+    <h1>🕌 Admin Panel · PratamaAI</h1>
+    <div class="header-actions">
+        <a href="/export-csv?pw={{ pw }}" class="btn btn-emas">⬇ Export CSV</a>
+        <a href="/" class="btn btn-outline">← Kembali ke Chat</a>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="stats">
+        <div class="stat-card">
+            <div class="ikon">💬</div>
+            <div class="angka">{{ total }}</div>
+            <div class="label">Total Percakapan</div>
+        </div>
+        <div class="stat-card">
+            <div class="ikon">👥</div>
+            <div class="angka">{{ total_sesi }}</div>
+            <div class="label">Total Sesi Pengguna</div>
+        </div>
+        <div class="stat-card">
+            <div class="ikon">⭐</div>
+            <div class="angka">{{ avg_rating }}</div>
+            <div class="label">Rata-rata Rating</div>
+        </div>
+        <div class="stat-card">
+            <div class="ikon">📅</div>
+            <div class="angka">{{ hari_ini }}</div>
+            <div class="label">Percakapan Hari Ini</div>
+        </div>
     </div>
 
-    <div class="container">
-        <div class="stats">
-            <div class="stat-card">
-                <div class="angka">{{ total }}</div>
-                <div class="label">Total Percakapan</div>
-            </div>
-            <div class="stat-card">
-                <div class="angka">{{ rated }}</div>
-                <div class="label">Sudah Dinilai</div>
-            </div>
-            <div class="stat-card">
-                <div class="angka">{{ avg_rating }}</div>
-                <div class="label">Rata-rata Rating</div>
-            </div>
+    <div class="section">
+        <div class="section-head">
+            <h2>📊 Distribusi Rating Jawaban</h2>
+            <span>{{ rated }} dari {{ total }} sudah dinilai</span>
         </div>
-
-        <div class="section">
-            <h2>Distribusi Rating</h2>
-            {% set max_rating = [1] %}
-            {% for i in range(1, 6) %}
-                {% if rating_dist[i] > max_rating[0] %}
-                    {% set _ = max_rating.append(rating_dist[i]) %}
-                {% endif %}
-            {% endfor %}
-            {% for i in range(5, 0, -1) %}
-            <div class="rating-bar">
-                <div class="label">{{ i }} ★</div>
-                <div class="bar-track">
-                    <div class="bar-fill" style="width: {{ (rating_dist[i] / max_rating[-1] * 100) if max_rating[-1] > 0 else 0 }}%"></div>
-                </div>
-                <div class="bar-count">{{ rating_dist[i] }}</div>
+        {% set maks = [1] %}
+        {% for i in range(1,6) %}
+            {% if rating_dist[i] > maks[0] %}{% set _ = maks.append(rating_dist[i]) %}{% endif %}
+        {% endfor %}
+        {% for i in range(5,0,-1) %}
+        <div class="rating-row">
+            <div class="lbl">{{ i }} ★</div>
+            <div class="bar-track">
+                <div class="bar-fill" style="width:{{ (rating_dist[i] / maks[-1] * 100)|round if maks[-1] > 0 else 0 }}%"></div>
             </div>
-            {% endfor %}
+            <div class="bar-count">{{ rating_dist[i] }}</div>
         </div>
-
-        <div class="section">
-            <h2>Riwayat Percakapan Terbaru</h2>
-            {% if terbaru %}
-            <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Pertanyaan</th>
-                        <th>Jawaban</th>
-                        <th>Rating</th>
-                        <th>Waktu</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for p in terbaru %}
-                    <tr>
-                        <td>{{ p.id }}</td>
-                        <td class="pertanyaan-col" title="{{ p.pertanyaan }}">{{ p.pertanyaan }}</td>
-                        <td class="jawaban-col" title="{{ p.jawaban }}">{{ p.jawaban }}</td>
-                        <td>
-                            {% if p.rating %}
-                                <span class="rating-stars">{{ '★' * p.rating }}{{ '☆' * (5 - p.rating) }}</span>
-                            {% else %}
-                                <span class="no-rating">Belum dinilai</span>
-                            {% endif %}
-                        </td>
-                        <td class="waktu-col">{{ p.waktu.strftime('%d/%m/%Y %H:%M') }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-            <div class="empty">Belum ada percakapan tercatat.</div>
-            {% endif %}
-        </div>
+        {% endfor %}
     </div>
+
+    <div class="section">
+        <div class="section-head">
+            <h2>📋 Riwayat Percakapan Terbaru</h2>
+            <span>Menampilkan 20 terbaru</span>
+        </div>
+        {% if terbaru %}
+        <div class="tbl-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Sesi</th>
+                    <th>Pertanyaan</th>
+                    <th class="col-a">Jawaban</th>
+                    <th>Rating</th>
+                    <th>Waktu</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in terbaru %}
+                <tr>
+                    <td>{{ p.id }}</td>
+                    <td style="font-size:10.5px;color:#aaa;font-family:monospace;">{{ p.sesi_id[:8] }}</td>
+                    <td class="col-q" title="{{ p.pertanyaan }}">{{ p.pertanyaan }}</td>
+                    <td class="col-a" title="{{ p.jawaban }}">{{ p.jawaban }}</td>
+                    <td>
+                        {% if p.rating %}
+                            <span class="stars-on">{{ '★' * p.rating }}{{ '☆' * (5 - p.rating) }}</span>
+                        {% else %}
+                            <span class="stars-off">Belum dinilai</span>
+                        {% endif %}
+                    </td>
+                    <td class="col-waktu">{{ p.waktu.strftime('%d/%m/%y %H:%M') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+        {% else %}
+        <div class="kosong">Belum ada percakapan yang tercatat.</div>
+        {% endif %}
+    </div>
+
+</div>
 </body>
 </html>
