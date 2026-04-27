@@ -245,7 +245,32 @@ def admin():
     )
 
 
-@app.route("/hapus/<int:pid>", methods=["POST"])
+@app.route("/simpan-kuis", methods=["POST"])
+def simpan_kuis():
+    """Simpan jawaban kuis siswa ke database secara langsung."""
+    try:
+        data      = request.json or {}
+        pw_check  = request.args.get("pw", "")  # opsional
+        sesi_id   = session.get("sesi_id", os.urandom(8).hex())
+        p = Percakapan(
+            sesi_id    = sesi_id,
+            nama_user  = data.get("nama_user", "Anonim"),
+            peran_user = data.get("peran_user", ""),
+            pertanyaan = data.get("soal", ""),
+            jawaban    = data.get("jawaban_siswa", ""),
+            is_kuis    = True,
+            topik_kuis = data.get("topik", None),
+            level_kuis = data.get("level", None),
+            skor_kuis  = data.get("skor", None)
+        )
+        db.session.add(p)
+        db.session.commit()
+        return jsonify({"status": "ok", "id": p.id})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
 def hapus(pid):
     pw = request.args.get("pw", "")
     if pw != ADMIN_PW:

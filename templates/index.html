@@ -473,23 +473,50 @@ PENTING:
 - Variasikan bentuk soal: bisa pertanyaan langsung, skenario, melengkapi kalimat, dll
 - Tulis HANYA soalnya saja, tanpa jawaban, tanpa pilihan ganda
 - Format: "Soal ${kuisSoalKe}: [pertanyaan]"`;
-        kirimKeAI(prompt, false);
+        kirimKeAI(prompt, false, (jawAI) => {
+            // Simpan teks soal yang dikirim AI untuk referensi saat siswa menjawab
+            soalTerakhir = jawAI.replace(/^Soal \d+:\s*/i, '').trim().substring(0, 300);
+        });
     }
 
-    function nilaiJawaban(jawaban) {
+    // soalTerakhir menyimpan teks soal yang sedang aktif
+    let soalTerakhir = '';
+
+    function nilaiJawaban(jawabanSiswa) {
         const prompt = `Kamu sedang dalam MODE KUIS sebagai penguji.
 Topik: ${kuisTopik}, Tingkat: ${kuisLevel}, Soal ke: ${kuisSoalKe} dari ${kuisTotalSoal}.
 
-Jawaban pengguna: "${jawaban}"
+Jawaban pengguna: "${jawabanSiswa}"
 
 Nilai jawabannya secara adil:
 1. Nyatakan BENAR atau SALAH di awal
 2. Jika benar, tambahkan skor 1 (tulis: SKOR:1)
 3. Jika salah, tulis SKOR:0
-4. Berikan penjelasan singkat yang sesuai. Untuk kuis, siswa TIDAK diwajibkan menyertakan dalil — nilai berdasarkan kebenaran isi jawaban.
+4. Berikan penjelasan singkat yang sesuai. Siswa TIDAK diwajibkan menyertakan dalil — nilai berdasarkan kebenaran isi jawaban.
 5. Jangan lanjut ke soal berikutnya, sistem yang akan mengirim soal selanjutnya.`;
-        kirimKeAI(prompt, true, (jawAI) => {
-            if (jawAI.includes('SKOR:1')) kuisSkor++;
+
+        kirimKeAI(prompt, true, async (jawAI) => {
+            const benar = jawAI.includes('SKOR:1');
+            if (benar) kuisSkor++;
+            const skor = benar ? 1 : 0;
+
+            // Simpan jawaban siswa ke DB via endpoint khusus kuis
+            try {
+                await fetch('/simpan-kuis', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        nama_user:     userData?.nama || 'Anonim',
+                        peran_user:    userData?.peran || '',
+                        soal:          soalTerakhir || `Soal ${kuisSoalKe}`,
+                        jawaban_siswa: jawabanSiswa,
+                        topik:         kuisTopik,
+                        level:         kuisLevel,
+                        skor:          skor
+                    })
+                });
+            } catch(e) { console.error('Gagal simpan kuis:', e); }
+
             setTimeout(() => mulaiSoal(), 1500);
         });
     }
@@ -528,6 +555,10 @@ Nilai jawabannya secara adil:
         if (!teks || !userData) return;
         input.value = '';
 
+        // Hilangkan welcome screen saat mulai ketik
+        const ws = document.getElementById('welcomeScreen');
+        if (ws) { ws.style.transition='opacity .3s'; ws.style.opacity='0'; setTimeout(()=>ws.remove(),300); }
+
         if (modeKuis && kuisTahap === 'berlangsung') {
             tambahBubbleUser(teks);
             nilaiJawaban(teks);
@@ -537,20 +568,26 @@ Nilai jawabannya secara adil:
         }
     }
 
-    async function kirimKeAI(pesan, tampilUser = true, callback = null) {
+    async function kirimKeAI(pesan, tampilUser = true, callback = null, opsiKuis = null) {
         const loading = document.getElementById('loading');
         loading.style.display = 'flex';
         scrollBawah();
 
         try {
+            const body = {
+                pertanyaan: pesan,
+                user_data: userData,
+                sudah_salam: sudahSalam,
+                is_kuis: opsiKuis ? true : false,
+                topik_kuis: opsiKuis ? opsiKuis.topik : null,
+                level_kuis: opsiKuis ? opsiKuis.level : null,
+                skor_kuis: opsiKuis ? opsiKuis.skor : null
+            };
+
             const res = await fetch('/tanya-stream', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    pertanyaan: pesan,
-                    user_data: userData,
-                    sudah_salam: sudahSalam
-                })
+                body: JSON.stringify(body)
             });
 
             const reader = res.body.getReader();
