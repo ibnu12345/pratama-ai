@@ -292,7 +292,7 @@
     function kirimChip(teks) {
         if (!userData) return;
         const ws = document.getElementById('welcomeScreen');
-        if (ws) ws.remove();
+        if (ws) { ws.style.transition='opacity .3s'; ws.style.opacity='0'; setTimeout(()=>ws.remove(),300); }
         tambahBubbleUser(teks);
         kirimKeAI(teks, true);
     }
@@ -341,11 +341,9 @@
         document.getElementById('overlay').style.display = 'none';
         document.getElementById('headerUser').textContent = `👤 ${nama} · ${peranDipilih}`;
 
-        // Kirim sapaan pertama dari AI — welcome screen hilang saat respons pertama datang
+        // Welcome screen TETAP di atas, sapaan AI muncul di bawahnya
         const konteks = extra ? `${peranDipilih} dari ${extra}` : peranDipilih;
         const sapaan = `Pengguna baru telah login. Nama: ${nama}, Peran: ${konteks}. Sapa dengan salam islami yang hangat, sebut namanya, dan tanya ada yang bisa dibantu hari ini. Ini adalah sapaan pertama, jadi gunakan salam lengkap.`;
-        const ws = document.getElementById('welcomeScreen');
-        if (ws) ws.remove();
         await kirimKeAI(sapaan, false);
         sudahSalam = true;
     }
@@ -407,15 +405,25 @@
             selesaiKuis();
             return;
         }
-        const prompt = `Kamu sedang dalam MODE KUIS sebagai penguji.
+
+        const panduanLevel = {
+            'Mudah': 'Buat soal tingkat MUDAH: pertanyaan dasar yang bisa dijawab siswa SD/SMP. Contoh: definisi, nama, jumlah (misal: berapa rukun Islam, siapa nama nabi pertama, apa arti kata tertentu).',
+            'Menengah': 'Buat soal tingkat MENENGAH: membutuhkan pemahaman, bukan sekedar hafalan. Contoh: alasan hukum, perbedaan konsep, penerapan dalam kehidupan sehari-hari.',
+            'Sulit': 'Buat soal tingkat SULIT: membutuhkan analisis mendalam, pengetahuan detail, atau perpaduan beberapa konsep. Contoh: hikmah suatu hukum, perbandingan pendapat ulama, konteks historis detail.'
+        };
+
+        const prompt = `Kamu sedang dalam MODE KUIS sebagai penguji Islam.
 Topik: ${kuisTopik}
 Tingkat: ${kuisLevel}
 Soal ke: ${kuisSoalKe} dari ${kuisTotalSoal}
 
-Berikan SATU soal pertanyaan saja (tanpa jawaban). Format:
-Soal ${kuisSoalKe}: [pertanyaan]
+${panduanLevel[kuisLevel] || ''}
 
-Jangan berikan jawaban atau pilihan. Tunggu jawaban dari pengguna.`;
+PENTING:
+- Buat soal yang BERBEDA dari soal-soal sebelumnya dalam sesi ini
+- Variasikan bentuk soal: bisa pertanyaan langsung, skenario, melengkapi kalimat, dll
+- Tulis HANYA soalnya saja, tanpa jawaban, tanpa pilihan ganda
+- Format: "Soal ${kuisSoalKe}: [pertanyaan]"`;
         kirimKeAI(prompt, false);
     }
 
