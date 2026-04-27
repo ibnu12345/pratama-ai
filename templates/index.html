@@ -57,8 +57,17 @@
         .bubble.ai { background:#fff; color:#2c2c2c; border-bottom-left-radius:4px; box-shadow:0 2px 10px rgba(0,0,0,0.07); }
         .bubble.ai p { margin-bottom:10px; }
         .bubble.ai p:last-child { margin-bottom:0; }
-        .arab { font-family:'Traditional Arabic','Arial Unicode MS',serif; font-size:20px; direction:rtl; text-align:right; display:block; margin:10px 0; color:var(--hijau-tua); line-height:2.2; }
-        .dalil-box { background:var(--hijau-pale); border-left:3px solid var(--hijau-mid); padding:9px 13px; border-radius:6px; margin:8px 0; font-size:12.5px; color:#444; }
+        /* DALIL STYLING - rapi seperti referensi */
+        .dalil-card { background:#fff; border:1.5px solid rgba(45,106,79,0.18); border-radius:14px; margin:12px 0; overflow:hidden; box-shadow:0 2px 8px rgba(26,74,46,0.06); }
+        .dalil-card .arab-wrap { background:var(--hijau-pale); padding:16px 20px; border-bottom:1px solid rgba(45,106,79,0.12); text-align:right; direction:rtl; }
+        .dalil-card .arab-teks { font-family:'Traditional Arabic','Scheherazade New','Arial Unicode MS',serif; font-size:24px; color:var(--hijau-tua); line-height:2; display:block; }
+        .dalil-card .dalil-body { padding:12px 16px; }
+        .dalil-card .transliterasi { font-style:italic; color:#777; font-size:12.5px; display:block; margin-bottom:6px; line-height:1.6; }
+        .dalil-card .arti { color:#333; font-size:13px; line-height:1.7; margin-bottom:8px; }
+        .dalil-card .sumber { display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:600; color:var(--hijau-mid); background:var(--hijau-pale); padding:3px 10px; border-radius:20px; }
+        /* fallback untuk teks arab inline */
+        .arab { font-family:'Traditional Arabic','Arial Unicode MS',serif; font-size:22px; direction:rtl; text-align:right; display:block; margin:10px 0; color:var(--hijau-tua); line-height:2.2; }
+        .dalil-box { background:var(--hijau-pale); border-left:3px solid var(--hijau-mid); padding:10px 14px; border-radius:8px; margin:8px 0; font-size:12.5px; color:#444; line-height:1.8; }
         .transliterasi { font-style:italic; color:#666; font-size:12.5px; margin:4px 0; display:block; }
 
         /* Bubble pilihan kuis */
@@ -259,6 +268,18 @@
             <div class="kuis-opt" onclick="pilihTopikModal('Pengetahuan Islam Umum', this)">🌟 Pengetahuan Umum</div>
         </div>
 
+        <span class="modal-label">Jumlah Soal</span>
+        <div class="level-row" id="kuisJumlahRow">
+            <div class="level-opt" onclick="pilihJumlahModal(5, this)">5️⃣<br>5 Soal</div>
+            <div class="level-opt" onclick="pilihJumlahModal(10, this)">🔟<br>10 Soal</div>
+            <div class="level-opt" id="jumlahCustomOpt" onclick="pilihJumlahCustom(this)">✏️<br>Custom</div>
+        </div>
+        <div id="customJumlahWrap" style="display:none;margin-bottom:6px;">
+            <input type="number" id="inputJumlahCustom" min="1" max="50" placeholder="Masukkan jumlah soal (1-50)"
+                style="width:100%;padding:9px 12px;border:1.5px solid var(--hijau-mid);border-radius:10px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;outline:none;"
+                oninput="validasiCustomJumlah(this)">
+        </div>
+
         <span class="modal-label">Tingkat Kesulitan</span>
         <div class="level-row" id="kuisLevelRow">
             <div class="level-opt" onclick="pilihLevelModal('Mudah', this)">😊<br>Mudah</div>
@@ -287,6 +308,7 @@
     let peranDipilih = null;
     let modalTopikDipilih = null;
     let modalLevelDipilih = null;
+    let modalJumlahDipilih = null;
 
     // ===== WELCOME CHIP =====
     function kirimChip(teks) {
@@ -351,11 +373,13 @@
     // ===== KUIS =====
     function mulaiKuis() {
         if (!userData) return;
-        // Reset pilihan modal
         modalTopikDipilih = null;
         modalLevelDipilih = null;
+        modalJumlahDipilih = null;
         document.querySelectorAll('.kuis-opt').forEach(e => e.classList.remove('aktif'));
         document.querySelectorAll('.level-opt').forEach(e => e.classList.remove('aktif'));
+        document.getElementById('customJumlahWrap').style.display = 'none';
+        document.getElementById('inputJumlahCustom').value = '';
         document.getElementById('btnMulaiKuis').disabled = true;
         document.getElementById('modalKuis').classList.add('aktif');
     }
@@ -374,8 +398,33 @@
         cekModalReady();
     }
 
+    function pilihJumlahModal(jumlah, el) {
+        document.querySelectorAll('#kuisJumlahRow .level-opt').forEach(e => e.classList.remove('aktif'));
+        el.classList.add('aktif');
+        modalJumlahDipilih = jumlah;
+        document.getElementById('customJumlahWrap').style.display = 'none';
+        cekModalReady();
+    }
+
+    function pilihJumlahCustom(el) {
+        document.querySelectorAll('#kuisJumlahRow .level-opt').forEach(e => e.classList.remove('aktif'));
+        el.classList.add('aktif');
+        modalJumlahDipilih = null;
+        document.getElementById('customJumlahWrap').style.display = 'block';
+        setTimeout(() => document.getElementById('inputJumlahCustom').focus(), 100);
+        cekModalReady();
+    }
+
+    function validasiCustomJumlah(inp) {
+        let val = parseInt(inp.value);
+        if (isNaN(val) || val < 1) val = null;
+        if (val > 50) { val = 50; inp.value = 50; }
+        modalJumlahDipilih = val;
+        cekModalReady();
+    }
+
     function cekModalReady() {
-        document.getElementById('btnMulaiKuis').disabled = !(modalTopikDipilih && modalLevelDipilih);
+        document.getElementById('btnMulaiKuis').disabled = !(modalTopikDipilih && modalLevelDipilih && modalJumlahDipilih);
     }
 
     function tutupModalKuis() {
@@ -386,12 +435,12 @@
         tutupModalKuis();
         kuisTopik = modalTopikDipilih;
         kuisLevel = modalLevelDipilih;
+        kuisTotalSoal = modalJumlahDipilih;
         modeKuis = true;
         kuisTahap = 'berlangsung';
         kuisSkor = 0;
         kuisSoalKe = 0;
 
-        // Hilangkan welcome screen jika masih ada
         const ws = document.getElementById('welcomeScreen');
         if (ws) ws.remove();
 
@@ -635,21 +684,95 @@ Nilai jawabannya secara adil:
     }
 
     function formatJawaban(teks) {
+        // Split per baris dulu untuk parsing blok dalil
+        const lines = teks.split('\n');
         let html = '';
-        const paragraf = teks.split(/\n\n+/);
-        paragraf.forEach(p => {
-            p = p.trim();
-            if (!p) return;
-            if (/[\u0600-\u06FF]/.test(p) && p.replace(/[\u0600-\u06FF\s،؟\.]/g,'').length < 10) {
-                html += `<span class="arab">${p}</span>`;
-            } else if (/^(QS\.|HR\.|Artinya:|Terjemahan:|\(QS|\(HR)/.test(p)) {
-                html += `<div class="dalil-box">${p.replace(/\n/g,'<br>')}</div>`;
-            } else if (/^[a-zA-Z].*latin/i.test(p) || /^['"].*['"]$/.test(p)) {
-                html += `<span class="transliterasi">${p}</span>`;
-            } else {
-                html += `<p>${p.replace(/\n/g,'<br>').replace(/\*(.*?)\*/g,'<b>$1</b>')}</p>`;
+        let i = 0;
+
+        while (i < lines.length) {
+            const line = lines[i].trim();
+            if (!line) { i++; continue; }
+
+            // Deteksi baris Arab (mayoritas karakter Arab)
+            const arabRatio = (line.match(/[\u0600-\u06FF]/g)||[]).length / Math.max(line.length, 1);
+            if (arabRatio > 0.3 && line.length > 2) {
+                // Mulai kumpulkan blok dalil
+                let arabTeks = line;
+                let transliterasi = '';
+                let arti = '';
+                let sumber = '';
+
+                // Scan baris berikutnya untuk bagian dalil
+                let j = i + 1;
+                while (j < lines.length) {
+                    const next = lines[j].trim();
+                    if (!next) { j++; break; }
+                    if (/^(Artinya|Terjemahan)\s*:/i.test(next)) {
+                        arti = next.replace(/^(Artinya|Terjemahan)\s*:\s*/i, '');
+                        j++;
+                    } else if (/^\(QS\.|^\(HR\.|^QS\.|^HR\./.test(next)) {
+                        sumber = next.replace(/[()]/g, '');
+                        j++; break;
+                    } else if (/^(Wa |Al-|An-|Inn|Qul|Kha|La |Bi |Fa |Fi |Mi |'An|Fal)/i.test(next) && !/[\u0600-\u06FF]/.test(next)) {
+                        transliterasi = next;
+                        j++;
+                    } else {
+                        break;
+                    }
+                }
+                i = j;
+
+                // Render sebagai dalil-card jika ada arti atau sumber
+                if (arti || sumber || transliterasi) {
+                    html += `<div class="dalil-card">
+                        <div class="arab-wrap"><span class="arab-teks">${arabTeks}</span></div>
+                        <div class="dalil-body">
+                            ${transliterasi ? `<span class="transliterasi">${transliterasi}</span>` : ''}
+                            ${arti ? `<div class="arti">Artinya: ${arti}</div>` : ''}
+                            ${sumber ? `<span class="sumber">📖 ${sumber}</span>` : ''}
+                        </div>
+                    </div>`;
+                } else {
+                    html += `<div class="arab-wrap" style="background:var(--hijau-pale);border-radius:10px;padding:12px 16px;margin:8px 0;text-align:right;direction:rtl;"><span class="arab-teks">${arabTeks}</span></div>`;
+                }
+                continue;
             }
-        });
+
+            // Deteksi sumber (QS. / HR.)
+            if (/^\(QS\.|^\(HR\.|^QS\.|^HR\./.test(line)) {
+                html += `<div style="margin:4px 0 10px;"><span class="sumber" style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:var(--hijau-mid);background:var(--hijau-pale);padding:3px 10px;border-radius:20px;">📖 ${line.replace(/[()]/g,'')}</span></div>`;
+                i++; continue;
+            }
+
+            // Deteksi Artinya:
+            if (/^(Artinya|Terjemahan)\s*:/i.test(line)) {
+                html += `<div class="dalil-box">${line}</div>`;
+                i++; continue;
+            }
+
+            // Deteksi transliterasi (baris italic latin setelah Arab)
+            if (i > 0 && /^[A-Za-z'"]/.test(line) && line.length < 200 && !/^[A-Z][a-z]+ [A-Z]/.test(line) && /[aeiou]{1,}/i.test(line)) {
+                const prev = lines[i-1] ? lines[i-1].trim() : '';
+                if ((prev.match(/[\u0600-\u06FF]/g)||[]).length > 0) {
+                    html += `<span class="transliterasi">${line}</span>`;
+                    i++; continue;
+                }
+            }
+
+            // Paragraph biasa — gabungkan baris kosong
+            let para = line;
+            i++;
+            while (i < lines.length && lines[i].trim() !== '') {
+                const nextLine = lines[i].trim();
+                const nextArabRatio = (nextLine.match(/[\u0600-\u06FF]/g)||[]).length / Math.max(nextLine.length,1);
+                if (nextArabRatio > 0.3) break;
+                if (/^\(QS\.|^\(HR\.|^QS\.|^HR\.|^(Artinya|Terjemahan)\s*:/i.test(nextLine)) break;
+                para += ' ' + nextLine;
+                i++;
+            }
+            html += `<p style="margin-bottom:10px;line-height:1.85;">${para.replace(/\*(.*?)\*/g,'<b>$1</b>')}</p>`;
+        }
+
         return html || `<p>${teks}</p>`;
     }
 

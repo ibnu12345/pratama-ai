@@ -7,122 +7,120 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --hijau-tua:   #1a4a2e;
-            --hijau-mid:   #2d6a4f;
-            --hijau-light: #52b788;
-            --hijau-pale:  #e8f5ee;
-            --emas:        #c9a84c;
-            --merah:       #e53935;
-            --krem:        #faf8f3;
-            --putih:       #ffffff;
-            --shadow:      0 2px 12px rgba(26,74,46,0.09);
+            --hijau-tua:#1a4a2e; --hijau-mid:#2d6a4f; --hijau-light:#52b788;
+            --hijau-pale:#e8f5ee; --emas:#c9a84c; --merah:#e53935;
+            --krem:#faf8f3; --putih:#ffffff; --shadow:0 2px 12px rgba(26,74,46,0.09);
         }
-        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--krem); min-height:100vh; }
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--krem);min-height:100vh;}
 
-        /* HEADER */
-        .header {
-            background:var(--hijau-tua); color:#fff;
-            padding:0 24px; height:58px;
-            display:flex; align-items:center; justify-content:space-between;
-            box-shadow:0 2px 10px rgba(0,0,0,0.18); position:sticky; top:0; z-index:50;
-        }
-        .header h1 { font-size:15px; display:flex; align-items:center; gap:8px; }
-        .header-actions { display:flex; gap:10px; }
-        .btn { padding:6px 15px; border-radius:20px; font-size:12px; font-family:'Plus Jakarta Sans',sans-serif; cursor:pointer; border:none; font-weight:500; transition:all .2s; text-decoration:none; display:inline-flex; align-items:center; gap:5px; }
-        .btn-outline { background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.3); color:#fff; }
-        .btn-outline:hover { background:rgba(255,255,255,0.22); }
-        .btn-emas { background:var(--emas); color:#fff; }
-        .btn-emas:hover { opacity:.88; }
+        .header{background:var(--hijau-tua);color:#fff;padding:0 24px;height:58px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,0.18);position:sticky;top:0;z-index:50;}
+        .header h1{font-size:15px;display:flex;align-items:center;gap:8px;}
+        .header-actions{display:flex;gap:10px;}
+        .btn{padding:6px 15px;border-radius:20px;font-size:12px;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;border:none;font-weight:500;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:5px;}
+        .btn-outline{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.3);color:#fff;}
+        .btn-outline:hover{background:rgba(255,255,255,0.22);}
+        .btn-emas{background:var(--emas);color:#fff;}
+        .btn-emas:hover{opacity:.88;}
 
-        /* TABS */
-        .tabs { background:#fff; border-bottom:2px solid var(--hijau-pale); display:flex; padding:0 24px; gap:0; position:sticky; top:58px; z-index:40; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
-        .tab { padding:14px 20px; font-size:13px; font-weight:600; color:#888; cursor:pointer; border-bottom:2.5px solid transparent; margin-bottom:-2px; transition:all .2s; display:flex; align-items:center; gap:6px; }
-        .tab:hover { color:var(--hijau-mid); }
-        .tab.aktif { color:var(--hijau-tua); border-bottom-color:var(--hijau-tua); }
-        .badge { background:var(--hijau-mid); color:#fff; font-size:10px; padding:2px 7px; border-radius:10px; font-weight:600; }
+        .tabs{background:#fff;border-bottom:2px solid var(--hijau-pale);display:flex;padding:0 24px;position:sticky;top:58px;z-index:40;box-shadow:0 2px 8px rgba(0,0,0,0.04);overflow-x:auto;}
+        .tab{padding:14px 18px;font-size:13px;font-weight:600;color:#888;cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-2px;transition:all .2s;display:flex;align-items:center;gap:6px;white-space:nowrap;}
+        .tab:hover{color:var(--hijau-mid);}
+        .tab.aktif{color:var(--hijau-tua);border-bottom-color:var(--hijau-tua);}
+        .badge{background:var(--hijau-mid);color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;}
 
-        .container { max-width:1150px; margin:24px auto; padding:0 20px 60px; }
-        .tab-content { display:none; }
-        .tab-content.aktif { display:block; }
+        .container{max-width:1150px;margin:24px auto;padding:0 20px 60px;}
+        .tab-content{display:none;}
+        .tab-content.aktif{display:block;}
 
-        /* STAT CARDS */
-        .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:22px; }
-        .stat-card { background:var(--putih); border-radius:14px; padding:18px 20px; box-shadow:var(--shadow); border:1px solid rgba(82,183,136,0.12); }
-        .stat-card .ikon { font-size:22px; margin-bottom:8px; }
-        .stat-card .angka { font-size:30px; font-weight:700; color:var(--hijau-mid); line-height:1; }
-        .stat-card .label { font-size:11.5px; color:#888; margin-top:5px; }
+        .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
+        .stat-card{background:var(--putih);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);border:1px solid rgba(82,183,136,0.12);}
+        .stat-card .ikon{font-size:22px;margin-bottom:8px;}
+        .stat-card .angka{font-size:30px;font-weight:700;color:var(--hijau-mid);line-height:1;}
+        .stat-card .label{font-size:11.5px;color:#888;margin-top:5px;}
 
-        /* SECTION */
-        .section { background:var(--putih); border-radius:14px; padding:20px; box-shadow:var(--shadow); border:1px solid rgba(82,183,136,0.10); margin-bottom:18px; }
-        .section-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; padding-bottom:10px; border-bottom:1.5px solid var(--hijau-pale); }
-        .section-head h2 { font-size:14px; color:var(--hijau-tua); font-weight:700; }
-        .section-head span { font-size:11.5px; color:#aaa; }
+        .section{background:var(--putih);border-radius:14px;padding:20px;box-shadow:var(--shadow);border:1px solid rgba(82,183,136,0.10);margin-bottom:18px;}
+        .section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:10px;border-bottom:1.5px solid var(--hijau-pale);}
+        .section-head h2{font-size:14px;color:var(--hijau-tua);font-weight:700;}
+        .section-head span{font-size:11.5px;color:#aaa;}
 
-        /* RATING BAR */
-        .rating-row { display:flex; align-items:center; gap:10px; margin-bottom:9px; }
-        .rating-row .lbl { width:42px; font-size:12.5px; color:#555; }
-        .bar-track { flex:1; background:#f0f0f0; border-radius:8px; height:18px; overflow:hidden; }
-        .bar-fill { height:100%; background:linear-gradient(90deg,var(--hijau-mid),var(--hijau-light)); border-radius:8px; }
-        .bar-count { width:30px; font-size:11.5px; color:#999; text-align:right; }
+        .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px;}
+        .bar-row .lbl{width:140px;font-size:12px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+        .bar-track{flex:1;background:#f0f0f0;border-radius:8px;height:18px;overflow:hidden;}
+        .bar-fill{height:100%;background:linear-gradient(90deg,var(--hijau-mid),var(--hijau-light));border-radius:8px;}
+        .bar-fill.emas{background:linear-gradient(90deg,var(--emas),#f0c070);}
+        .bar-count{width:30px;font-size:11.5px;color:#999;text-align:right;}
 
-        /* TABLE */
-        .tbl-wrap { overflow-x:auto; }
-        table { width:100%; border-collapse:collapse; font-size:12.5px; }
-        th { background:var(--hijau-pale); color:var(--hijau-tua); padding:10px 13px; text-align:left; font-weight:600; white-space:nowrap; }
-        td { padding:10px 13px; border-bottom:1px solid #f3f3f3; vertical-align:middle; }
-        tr:hover td { background:#fafff8; }
-        .col-teks { max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; cursor:help; color:#444; }
-        .col-waktu { color:#aaa; font-size:11px; white-space:nowrap; }
-        .stars-on { color:#f5a623; }
-        .stars-off { color:#ccc; font-size:11px; }
-        .kosong { text-align:center; color:#bbb; padding:30px; font-size:13px; }
+        .tbl-wrap{overflow-x:auto;}
+        table{width:100%;border-collapse:collapse;font-size:12.5px;}
+        th{background:var(--hijau-pale);color:var(--hijau-tua);padding:10px 13px;text-align:left;font-weight:600;white-space:nowrap;}
+        td{padding:10px 13px;border-bottom:1px solid #f3f3f3;vertical-align:middle;}
+        tr:hover td{background:#fafff8;}
+        .col-teks{max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:help;color:#444;}
+        .col-waktu{color:#aaa;font-size:11px;white-space:nowrap;}
+        .kosong{text-align:center;color:#bbb;padding:30px;font-size:13px;}
 
-        /* BADGE PERAN */
-        .tag { display:inline-block; padding:2px 10px; border-radius:10px; font-size:11px; font-weight:600; }
-        .tag-siswa { background:#e3f2fd; color:#1565c0; }
-        .tag-mhs { background:#f3e5f5; color:#6a1b9a; }
-        .tag-umum { background:#e8f5e9; color:#2e7d32; }
-        .tag-kuis { background:#fff3e0; color:#e65100; }
-        .tag-chat { background:#e8f5ee; color:#2d6a4f; }
-        .tag-benar { background:#e8f5ee; color:#2d6a4f; }
-        .tag-salah { background:#fce4e4; color:#c62828; }
+        .tag{display:inline-block;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:600;}
+        .tag-siswa{background:#e3f2fd;color:#1565c0;}
+        .tag-mhs{background:#f3e5f5;color:#6a1b9a;}
+        .tag-umum{background:#e8f5e9;color:#2e7d32;}
+        .tag-kuis{background:#fff3e0;color:#e65100;}
+        .tag-chat{background:#e8f5ee;color:#2d6a4f;}
+        .tag-benar{background:#e8f5ee;color:#2d6a4f;}
+        .tag-salah{background:#fce4e4;color:#c62828;}
+        .stars-on{color:#f5a623;}
 
-        /* ACTION BUTTONS */
-        .btn-aksi { padding:4px 10px; border-radius:8px; font-size:11px; cursor:pointer; border:none; font-family:'Plus Jakarta Sans',sans-serif; font-weight:600; }
-        .btn-edit { background:#fff3e0; color:#e65100; }
-        .btn-edit:hover { background:#ffe0b2; }
-        .btn-hapus { background:#fce4e4; color:#c62828; }
-        .btn-hapus:hover { background:#ffcdd2; }
+        .btn-aksi{padding:4px 10px;border-radius:8px;font-size:11px;cursor:pointer;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;transition:all .15s;margin-right:3px;}
+        .btn-edit{background:#fff3e0;color:#e65100;}
+        .btn-edit:hover{background:#ffe0b2;}
+        .btn-hapus{background:#fce4e4;color:#c62828;}
+        .btn-hapus:hover{background:#ffcdd2;}
 
-        /* MODAL EDIT */
-        .modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:200; align-items:center; justify-content:center; backdrop-filter:blur(3px); }
-        .modal-bg.show { display:flex; }
-        .modal-card { background:#fff; border-radius:18px; padding:28px; width:100%; max-width:520px; box-shadow:0 8px 40px rgba(0,0,0,0.18); }
-        .modal-card h3 { font-size:15px; color:var(--hijau-tua); margin-bottom:16px; }
-        .modal-card label { font-size:12px; font-weight:600; color:#555; display:block; margin-bottom:4px; margin-top:12px; }
-        .modal-card textarea, .modal-card input[type=text] { width:100%; padding:9px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:13px; font-family:'Plus Jakarta Sans',sans-serif; outline:none; resize:vertical; }
-        .modal-card textarea:focus, .modal-card input:focus { border-color:var(--hijau-mid); }
-        .modal-actions { display:flex; gap:10px; margin-top:18px; }
-        .btn-simpan { flex:2; padding:10px; background:var(--hijau-mid); color:#fff; border:none; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; }
-        .btn-batal-modal { flex:1; padding:10px; background:#f5f5f5; color:#666; border:none; border-radius:10px; font-size:13px; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; }
+        /* PENGGUNA CARDS */
+        .pengguna-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;}
+        .pengguna-card{background:var(--hijau-pale);border-radius:12px;padding:14px 16px;border:1px solid rgba(82,183,136,0.2);cursor:pointer;transition:all .2s;position:relative;}
+        .pengguna-card:hover{background:#d4edde;border-color:var(--hijau-mid);transform:translateY(-2px);box-shadow:var(--shadow);}
+        .pengguna-card .nama{font-size:13.5px;font-weight:700;color:var(--hijau-tua);margin-bottom:4px;}
+        .pengguna-card .info-tag{font-size:11.5px;margin-bottom:8px;}
+        .stats-mini{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+        .stat-mini{font-size:11px;background:#fff;padding:3px 9px;border-radius:8px;color:#444;}
+        .hapus-pengguna-btn{width:100%;padding:6px;background:#fce4e4;color:#c62828;border:none;border-radius:8px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
+        .hapus-pengguna-btn:hover{background:#ffcdd2;}
 
-        /* PENGGUNA CARD */
-        .pengguna-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:12px; }
-        .pengguna-card { background:var(--hijau-pale); border-radius:12px; padding:14px 16px; border:1px solid rgba(82,183,136,0.2); }
-        .pengguna-card .nama { font-size:13.5px; font-weight:700; color:var(--hijau-tua); margin-bottom:4px; }
-        .pengguna-card .info { font-size:11.5px; color:#666; margin-bottom:8px; }
-        .pengguna-card .stats-mini { display:flex; gap:8px; flex-wrap:wrap; }
-        .stat-mini { font-size:11px; background:#fff; padding:3px 9px; border-radius:8px; color:#444; }
+        /* MODALS */
+        .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+        .modal-bg.show{display:flex;}
+        .modal-card{background:#fff;border-radius:18px;width:100%;max-width:680px;max-height:90vh;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.2);display:flex;flex-direction:column;}
+        .modal-header{padding:20px 24px 16px;border-bottom:1.5px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+        .modal-header h3{font-size:15px;color:var(--hijau-tua);font-weight:700;}
+        .modal-close{background:none;border:none;font-size:22px;cursor:pointer;color:#aaa;line-height:1;padding:0;}
+        .modal-close:hover{color:#333;}
+        .modal-body{padding:20px 24px;overflow-y:auto;flex:1;}
+        .modal-footer{padding:16px 24px;border-top:1.5px solid #f0f0f0;display:flex;gap:10px;flex-shrink:0;}
+        .btn-simpan{flex:2;padding:10px;background:var(--hijau-mid);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
+        .btn-simpan:hover{background:var(--hijau-tua);}
+        .btn-batal-m{flex:1;padding:10px;background:#f5f5f5;color:#666;border:none;border-radius:10px;font-size:13px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
+        .form-label{font-size:12px;font-weight:600;color:#555;display:block;margin-bottom:4px;margin-top:14px;}
+        .form-input{width:100%;padding:9px 12px;border:1.5px solid #ddd;border-radius:10px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;outline:none;resize:vertical;}
+        .form-input:focus{border-color:var(--hijau-mid);}
 
-        /* KUIS TOPIK CHART */
-        .topik-row { display:flex; align-items:center; gap:10px; margin-bottom:9px; }
-        .topik-row .lbl { width:160px; font-size:12px; color:#555; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        /* RIWAYAT ITEMS */
+        .riwayat-item{background:#f9f9f9;border-radius:10px;padding:14px;margin-bottom:10px;border:1px solid #eee;}
+        .riwayat-meta{display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap;}
+        .riwayat-q{font-weight:600;font-size:13px;color:#333;margin-bottom:5px;}
+        .riwayat-a{font-size:12.5px;color:#666;line-height:1.6;}
+        .riwayat-aksi{display:flex;gap:6px;margin-top:8px;}
+
+        /* USER STAT MINI */
+        .user-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+        .user-stat{background:var(--hijau-pale);border-radius:10px;padding:12px;text-align:center;}
+        .user-stat .num{font-size:22px;font-weight:700;color:var(--hijau-tua);}
+        .user-stat .lbl{font-size:11px;color:#666;margin-top:2px;}
+        .kuis-stat-bar{background:var(--hijau-pale);border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
 
         @media(max-width:700px){
-            .stats { grid-template-columns:repeat(2,1fr); }
-            .tabs { overflow-x:auto; }
-            .tab { white-space:nowrap; padding:12px 14px; font-size:12px; }
+            .stats{grid-template-columns:repeat(2,1fr);}
+            .user-stat-grid{grid-template-columns:repeat(2,1fr);}
         }
     </style>
 </head>
@@ -132,307 +130,348 @@
     <h1>🕌 Admin Panel · PratamaAI</h1>
     <div class="header-actions">
         <a href="/export-csv?pw={{ pw }}" class="btn btn-emas">⬇ Export CSV</a>
-        <a href="/" class="btn btn-outline">← Kembali ke Chat</a>
+        <a href="/" class="btn btn-outline">← Kembali</a>
     </div>
 </div>
 
-<!-- TABS -->
 <div class="tabs">
-    <div class="tab aktif" onclick="gantiTab('dashboard')">📊 Dashboard</div>
-    <div class="tab" onclick="gantiTab('pengguna')">👥 Pengguna <span class="badge">{{ pengguna_list|length }}</span></div>
-    <div class="tab" onclick="gantiTab('percakapan')">💬 Percakapan <span class="badge">{{ total }}</span></div>
-    <div class="tab" onclick="gantiTab('kuis')">🎯 Kuis <span class="badge">{{ total_kuis }}</span></div>
+    <div class="tab aktif" onclick="gantiTab('dashboard',this)">📊 Dashboard</div>
+    <div class="tab" onclick="gantiTab('pengguna',this)">👥 Pengguna <span class="badge">{{ pengguna_list|length }}</span></div>
+    <div class="tab" onclick="gantiTab('percakapan',this)">💬 Percakapan <span class="badge">{{ total }}</span></div>
+    <div class="tab" onclick="gantiTab('kuis',this)">🎯 Kuis <span class="badge">{{ total_kuis }}</span></div>
 </div>
 
 <div class="container">
 
-    <!-- ===== TAB DASHBOARD ===== -->
+    <!-- DASHBOARD -->
     <div id="tab-dashboard" class="tab-content aktif">
         <div class="stats">
-            <div class="stat-card">
-                <div class="ikon">💬</div>
-                <div class="angka">{{ total }}</div>
-                <div class="label">Total Percakapan</div>
-            </div>
-            <div class="stat-card">
-                <div class="ikon">👥</div>
-                <div class="angka">{{ total_sesi }}</div>
-                <div class="label">Total Sesi</div>
-            </div>
-            <div class="stat-card">
-                <div class="ikon">⭐</div>
-                <div class="angka">{{ avg_rating }}</div>
-                <div class="label">Rata-rata Rating</div>
-            </div>
-            <div class="stat-card">
-                <div class="ikon">📅</div>
-                <div class="angka">{{ hari_ini }}</div>
-                <div class="label">Chat Hari Ini</div>
-            </div>
+            <div class="stat-card"><div class="ikon">💬</div><div class="angka">{{ total }}</div><div class="label">Total Percakapan</div></div>
+            <div class="stat-card"><div class="ikon">👥</div><div class="angka">{{ total_sesi }}</div><div class="label">Total Sesi</div></div>
+            <div class="stat-card"><div class="ikon">⭐</div><div class="angka">{{ avg_rating }}</div><div class="label">Rata-rata Rating</div></div>
+            <div class="stat-card"><div class="ikon">📅</div><div class="angka">{{ hari_ini }}</div><div class="label">Chat Hari Ini</div></div>
         </div>
-
         <div class="section">
-            <div class="section-head">
-                <h2>📊 Distribusi Rating</h2>
-                <span>{{ rated }} dari {{ total }} sudah dinilai</span>
-            </div>
-            {% set maks = [1] %}
-            {% for i in range(1,6) %}{% if rating_dist[i] > maks[0] %}{% set _ = maks.append(rating_dist[i]) %}{% endif %}{% endfor %}
+            <div class="section-head"><h2>📊 Distribusi Rating</h2><span>{{ rated }} dari {{ total }} dinilai</span></div>
+            {% set maks=[1] %}{% for i in range(1,6) %}{% if rating_dist[i]>maks[0] %}{% set _=maks.append(rating_dist[i]) %}{% endif %}{% endfor %}
             {% for i in range(5,0,-1) %}
-            <div class="rating-row">
+            <div class="bar-row">
                 <div class="lbl">{{ i }} ★</div>
-                <div class="bar-track">
-                    <div class="bar-fill" style="width:{{ (rating_dist[i] / maks[-1] * 100)|round if maks[-1] > 0 else 0 }}%"></div>
-                </div>
+                <div class="bar-track"><div class="bar-fill" style="width:{{ (rating_dist[i]/maks[-1]*100)|round if maks[-1]>0 else 0 }}%"></div></div>
                 <div class="bar-count">{{ rating_dist[i] }}</div>
+            </div>{% endfor %}
+        </div>
+        {% if kuis_per_topik %}
+        <div class="section">
+            <div class="section-head"><h2>🎯 Kuis per Topik</h2><span>{{ total_kuis }} total</span></div>
+            {% set mk=[1] %}{% for t in kuis_per_topik %}{% if t.jumlah>mk[0] %}{% set _=mk.append(t.jumlah) %}{% endif %}{% endfor %}
+            {% for t in kuis_per_topik %}
+            <div class="bar-row">
+                <div class="lbl">{{ t.topik_kuis }}</div>
+                <div class="bar-track"><div class="bar-fill emas" style="width:{{ (t.jumlah/mk[-1]*100)|round }}%"></div></div>
+                <div class="bar-count">{{ t.jumlah }}</div>
+            </div>{% endfor %}
+        </div>{% endif %}
+    </div>
+
+    <!-- PENGGUNA -->
+    <div id="tab-pengguna" class="tab-content">
+        <div class="section">
+            <div class="section-head"><h2>👥 Daftar Pengguna</h2><span>Klik kartu untuk melihat riwayat chat & kuis</span></div>
+            {% if pengguna_list %}
+            <div class="pengguna-grid">
+                {% for p in pengguna_list %}
+                <div class="pengguna-card" onclick="lihatRiwayat('{{ p.nama_user|replace("'","\\'") }}')">
+                    <div class="nama">{{ p.nama_user or 'Anonim' }}</div>
+                    <div class="info-tag">
+                        {% if p.peran_user=='Siswa' %}<span class="tag tag-siswa">🎒 Siswa</span>
+                        {% elif p.peran_user=='Mahasiswa' %}<span class="tag tag-mhs">🎓 Mahasiswa</span>
+                        {% else %}<span class="tag tag-umum">👤 {{ p.peran_user or 'Umum' }}</span>{% endif %}
+                    </div>
+                    <div class="stats-mini">
+                        <span class="stat-mini">💬 {{ p.jumlah_chat }}</span>
+                        <span class="stat-mini">🎯 {{ p.jumlah_kuis }}</span>
+                        <span class="stat-mini">🕐 {{ p.terakhir_aktif.strftime('%d/%m/%y') }}</span>
+                    </div>
+                    <button class="hapus-pengguna-btn" onclick="event.stopPropagation();hapusPengguna('{{ p.nama_user|replace("'","\\'") }}')">🗑 Hapus Semua Data</button>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
+            {% else %}<div class="kosong">Belum ada pengguna.</div>{% endif %}
+        </div>
+    </div>
+
+    <!-- PERCAKAPAN -->
+    <div id="tab-percakapan" class="tab-content">
+        <div class="section">
+            <div class="section-head"><h2>💬 Riwayat Percakapan</h2><span>20 terbaru</span></div>
+            {% if terbaru %}
+            <div class="tbl-wrap">
+            <table>
+                <thead><tr><th>#</th><th>Nama</th><th>Jenis</th><th>Pertanyaan</th><th>Jawaban</th><th>Rating</th><th>Waktu</th><th>Aksi</th></tr></thead>
+                <tbody>
+                {% for p in terbaru %}
+                <tr id="row-{{ p.id }}">
+                    <td>{{ p.id }}</td>
+                    <td style="font-weight:600;color:var(--hijau-tua);white-space:nowrap;cursor:pointer;" onclick="lihatRiwayat('{{ p.nama_user|replace("'","\\'") }}')">{{ p.nama_user }}</td>
+                    <td>{% if p.is_kuis %}<span class="tag tag-kuis">🎯 Kuis</span>{% else %}<span class="tag tag-chat">💬 Chat</span>{% endif %}</td>
+                    <td class="col-teks" title="{{ p.pertanyaan }}">{{ p.pertanyaan }}</td>
+                    <td class="col-teks" title="{{ p.jawaban }}">{{ p.jawaban }}</td>
+                    <td>{% if p.rating %}<span class="stars-on">{{ '★'*p.rating }}</span>{% else %}<span style="color:#ccc">-</span>{% endif %}</td>
+                    <td class="col-waktu">{{ p.waktu.strftime('%d/%m/%y %H:%M') }}</td>
+                    <td style="white-space:nowrap;">
+                        <button class="btn-aksi btn-edit" onclick="bukaEdit({{ p.id }},'{{ p.nama_user|replace("'","\\'") }}',`{{ p.pertanyaan|replace('`','\\`')|replace('\n',' ')|truncate(300,True,'') }}`,`{{ p.jawaban|replace('`','\\`')|replace('\n',' ')|truncate(300,True,'') }}`)">✏ Edit</button>
+                        <button class="btn-aksi btn-hapus" onclick="hapusData({{ p.id }})">🗑</button>
+                    </td>
+                </tr>{% endfor %}
+                </tbody>
+            </table>
+            </div>
+            {% else %}<div class="kosong">Belum ada percakapan.</div>{% endif %}
+        </div>
+    </div>
+
+    <!-- KUIS -->
+    <div id="tab-kuis" class="tab-content">
+        <div class="stats" style="grid-template-columns:repeat(3,1fr);">
+            <div class="stat-card"><div class="ikon">🎯</div><div class="angka">{{ total_kuis }}</div><div class="label">Total Sesi Kuis</div></div>
+            <div class="stat-card"><div class="ikon">📚</div><div class="angka">{{ kuis_per_topik|length }}</div><div class="label">Topik Dikerjakan</div></div>
+            <div class="stat-card"><div class="ikon">👥</div><div class="angka">{{ pengguna_list|selectattr('jumlah_kuis','gt',0)|list|length }}</div><div class="label">Peserta Kuis</div></div>
         </div>
 
         {% if kuis_per_topik %}
         <div class="section">
-            <div class="section-head">
-                <h2>🎯 Kuis per Topik</h2>
-                <span>Total {{ total_kuis }} sesi kuis</span>
-            </div>
-            {% set maks_k = [1] %}
-            {% for t in kuis_per_topik %}{% if t.jumlah > maks_k[0] %}{% set _ = maks_k.append(t.jumlah) %}{% endif %}{% endfor %}
+            <div class="section-head"><h2>📊 Statistik per Topik</h2></div>
+            {% set mk2=[1] %}{% for t in kuis_per_topik %}{% if t.jumlah>mk2[0] %}{% set _=mk2.append(t.jumlah) %}{% endif %}{% endfor %}
             {% for t in kuis_per_topik %}
-            <div class="topik-row">
+            <div class="bar-row">
                 <div class="lbl">{{ t.topik_kuis }}</div>
-                <div class="bar-track">
-                    <div class="bar-fill" style="width:{{ (t.jumlah / maks_k[-1] * 100)|round }}%; background:linear-gradient(90deg,var(--emas),#f0c070);"></div>
-                </div>
+                <div class="bar-track"><div class="bar-fill emas" style="width:{{ (t.jumlah/mk2[-1]*100)|round }}%"></div></div>
                 <div class="bar-count">{{ t.jumlah }}</div>
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-    </div>
-
-    <!-- ===== TAB PENGGUNA ===== -->
-    <div id="tab-pengguna" class="tab-content">
-        <div class="section">
-            <div class="section-head">
-                <h2>👥 Daftar Pengguna & Aktivitas</h2>
-                <span>{{ pengguna_list|length }} pengguna terdaftar</span>
-            </div>
-            {% if pengguna_list %}
-            <div class="pengguna-grid">
-                {% for p in pengguna_list %}
-                <div class="pengguna-card">
-                    <div class="nama">{{ p.nama_user or 'Anonim' }}</div>
-                    <div class="info">
-                        {% if p.peran_user == 'Siswa' %}<span class="tag tag-siswa">🎒 Siswa</span>
-                        {% elif p.peran_user == 'Mahasiswa' %}<span class="tag tag-mhs">🎓 Mahasiswa</span>
-                        {% else %}<span class="tag tag-umum">👤 Umum</span>{% endif %}
-                    </div>
-                    <div class="stats-mini">
-                        <span class="stat-mini">💬 {{ p.jumlah_chat }} chat</span>
-                        <span class="stat-mini">🎯 {{ p.jumlah_kuis }} kuis</span>
-                        <span class="stat-mini">🕐 {{ p.terakhir_aktif.strftime('%d/%m/%y') }}</span>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-            {% else %}
-            <div class="kosong">Belum ada pengguna terdaftar.</div>
-            {% endif %}
-        </div>
-    </div>
-
-    <!-- ===== TAB PERCAKAPAN ===== -->
-    <div id="tab-percakapan" class="tab-content">
-        <div class="section">
-            <div class="section-head">
-                <h2>💬 Riwayat Percakapan</h2>
-                <span>20 terbaru</span>
-            </div>
-            {% if terbaru %}
-            <div class="tbl-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Nama</th>
-                        <th>Jenis</th>
-                        <th>Pertanyaan</th>
-                        <th>Jawaban</th>
-                        <th>Rating</th>
-                        <th>Waktu</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="tabelPercakapan">
-                    {% for p in terbaru %}
-                    <tr id="row-{{ p.id }}">
-                        <td>{{ p.id }}</td>
-                        <td style="font-weight:600;color:var(--hijau-tua);white-space:nowrap;">{{ p.nama_user }}</td>
-                        <td>
-                            {% if p.is_kuis %}<span class="tag tag-kuis">🎯 Kuis</span>
-                            {% else %}<span class="tag tag-chat">💬 Chat</span>{% endif %}
-                        </td>
-                        <td class="col-teks" title="{{ p.pertanyaan }}">{{ p.pertanyaan }}</td>
-                        <td class="col-teks" title="{{ p.jawaban }}">{{ p.jawaban }}</td>
-                        <td>
-                            {% if p.rating %}<span class="stars-on">{{ '★' * p.rating }}{{ '☆' * (5 - p.rating) }}</span>
-                            {% else %}<span class="stars-off">-</span>{% endif %}
-                        </td>
-                        <td class="col-waktu">{{ p.waktu.strftime('%d/%m/%y %H:%M') }}</td>
-                        <td style="white-space:nowrap;">
-                            <button class="btn-aksi btn-edit" onclick="bukaEdit({{ p.id }}, '{{ p.nama_user|replace("'","\\'")|replace('"','\\"') }}', '{{ p.pertanyaan|replace("'","\\'")|replace('"','\\"')|truncate(100,True,'')|replace('\n',' ') }}', '{{ p.jawaban|replace("'","\\'")|replace('"','\\"')|truncate(100,True,'')|replace('\n',' ') }}')">✏ Edit</button>
-                            <button class="btn-aksi btn-hapus" onclick="hapusData({{ p.id }})">🗑 Hapus</button>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            </div>
-            {% else %}
-            <div class="kosong">Belum ada percakapan.</div>
-            {% endif %}
-        </div>
-    </div>
-
-    <!-- ===== TAB KUIS ===== -->
-    <div id="tab-kuis" class="tab-content">
-        <div class="stats">
-            <div class="stat-card">
-                <div class="ikon">🎯</div>
-                <div class="angka">{{ total_kuis }}</div>
-                <div class="label">Total Sesi Kuis</div>
-            </div>
-            <div class="stat-card">
-                <div class="ikon">📚</div>
-                <div class="angka">{{ kuis_per_topik|length }}</div>
-                <div class="label">Topik Dikerjakan</div>
-            </div>
-        </div>
+            </div>{% endfor %}
+        </div>{% endif %}
 
         <div class="section">
-            <div class="section-head">
-                <h2>🎯 Riwayat Kuis</h2>
-                <span>20 terbaru</span>
-            </div>
+            <div class="section-head"><h2>🎯 Riwayat Jawaban Kuis</h2><span>Klik nama pengguna untuk detail</span></div>
             {% if kuis_terbaru %}
             <div class="tbl-wrap">
             <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Nama</th>
-                        <th>Topik</th>
-                        <th>Level</th>
-                        <th>Soal</th>
-                        <th>Jawaban Siswa</th>
-                        <th>Hasil</th>
-                        <th>Waktu</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
+                <thead><tr><th>#</th><th>Nama</th><th>Topik</th><th>Level</th><th>Soal</th><th>Jawaban</th><th>Hasil</th><th>Waktu</th><th>Aksi</th></tr></thead>
                 <tbody>
-                    {% for p in kuis_terbaru %}
-                    <tr id="row-{{ p.id }}">
-                        <td>{{ p.id }}</td>
-                        <td style="font-weight:600;color:var(--hijau-tua);white-space:nowrap;">{{ p.nama_user }}</td>
-                        <td><span class="tag tag-kuis">{{ p.topik_kuis or '-' }}</span></td>
-                        <td style="font-size:11px;color:#777;">{{ p.level_kuis or '-' }}</td>
-                        <td class="col-teks" title="{{ p.pertanyaan }}">{{ p.pertanyaan }}</td>
-                        <td class="col-teks" title="{{ p.jawaban }}">{{ p.jawaban }}</td>
-                        <td>
-                            {% if p.skor_kuis == 1 %}<span class="tag tag-benar">✓ Benar</span>
-                            {% elif p.skor_kuis == 0 %}<span class="tag tag-salah">✗ Salah</span>
-                            {% else %}<span style="color:#ccc;font-size:11px;">-</span>{% endif %}
-                        </td>
-                        <td class="col-waktu">{{ p.waktu.strftime('%d/%m/%y %H:%M') }}</td>
-                        <td>
-                            <button class="btn-aksi btn-hapus" onclick="hapusData({{ p.id }})">🗑 Hapus</button>
-                        </td>
-                    </tr>
-                    {% endfor %}
+                {% for p in kuis_terbaru %}
+                <tr id="row-{{ p.id }}">
+                    <td>{{ p.id }}</td>
+                    <td style="font-weight:600;color:var(--hijau-tua);white-space:nowrap;cursor:pointer;text-decoration:underline dotted;" onclick="lihatRiwayat('{{ p.nama_user|replace("'","\\'") }}')">{{ p.nama_user }}</td>
+                    <td><span class="tag tag-kuis">{{ p.topik_kuis or '-' }}</span></td>
+                    <td style="font-size:11px;color:#777;">{{ p.level_kuis or '-' }}</td>
+                    <td class="col-teks" title="{{ p.pertanyaan }}">{{ p.pertanyaan }}</td>
+                    <td class="col-teks" title="{{ p.jawaban }}">{{ p.jawaban }}</td>
+                    <td>
+                        {% if p.skor_kuis==1 %}<span class="tag tag-benar">✓ Benar</span>
+                        {% elif p.skor_kuis==0 %}<span class="tag tag-salah">✗ Salah</span>
+                        {% else %}<span style="color:#ccc;font-size:11px;">-</span>{% endif %}
+                    </td>
+                    <td class="col-waktu">{{ p.waktu.strftime('%d/%m/%y %H:%M') }}</td>
+                    <td><button class="btn-aksi btn-hapus" onclick="hapusData({{ p.id }})">🗑</button></td>
+                </tr>{% endfor %}
                 </tbody>
             </table>
             </div>
-            {% else %}
-            <div class="kosong">Belum ada data kuis.</div>
-            {% endif %}
+            {% else %}<div class="kosong">Belum ada data kuis. Data akan muncul setelah pengguna mengerjakan kuis.</div>{% endif %}
         </div>
     </div>
-
 </div>
 
 <!-- MODAL EDIT -->
 <div class="modal-bg" id="modalEdit">
-    <div class="modal-card">
-        <h3>✏ Edit Data Percakapan</h3>
-        <input type="hidden" id="editId">
-        <label>Nama Pengguna</label>
-        <input type="text" id="editNama">
-        <label>Pertanyaan</label>
-        <textarea id="editPertanyaan" rows="3"></textarea>
-        <label>Jawaban AI</label>
-        <textarea id="editJawaban" rows="5"></textarea>
-        <div class="modal-actions">
-            <button class="btn-batal-modal" onclick="tutupModal()">Batal</button>
-            <button class="btn-simpan" onclick="simpanEdit()">Simpan Perubahan</button>
+    <div class="modal-card" style="max-width:520px;">
+        <div class="modal-header">
+            <h3>✏ Edit Data</h3>
+            <button class="modal-close" onclick="tutupModal('modalEdit')">✕</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="editId">
+            <label class="form-label">Nama Pengguna</label>
+            <input type="text" class="form-input" id="editNama">
+            <label class="form-label">Pertanyaan</label>
+            <textarea class="form-input" id="editPertanyaan" rows="3"></textarea>
+            <label class="form-label">Jawaban AI</label>
+            <textarea class="form-input" id="editJawaban" rows="6"></textarea>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-batal-m" onclick="tutupModal('modalEdit')">Batal</button>
+            <button class="btn-simpan" onclick="simpanEdit()">💾 Simpan</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL RIWAYAT PENGGUNA -->
+<div class="modal-bg" id="modalRiwayat">
+    <div class="modal-card" style="max-width:740px;">
+        <div class="modal-header">
+            <h3 id="riwayatJudul">Riwayat Pengguna</h3>
+            <button class="modal-close" onclick="tutupModal('modalRiwayat')">✕</button>
+        </div>
+        <div class="modal-body" id="riwayatBody">
+            <div style="text-align:center;color:#aaa;padding:40px;">Memuat...</div>
         </div>
     </div>
 </div>
 
 <script>
-    const PW = '{{ pw }}';
+const PW = '{{ pw }}';
 
-    function gantiTab(nama) {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('aktif'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('aktif'));
-        document.getElementById('tab-' + nama).classList.add('aktif');
-        event.currentTarget.classList.add('aktif');
-    }
+function gantiTab(nama, el) {
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('aktif'));
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('aktif'));
+    document.getElementById('tab-'+nama).classList.add('aktif');
+    el.classList.add('aktif');
+}
 
-    function hapusData(id) {
-        if (!confirm('Yakin hapus data #' + id + '? Tindakan ini tidak bisa dibatalkan.')) return;
-        fetch(`/hapus/${id}?pw=${PW}`, { method: 'POST' })
-            .then(r => r.json())
-            .then(d => {
-                if (d.status === 'ok') {
-                    const row = document.getElementById('row-' + id);
-                    if (row) { row.style.opacity='0'; row.style.transition='opacity .3s'; setTimeout(()=>row.remove(), 300); }
-                } else alert('Gagal hapus: ' + d.error);
-            });
-    }
+function tutupModal(id) { document.getElementById(id).classList.remove('show'); }
+document.querySelectorAll('.modal-bg').forEach(m=>{
+    m.addEventListener('click',function(e){if(e.target===this)tutupModal(this.id);});
+});
 
-    function bukaEdit(id, nama, pertanyaan, jawaban) {
-        document.getElementById('editId').value = id;
-        document.getElementById('editNama').value = nama;
-        document.getElementById('editPertanyaan').value = pertanyaan;
-        document.getElementById('editJawaban').value = jawaban;
-        document.getElementById('modalEdit').classList.add('show');
-    }
+function escHtml(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
 
-    function tutupModal() {
-        document.getElementById('modalEdit').classList.remove('show');
-    }
-
-    async function simpanEdit() {
-        const id   = document.getElementById('editId').value;
-        const data = {
-            nama_user:  document.getElementById('editNama').value,
-            pertanyaan: document.getElementById('editPertanyaan').value,
-            jawaban:    document.getElementById('editJawaban').value,
-        };
-        const r = await fetch(`/edit/${id}?pw=${PW}`, {
-            method:'POST', headers:{'Content-Type':'application/json'},
-            body: JSON.stringify(data)
-        });
-        const d = await r.json();
-        if (d.status === 'ok') { tutupModal(); location.reload(); }
-        else alert('Gagal simpan: ' + d.error);
-    }
-
-    // Tutup modal klik luar
-    document.getElementById('modalEdit').addEventListener('click', function(e) {
-        if (e.target === this) tutupModal();
+// ===== HAPUS DATA =====
+function hapusData(id) {
+    if (!confirm(`Yakin hapus data #${id}?`)) return;
+    fetch(`/hapus/${id}?pw=${PW}`,{method:'POST'}).then(r=>r.json()).then(d=>{
+        if(d.status==='ok'){
+            const row=document.getElementById('row-'+id);
+            if(row){row.style.opacity='0';row.style.transition='.3s';setTimeout(()=>row.remove(),300);}
+        } else alert('Gagal: '+d.error);
     });
+}
+
+function hapusPengguna(nama) {
+    if (!confirm(`Yakin hapus SEMUA data "${nama}"? Chat dan kuis akan terhapus semua!`)) return;
+    fetch(`/hapus-pengguna?pw=${PW}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nama})})
+    .then(r=>r.json()).then(d=>{
+        if(d.status==='ok'){alert('Berhasil dihapus!');location.reload();}
+        else alert('Gagal: '+d.error);
+    });
+}
+
+// ===== EDIT =====
+function bukaEdit(id, nama, pertanyaan, jawaban) {
+    document.getElementById('editId').value=id;
+    document.getElementById('editNama').value=nama;
+    document.getElementById('editPertanyaan').value=pertanyaan;
+    document.getElementById('editJawaban').value=jawaban;
+    document.getElementById('modalEdit').classList.add('show');
+}
+
+async function simpanEdit() {
+    const id=document.getElementById('editId').value;
+    const r=await fetch(`/edit/${id}?pw=${PW}`,{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+            nama_user:document.getElementById('editNama').value,
+            pertanyaan:document.getElementById('editPertanyaan').value,
+            jawaban:document.getElementById('editJawaban').value
+        })
+    });
+    const d=await r.json();
+    if(d.status==='ok'){tutupModal('modalEdit');location.reload();}
+    else alert('Gagal: '+d.error);
+}
+
+// ===== RIWAYAT PENGGUNA =====
+async function lihatRiwayat(nama) {
+    document.getElementById('riwayatJudul').textContent=`📋 Riwayat: ${nama}`;
+    document.getElementById('riwayatBody').innerHTML='<div style="text-align:center;color:#aaa;padding:40px;">⏳ Memuat data...</div>';
+    document.getElementById('modalRiwayat').classList.add('show');
+
+    const r=await fetch(`/pengguna-riwayat?pw=${PW}&nama=${encodeURIComponent(nama)}`);
+    const data=await r.json();
+
+    if(!data.length){
+        document.getElementById('riwayatBody').innerHTML='<div style="text-align:center;color:#aaa;padding:40px;">Belum ada riwayat.</div>';
+        return;
+    }
+
+    const chats=data.filter(d=>!d.is_kuis);
+    const kuiss=data.filter(d=>d.is_kuis);
+    const benar=data.filter(d=>d.skor_kuis===1).length;
+    const salah=data.filter(d=>d.skor_kuis===0).length;
+    const rated=data.filter(d=>d.rating);
+    const avgR=rated.length?(rated.reduce((a,b)=>a+b.rating,0)/rated.length).toFixed(1):'-';
+
+    let html=`
+    <div class="user-stat-grid">
+        <div class="user-stat"><div class="num">${chats.length}</div><div class="lbl">💬 Chat</div></div>
+        <div class="user-stat"><div class="num">${kuiss.length}</div><div class="lbl">🎯 Kuis</div></div>
+        <div class="user-stat"><div class="num">${avgR}</div><div class="lbl">⭐ Avg Rating</div></div>
+    </div>`;
+
+    if(kuiss.length>0){
+        const akurasi=benar+salah>0?Math.round(benar/(benar+salah)*100):'-';
+        html+=`<div class="kuis-stat-bar">
+            <span style="font-size:13px;font-weight:700;color:var(--hijau-tua);">🎯 Statistik Kuis</span>
+            <span class="tag tag-benar">✓ ${benar} Benar</span>
+            <span class="tag tag-salah">✗ ${salah} Salah</span>
+            <span style="font-size:12px;color:#555;">Akurasi: <b>${akurasi}%</b></span>
+        </div>`;
+    }
+
+    // Tabs mini
+    html+=`<div style="display:flex;gap:8px;margin-bottom:14px;">
+        <button onclick="filterRiwayat('semua')" id="fr-semua" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--hijau-mid);background:var(--hijau-mid);color:#fff;font-size:12px;cursor:pointer;font-family:inherit;font-weight:600;">Semua (${data.length})</button>
+        <button onclick="filterRiwayat('chat')" id="fr-chat" style="padding:6px 14px;border-radius:20px;border:1.5px solid #ddd;background:#fff;color:#555;font-size:12px;cursor:pointer;font-family:inherit;">Chat (${chats.length})</button>
+        <button onclick="filterRiwayat('kuis')" id="fr-kuis" style="padding:6px 14px;border-radius:20px;border:1.5px solid #ddd;background:#fff;color:#555;font-size:12px;cursor:pointer;font-family:inherit;">Kuis (${kuiss.length})</button>
+    </div>
+    <div id="riwayat-list">`;
+
+    data.forEach(item=>{
+        const jenisKls=item.is_kuis?'kuis':'chat';
+        const jenisTag=item.is_kuis
+            ?`<span class="tag tag-kuis">🎯 ${escHtml(item.topik_kuis||'Kuis')} · ${escHtml(item.level_kuis||'')}</span>`
+            :`<span class="tag tag-chat">💬 Chat</span>`;
+        const hasilTag=item.is_kuis
+            ?(item.skor_kuis===1?'<span class="tag tag-benar">✓ Benar</span>':item.skor_kuis===0?'<span class="tag tag-salah">✗ Salah</span>':'')
+            :(item.rating?`<span style="color:#f5a623;font-size:13px;">${'★'.repeat(item.rating)}</span>`:'');
+
+        html+=`<div class="riwayat-item" data-jenis="${jenisKls}" id="ri-${item.id}">
+            <div class="riwayat-meta">${jenisTag}${hasilTag}<span class="col-waktu">${escHtml(item.waktu)}</span></div>
+            <div class="riwayat-q">${escHtml(item.pertanyaan)}</div>
+            <div class="riwayat-a">${escHtml(item.jawaban)}</div>
+            <div class="riwayat-aksi">
+                <button class="btn-aksi btn-hapus" onclick="hapusDariModal(${item.id})">🗑 Hapus</button>
+            </div>
+        </div>`;
+    });
+
+    html+='</div>';
+    document.getElementById('riwayatBody').innerHTML=html;
+}
+
+function filterRiwayat(tipe) {
+    document.querySelectorAll('#riwayat-list .riwayat-item').forEach(el=>{
+        if(tipe==='semua' || el.dataset.jenis===tipe) el.style.display='';
+        else el.style.display='none';
+    });
+    ['semua','chat','kuis'].forEach(t=>{
+        const btn=document.getElementById('fr-'+t);
+        if(!btn) return;
+        if(t===tipe){btn.style.background='var(--hijau-mid)';btn.style.color='#fff';btn.style.borderColor='var(--hijau-mid)';}
+        else{btn.style.background='#fff';btn.style.color='#555';btn.style.borderColor='#ddd';}
+    });
+}
+
+function hapusDariModal(id) {
+    if (!confirm(`Hapus data #${id}?`)) return;
+    fetch(`/hapus/${id}?pw=${PW}`,{method:'POST'}).then(r=>r.json()).then(d=>{
+        if(d.status==='ok'){
+            const el=document.getElementById('ri-'+id);
+            if(el){el.style.opacity='0';el.style.transition='.3s';setTimeout(()=>el.remove(),300);}
+        } else alert('Gagal: '+d.error);
+    });
+}
 </script>
 </body>
 </html>

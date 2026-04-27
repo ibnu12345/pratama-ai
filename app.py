@@ -336,5 +336,41 @@ def export_pdf():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route("/pengguna-riwayat")
+def pengguna_riwayat():
+    pw = request.args.get("pw", "")
+    if pw != ADMIN_PW:
+        return jsonify({"error": "Akses ditolak"}), 403
+    nama = request.args.get("nama", "")
+    data = Percakapan.query.filter_by(nama_user=nama).order_by(Percakapan.waktu.desc()).all()
+    hasil = []
+    for p in data:
+        hasil.append({
+            "id": p.id,
+            "pertanyaan": p.pertanyaan,
+            "jawaban": p.jawaban[:300] + "..." if len(p.jawaban) > 300 else p.jawaban,
+            "rating": p.rating,
+            "is_kuis": p.is_kuis,
+            "topik_kuis": p.topik_kuis,
+            "level_kuis": p.level_kuis,
+            "skor_kuis": p.skor_kuis,
+            "waktu": p.waktu.strftime("%d/%m/%Y %H:%M")
+        })
+    return jsonify(hasil)
+
+
+@app.route("/hapus-pengguna", methods=["POST"])
+def hapus_pengguna():
+    pw = request.args.get("pw", "")
+    if pw != ADMIN_PW:
+        return jsonify({"error": "Akses ditolak"}), 403
+    nama = (request.json or {}).get("nama", "")
+    if not nama:
+        return jsonify({"error": "Nama tidak boleh kosong"}), 400
+    Percakapan.query.filter_by(nama_user=nama).delete()
+    db.session.commit()
+    return jsonify({"status": "ok"})
+
+
 if __name__ == "__main__":
     app.run(debug=True)
