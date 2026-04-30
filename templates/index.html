@@ -57,7 +57,8 @@
         .bubble.ai { background:#fff; color:#2c2c2c; border-bottom-left-radius:4px; box-shadow:0 2px 10px rgba(0,0,0,0.07); }
         .bubble.ai p { margin-bottom:10px; }
         .bubble.ai p:last-child { margin-bottom:0; }
-        /* DALIL STYLING - rapi seperti referensi */
+
+        /* DALIL STYLING */
         .dalil-card { background:#fff; border:1.5px solid rgba(45,106,79,0.18); border-radius:14px; margin:12px 0; overflow:hidden; box-shadow:0 2px 8px rgba(26,74,46,0.06); }
         .dalil-card .arab-wrap { background:var(--hijau-pale); padding:16px 20px; border-bottom:1px solid rgba(45,106,79,0.12); text-align:right; direction:rtl; }
         .dalil-card .arab-teks { font-family:'Traditional Arabic','Scheherazade New','Arial Unicode MS',serif; font-size:24px; color:var(--hijau-tua); line-height:2; display:block; }
@@ -65,22 +66,31 @@
         .dalil-card .transliterasi { font-style:italic; color:#777; font-size:12.5px; display:block; margin-bottom:6px; line-height:1.6; }
         .dalil-card .arti { color:#333; font-size:13px; line-height:1.7; margin-bottom:8px; }
         .dalil-card .sumber { display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:600; color:var(--hijau-mid); background:var(--hijau-pale); padding:3px 10px; border-radius:20px; }
-        /* fallback untuk teks arab inline */
         .arab { font-family:'Traditional Arabic','Arial Unicode MS',serif; font-size:22px; direction:rtl; text-align:right; display:block; margin:10px 0; color:var(--hijau-tua); line-height:2.2; }
         .dalil-box { background:var(--hijau-pale); border-left:3px solid var(--hijau-mid); padding:10px 14px; border-radius:8px; margin:8px 0; font-size:12.5px; color:#444; line-height:1.8; }
         .transliterasi { font-style:italic; color:#666; font-size:12.5px; margin:4px 0; display:block; }
 
-        /* Bubble pilihan kuis */
-        .pilihan-wrap { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+        /* Bubble pilihan */
+        .pilihan-wrap { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; max-width:78%; }
         .pilihan-bubble { padding:7px 16px; border-radius:20px; border:1.5px solid var(--hijau-mid); color:var(--hijau-mid); font-size:12.5px; cursor:pointer; background:#fff; font-family:'Plus Jakarta Sans',sans-serif; transition:all .2s; }
         .pilihan-bubble:hover { background:var(--hijau-mid); color:#fff; }
         .pilihan-bubble.dipilih { background:var(--hijau-mid); color:#fff; pointer-events:none; }
 
+        /* Bubble pilihan ganda A B C D */
+        .pilgan-wrap { display:flex; flex-direction:column; gap:8px; margin-top:10px; max-width:78%; }
+        .pilgan-opt { padding:10px 16px; border-radius:12px; border:1.5px solid var(--hijau-mid); color:var(--hijau-mid); font-size:13px; cursor:pointer; background:#fff; font-family:'Plus Jakarta Sans',sans-serif; transition:all .2s; text-align:left; }
+        .pilgan-opt:hover { background:var(--hijau-pale); }
+        .pilgan-opt.benar { background:#d4edda; border-color:#28a745; color:#155724; pointer-events:none; }
+        .pilgan-opt.salah { background:#f8d7da; border-color:#dc3545; color:#721c24; pointer-events:none; }
+        .pilgan-opt.dipilih { background:var(--hijau-mid); color:#fff; pointer-events:none; }
+
         /* Skor kuis */
-        .skor-box { background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-mid)); color:#fff; border-radius:16px; padding:20px; text-align:center; margin-top:8px; }
+        .skor-box { background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-mid)); color:#fff; border-radius:16px; padding:20px; text-align:center; margin-top:8px; max-width:78%; }
         .skor-box .angka { font-size:40px; font-weight:700; }
         .skor-box .label { font-size:13px; opacity:.85; margin-top:4px; }
         .skor-box .pesan { font-size:13px; margin-top:10px; background:rgba(255,255,255,0.15); border-radius:10px; padding:8px 12px; }
+        .skor-box .btn-ulangi { display:inline-block; margin-top:12px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; padding:7px 18px; border-radius:16px; font-size:12px; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; }
+        .skor-box .btn-ulangi:hover { background:rgba(255,255,255,0.3); }
 
         /* Rating */
         .rating-area { display:flex; align-items:center; gap:6px; margin-top:8px; }
@@ -112,62 +122,45 @@
         /* MODAL KUIS */
         .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:200; display:none; align-items:center; justify-content:center; backdrop-filter:blur(4px); }
         .modal-overlay.aktif { display:flex; }
-        .modal-box { background:#fff; border-radius:20px; padding:28px 24px; width:100%; max-width:440px; box-shadow:0 8px 40px rgba(0,0,0,0.18); animation:fadeUp .25s ease; }
+        .modal-box { background:#fff; border-radius:20px; padding:28px 24px; width:100%; max-width:460px; box-shadow:0 8px 40px rgba(0,0,0,0.18); animation:fadeUp .25s ease; max-height:90vh; overflow-y:auto; }
         @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
         .modal-box h3 { font-size:16px; color:var(--hijau-tua); font-weight:700; margin-bottom:4px; }
         .modal-box .sub { font-size:12px; color:#999; margin-bottom:18px; }
         .modal-label { font-size:12px; font-weight:600; color:#555; margin-bottom:8px; display:block; }
         .kuis-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:18px; }
-        .kuis-opt {
-            padding:10px 12px; border-radius:12px; border:1.5px solid #e0e0e0;
-            font-size:12.5px; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif;
-            background:#fff; color:#444; transition:all .18s; text-align:left;
-        }
+        .kuis-opt { padding:10px 12px; border-radius:12px; border:1.5px solid #e0e0e0; font-size:12.5px; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; background:#fff; color:#444; transition:all .18s; text-align:left; }
         .kuis-opt:hover { border-color:var(--hijau-mid); color:var(--hijau-mid); background:var(--hijau-pale); }
         .kuis-opt.aktif { background:var(--hijau-mid); color:#fff; border-color:var(--hijau-mid); }
-        .level-row { display:flex; gap:8px; margin-bottom:20px; }
-        .level-opt {
-            flex:1; padding:10px 8px; border-radius:12px; border:1.5px solid #e0e0e0;
-            font-size:12px; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif;
-            background:#fff; color:#444; transition:all .18s; text-align:center;
-        }
+        .level-row { display:flex; gap:8px; margin-bottom:18px; }
+        .level-opt { flex:1; padding:10px 8px; border-radius:12px; border:1.5px solid #e0e0e0; font-size:12px; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; background:#fff; color:#444; transition:all .18s; text-align:center; }
         .level-opt:hover { border-color:var(--emas); color:var(--emas); background:#fdf9ee; }
         .level-opt.aktif { background:var(--emas); color:#fff; border-color:var(--emas); }
+        .tipe-row { display:flex; gap:8px; margin-bottom:20px; }
+        .tipe-opt { flex:1; padding:14px 10px; border-radius:12px; border:1.5px solid #e0e0e0; font-size:13px; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; background:#fff; color:#444; transition:all .18s; text-align:center; }
+        .tipe-opt:hover { border-color:var(--hijau-mid); color:var(--hijau-mid); background:var(--hijau-pale); }
+        .tipe-opt.aktif { background:var(--hijau-mid); color:#fff; border-color:var(--hijau-mid); }
+        .tipe-opt .tipe-ikon { font-size:22px; display:block; margin-bottom:4px; }
+        .tipe-opt .tipe-label { font-size:12px; font-weight:600; }
+        .tipe-opt .tipe-desc { font-size:10.5px; opacity:.75; margin-top:2px; }
         .modal-actions { display:flex; gap:10px; }
         .btn-modal-batal { flex:1; padding:11px; border-radius:12px; border:1.5px solid #ddd; background:#fff; font-size:13px; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; color:#666; }
         .btn-modal-mulai { flex:2; padding:11px; border-radius:12px; border:none; background:var(--hijau-mid); color:#fff; font-size:13px; font-weight:700; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; }
         .btn-modal-mulai:disabled { background:#bbb; cursor:not-allowed; }
         .btn-modal-mulai:not(:disabled):hover { background:var(--hijau-tua); }
 
-        .sambutan { text-align:center; padding:28px 16px; color:#777; }
-        .sambutan h2 { color:var(--hijau-tua); font-size:17px; margin-bottom:6px; }
-        .sambutan p { font-size:12.5px; }
-
         /* WELCOME SCREEN */
-        .welcome-screen {
-            display:flex; flex-direction:column; align-items:center; justify-content:center;
-            flex:1; padding:32px 20px; text-align:center;
-        }
-        .welcome-card {
-            background:#fff; border-radius:24px; padding:36px 32px;
-            box-shadow:0 4px 24px rgba(26,74,46,0.10); max-width:520px; width:100%;
-            border:1px solid rgba(82,183,136,0.15);
-        }
-        .welcome-arab {
-            font-family:'Traditional Arabic','Arial Unicode MS',serif;
-            font-size:32px; color:var(--hijau-tua); direction:rtl;
-            line-height:1.8; margin-bottom:16px; display:block;
-        }
+        .welcome-screen { display:flex; flex-direction:column; align-items:center; justify-content:center; flex:1; padding:32px 20px; text-align:center; }
+        .welcome-card { background:#fff; border-radius:24px; padding:36px 32px; box-shadow:0 4px 24px rgba(26,74,46,0.10); max-width:520px; width:100%; border:1px solid rgba(82,183,136,0.15); }
+        .welcome-arab { font-family:'Traditional Arabic','Arial Unicode MS',serif; font-size:32px; color:var(--hijau-tua); direction:rtl; line-height:1.8; margin-bottom:16px; display:block; }
         .welcome-card h2 { font-size:18px; color:var(--hijau-tua); font-weight:700; margin-bottom:8px; }
         .welcome-card p { font-size:12.5px; color:#777; line-height:1.7; margin-bottom:4px; }
         .welcome-dev { font-size:12px; color:var(--emas); font-weight:600; margin-top:10px; }
         .welcome-chips { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:20px; }
-        .welcome-chip {
-            padding:8px 16px; border-radius:20px; border:1.5px solid rgba(45,106,79,0.25);
-            font-size:12.5px; cursor:pointer; background:#fff; color:var(--hijau-mid);
-            font-family:'Plus Jakarta Sans',sans-serif; transition:all .2s;
-        }
+        .welcome-chip { padding:8px 16px; border-radius:20px; border:1.5px solid rgba(45,106,79,0.25); font-size:12.5px; cursor:pointer; background:#fff; color:var(--hijau-mid); font-family:'Plus Jakarta Sans',sans-serif; transition:all .2s; }
         .welcome-chip:hover { background:var(--hijau-pale); border-color:var(--hijau-mid); }
+
+        /* BADGE KUIS AKTIF */
+        .kuis-badge { background:var(--emas); color:#fff; font-size:11px; font-weight:700; padding:3px 10px; border-radius:10px; display:none; }
     </style>
 </head>
 <body>
@@ -180,22 +173,18 @@
             <h2>Selamat Datang di PratamaAI</h2>
             <p>Asisten Pembelajaran Pendidikan Agama Islam</p>
         </div>
-
         <label>Nama Lengkap</label>
         <input type="text" id="inputNama" placeholder="Masukkan nama Anda..." />
-
         <label>Saya adalah</label>
         <div class="bubble-group" id="grupPeran">
             <div class="bubble-pilih" onclick="pilihPeran('Pengguna Umum', this)">👤 Pengguna Umum</div>
             <div class="bubble-pilih" onclick="pilihPeran('Siswa', this)">🎒 Siswa</div>
             <div class="bubble-pilih" onclick="pilihPeran('Mahasiswa', this)">🎓 Mahasiswa</div>
         </div>
-
         <div id="extraField" style="display:none;">
             <label id="extraLabel">Nama Sekolah</label>
             <input type="text" id="inputExtra" placeholder="" />
         </div>
-
         <button class="btn-mulai" id="btnMulai" onclick="mulaiChat()" disabled>Mulai Belajar →</button>
     </div>
 </div>
@@ -210,6 +199,7 @@
         </div>
     </div>
     <div class="header-right">
+        <span class="kuis-badge" id="kuisBadge">🎯 Kuis Aktif</span>
         <div class="header-user" id="headerUser"></div>
         <button class="btn-hdr" onclick="exportPDF()">⬇ PDF</button>
         <button class="btn-hdr" onclick="resetChat()">↺ Reset</button>
@@ -256,9 +246,9 @@
 <div class="modal-overlay" id="modalKuis">
     <div class="modal-box">
         <h3>🎯 Mulai Kuis Islam</h3>
-        <div class="sub">Pilih topik dan tingkat kesulitan</div>
+        <div class="sub">Pilih topik, jumlah soal, tingkat kesulitan, dan tipe soal</div>
 
-        <span class="modal-label">Pilih Topik</span>
+        <span class="modal-label">📚 Pilih Topik</span>
         <div class="kuis-grid" id="kuisTopikGrid">
             <div class="kuis-opt" onclick="pilihTopikModal('Fiqih', this)">📖 Fiqih</div>
             <div class="kuis-opt" onclick="pilihTopikModal('Aqidah', this)">🌙 Aqidah</div>
@@ -268,23 +258,37 @@
             <div class="kuis-opt" onclick="pilihTopikModal('Pengetahuan Islam Umum', this)">🌟 Pengetahuan Umum</div>
         </div>
 
-        <span class="modal-label">Jumlah Soal</span>
+        <span class="modal-label">🔢 Jumlah Soal</span>
         <div class="level-row" id="kuisJumlahRow">
-            <div class="level-opt" onclick="pilihJumlahModal(5, this)">5️⃣<br>5 Soal</div>
-            <div class="level-opt" onclick="pilihJumlahModal(10, this)">🔟<br>10 Soal</div>
-            <div class="level-opt" id="jumlahCustomOpt" onclick="pilihJumlahCustom(this)">✏️<br>Custom</div>
+            <div class="level-opt" onclick="pilihJumlahModal(5, this)">5️⃣<br><small>5 Soal</small></div>
+            <div class="level-opt" onclick="pilihJumlahModal(10, this)">🔟<br><small>10 Soal</small></div>
+            <div class="level-opt" id="jumlahCustomOpt" onclick="pilihJumlahCustom(this)">✏️<br><small>Custom</small></div>
         </div>
-        <div id="customJumlahWrap" style="display:none;margin-bottom:6px;">
+        <div id="customJumlahWrap" style="display:none;margin-bottom:14px;">
             <input type="number" id="inputJumlahCustom" min="1" max="50" placeholder="Masukkan jumlah soal (1-50)"
                 style="width:100%;padding:9px 12px;border:1.5px solid var(--hijau-mid);border-radius:10px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;outline:none;"
                 oninput="validasiCustomJumlah(this)">
         </div>
 
-        <span class="modal-label">Tingkat Kesulitan</span>
+        <span class="modal-label">🎯 Tingkat Kesulitan</span>
         <div class="level-row" id="kuisLevelRow">
-            <div class="level-opt" onclick="pilihLevelModal('Mudah', this)">😊<br>Mudah</div>
-            <div class="level-opt" onclick="pilihLevelModal('Menengah', this)">🤔<br>Menengah</div>
-            <div class="level-opt" onclick="pilihLevelModal('Sulit', this)">🔥<br>Sulit</div>
+            <div class="level-opt" onclick="pilihLevelModal('Mudah', this)">😊<br><small>Mudah</small></div>
+            <div class="level-opt" onclick="pilihLevelModal('Menengah', this)">🤔<br><small>Menengah</small></div>
+            <div class="level-opt" onclick="pilihLevelModal('Sulit', this)">🔥<br><small>Sulit</small></div>
+        </div>
+
+        <span class="modal-label">📝 Tipe Soal</span>
+        <div class="tipe-row" id="kuisTipeRow">
+            <div class="tipe-opt" onclick="pilihTipeModal('pilgan', this)">
+                <span class="tipe-ikon">🔘</span>
+                <div class="tipe-label">Pilihan Ganda</div>
+                <div class="tipe-desc">Pilih jawaban A/B/C/D</div>
+            </div>
+            <div class="tipe-opt" onclick="pilihTipeModal('esai', this)">
+                <span class="tipe-ikon">✍️</span>
+                <div class="tipe-label">Esai</div>
+                <div class="tipe-desc">Jawab dengan kalimat sendiri</div>
+            </div>
         </div>
 
         <div class="modal-actions">
@@ -298,17 +302,20 @@
     // ===== STATE =====
     let userData = null;
     let modeKuis = false;
-    let kuisTahap = null; // 'berlangsung'
+    let kuisTahap = null;
     let kuisTopik = null;
     let kuisLevel = null;
+    let kuisTipe = null; // 'pilgan' | 'esai'
     let kuisSkor = 0;
     let kuisSoalKe = 0;
     let kuisTotalSoal = 5;
+    let kuisSoalTerakhir = '';
     let sudahSalam = false;
     let peranDipilih = null;
     let modalTopikDipilih = null;
     let modalLevelDipilih = null;
     let modalJumlahDipilih = null;
+    let modalTipeDipilih = null;
 
     // ===== WELCOME CHIP =====
     function kirimChip(teks) {
@@ -324,11 +331,9 @@
         document.querySelectorAll('#grupPeran .bubble-pilih').forEach(b => b.classList.remove('aktif'));
         el.classList.add('aktif');
         peranDipilih = peran;
-
         const extra = document.getElementById('extraField');
         const label = document.getElementById('extraLabel');
         const inp = document.getElementById('inputExtra');
-
         if (peran === 'Siswa') {
             extra.style.display = 'block';
             label.textContent = 'Nama Sekolah';
@@ -359,25 +364,25 @@
         const nama = document.getElementById('inputNama').value.trim();
         const extra = document.getElementById('inputExtra').value.trim();
         userData = { nama, peran: peranDipilih, extra };
-
         document.getElementById('overlay').style.display = 'none';
         document.getElementById('headerUser').textContent = `👤 ${nama} · ${peranDipilih}`;
-
-        // Welcome screen TETAP di atas, sapaan AI muncul di bawahnya
         const konteks = extra ? `${peranDipilih} dari ${extra}` : peranDipilih;
         const sapaan = `Pengguna baru telah login. Nama: ${nama}, Peran: ${konteks}. Sapa dengan salam islami yang hangat, sebut namanya, dan tanya ada yang bisa dibantu hari ini. Ini adalah sapaan pertama, jadi gunakan salam lengkap.`;
         await kirimKeAI(sapaan, false);
         sudahSalam = true;
     }
 
-    // ===== KUIS =====
+    // ===== MODAL KUIS =====
     function mulaiKuis() {
         if (!userData) return;
+        // Reset semua pilihan modal
         modalTopikDipilih = null;
         modalLevelDipilih = null;
         modalJumlahDipilih = null;
+        modalTipeDipilih = null;
         document.querySelectorAll('.kuis-opt').forEach(e => e.classList.remove('aktif'));
         document.querySelectorAll('.level-opt').forEach(e => e.classList.remove('aktif'));
+        document.querySelectorAll('.tipe-opt').forEach(e => e.classList.remove('aktif'));
         document.getElementById('customJumlahWrap').style.display = 'none';
         document.getElementById('inputJumlahCustom').value = '';
         document.getElementById('btnMulaiKuis').disabled = true;
@@ -392,7 +397,7 @@
     }
 
     function pilihLevelModal(level, el) {
-        document.querySelectorAll('.level-opt').forEach(e => e.classList.remove('aktif'));
+        document.querySelectorAll('#kuisLevelRow .level-opt').forEach(e => e.classList.remove('aktif'));
         el.classList.add('aktif');
         modalLevelDipilih = level;
         cekModalReady();
@@ -423,8 +428,16 @@
         cekModalReady();
     }
 
+    function pilihTipeModal(tipe, el) {
+        document.querySelectorAll('.tipe-opt').forEach(e => e.classList.remove('aktif'));
+        el.classList.add('aktif');
+        modalTipeDipilih = tipe;
+        cekModalReady();
+    }
+
     function cekModalReady() {
-        document.getElementById('btnMulaiKuis').disabled = !(modalTopikDipilih && modalLevelDipilih && modalJumlahDipilih);
+        const ready = modalTopikDipilih && modalLevelDipilih && modalJumlahDipilih && modalTipeDipilih;
+        document.getElementById('btnMulaiKuis').disabled = !ready;
     }
 
     function tutupModalKuis() {
@@ -436,112 +449,194 @@
         kuisTopik = modalTopikDipilih;
         kuisLevel = modalLevelDipilih;
         kuisTotalSoal = modalJumlahDipilih;
+        kuisTipe = modalTipeDipilih;
         modeKuis = true;
         kuisTahap = 'berlangsung';
         kuisSkor = 0;
         kuisSoalKe = 0;
+        kuisSoalTerakhir = '';
 
+        // Hilangkan welcome screen
         const ws = document.getElementById('welcomeScreen');
         if (ws) ws.remove();
 
-        tambahBubbleAI(`Bismillah! 🎯 Kuis dimulai!\n\nTopik: ${kuisTopik}\nTingkat: ${kuisLevel}\nJumlah Soal: ${kuisTotalSoal}\n\nSiap? Mari kita mulai!`, null);
-        setTimeout(() => mulaiSoal(), 600);
+        // Tampilkan badge kuis aktif
+        document.getElementById('kuisBadge').style.display = 'inline-block';
+
+        const tipeLabel = kuisTipe === 'pilgan' ? 'Pilihan Ganda' : 'Esai';
+        tambahBubbleAI(`Bismillah! 🎯 Kuis dimulai!\n\nTopik: ${kuisTopik}\nTingkat: ${kuisLevel}\nJumlah Soal: ${kuisTotalSoal}\nTipe: ${tipeLabel}\n\nSiap? Mari kita mulai soal pertama!`, null);
+        setTimeout(() => mulaiSoal(), 800);
     }
 
+    // ===== KUIS LOGIC =====
     function mulaiSoal() {
         kuisSoalKe++;
-        if (kuisSoalKe > kuisTotalSoal) {
-            selesaiKuis();
-            return;
-        }
+        if (kuisSoalKe > kuisTotalSoal) { selesaiKuis(); return; }
 
         const panduanLevel = {
-            'Mudah': 'Buat soal tingkat MUDAH: pertanyaan dasar yang bisa dijawab siswa SD/SMP. Contoh: definisi, nama, jumlah (misal: berapa rukun Islam, siapa nama nabi pertama, apa arti kata tertentu).',
-            'Menengah': 'Buat soal tingkat MENENGAH: membutuhkan pemahaman, bukan sekedar hafalan. Contoh: alasan hukum, perbedaan konsep, penerapan dalam kehidupan sehari-hari.',
-            'Sulit': 'Buat soal tingkat SULIT: membutuhkan analisis mendalam, pengetahuan detail, atau perpaduan beberapa konsep. Contoh: hikmah suatu hukum, perbandingan pendapat ulama, konteks historis detail.'
+            'Mudah': 'Buat soal MUDAH: pertanyaan dasar yang bisa dijawab siswa SD/SMP. Contoh: definisi, nama, jumlah.',
+            'Menengah': 'Buat soal MENENGAH: membutuhkan pemahaman, bukan sekedar hafalan. Contoh: alasan hukum, perbedaan konsep.',
+            'Sulit': 'Buat soal SULIT: membutuhkan analisis mendalam, pengetahuan detail. Contoh: hikmah suatu hukum, perbandingan pendapat ulama.'
         };
 
-        const prompt = `Kamu sedang dalam MODE KUIS sebagai penguji Islam.
-Topik: ${kuisTopik}
-Tingkat: ${kuisLevel}
-Soal ke: ${kuisSoalKe} dari ${kuisTotalSoal}
-
+        let prompt = '';
+        if (kuisTipe === 'pilgan') {
+            prompt = `Kamu adalah penguji kuis Islam. MODE: PILIHAN GANDA.
+Topik: ${kuisTopik}, Tingkat: ${kuisLevel}, Soal ke-${kuisSoalKe} dari ${kuisTotalSoal}.
 ${panduanLevel[kuisLevel] || ''}
 
-PENTING:
-- Buat soal yang BERBEDA dari soal-soal sebelumnya dalam sesi ini
-- Variasikan bentuk soal: bisa pertanyaan langsung, skenario, melengkapi kalimat, dll
-- Tulis HANYA soalnya saja, tanpa jawaban, tanpa pilihan ganda
-- Format: "Soal ${kuisSoalKe}: [pertanyaan]"`;
+Buat SATU soal pilihan ganda yang BERBEDA dari soal sebelumnya dalam sesi ini.
+Format WAJIB (ikuti persis, gunakan baris baru):
+
+Soal ${kuisSoalKe}: [pertanyaan]
+
+A. [pilihan A]
+B. [pilihan B]
+C. [pilihan C]
+D. [pilihan D]
+
+JANGAN tulis jawaban yang benar. Tunggu jawaban dari pengguna.`;
+        } else {
+            prompt = `Kamu adalah penguji kuis Islam. MODE: ESAI.
+Topik: ${kuisTopik}, Tingkat: ${kuisLevel}, Soal ke-${kuisSoalKe} dari ${kuisTotalSoal}.
+${panduanLevel[kuisLevel] || ''}
+
+Buat SATU soal esai yang BERBEDA dari soal sebelumnya.
+Format WAJIB:
+Soal ${kuisSoalKe}: [pertanyaan esai yang membutuhkan penjelasan]
+
+JANGAN tulis jawaban. Tunggu jawaban dari pengguna.`;
+        }
+
         kirimKeAI(prompt, false, (jawAI) => {
-            // Simpan teks soal yang dikirim AI untuk referensi saat siswa menjawab
-            soalTerakhir = jawAI.replace(/^Soal \d+:\s*/i, '').trim().substring(0, 300);
-        });
+            kuisSoalTerakhir = jawAI.trim().substring(0, 500);
+            // Untuk pilihan ganda, tampilkan bubble A B C D
+            if (kuisTipe === 'pilgan') {
+                tampilkanPilganBubble(jawAI);
+            }
+        }, true);
     }
 
-    // soalTerakhir menyimpan teks soal yang sedang aktif
-    let soalTerakhir = '';
+    function tampilkanPilganBubble(teksAI) {
+        // Parse pilihan A B C D dari teks AI
+        const pilihanRegex = /^([A-D])\.\s*(.+)$/gm;
+        const pilihan = [];
+        let match;
+        while ((match = pilihanRegex.exec(teksAI)) !== null) {
+            pilihan.push({ huruf: match[1], teks: match[2].trim() });
+        }
+        if (pilihan.length < 2) return; // Tidak ada pilihan terdeteksi
+
+        const area = document.getElementById('chatArea');
+        const wrap = document.createElement('div');
+        wrap.className = 'bubble-wrap ai';
+
+        const pWrap = document.createElement('div');
+        pWrap.className = 'pilgan-wrap';
+
+        pilihan.forEach(p => {
+            const btn = document.createElement('div');
+            btn.className = 'pilgan-opt';
+            btn.innerHTML = `<b>${p.huruf}.</b> ${p.teks}`;
+            btn.onclick = () => {
+                // Disable semua pilihan
+                pWrap.querySelectorAll('.pilgan-opt').forEach(b => {
+                    b.classList.add('dipilih');
+                    b.onclick = null;
+                });
+                btn.classList.remove('dipilih');
+                btn.classList.add('dipilih');
+                tambahBubbleUser(`${p.huruf}. ${p.teks}`);
+                nilaiJawaban(`${p.huruf}. ${p.teks}`);
+            };
+            pWrap.appendChild(btn);
+        });
+
+        wrap.appendChild(pWrap);
+        area.appendChild(wrap);
+        scrollBawah();
+    }
 
     function nilaiJawaban(jawabanSiswa) {
-        const prompt = `Kamu sedang dalam MODE KUIS sebagai penguji.
-Topik: ${kuisTopik}, Tingkat: ${kuisLevel}, Soal ke: ${kuisSoalKe} dari ${kuisTotalSoal}.
-
+        let prompt = '';
+        if (kuisTipe === 'pilgan') {
+            prompt = `Kamu penguji kuis Islam. MODE: PILIHAN GANDA.
+Topik: ${kuisTopik}, Tingkat: ${kuisLevel}, Soal ke-${kuisSoalKe} dari ${kuisTotalSoal}.
+Soal yang diberikan: ${kuisSoalTerakhir}
 Jawaban pengguna: "${jawabanSiswa}"
 
-Nilai jawabannya secara adil:
+Lakukan penilaian:
 1. Nyatakan BENAR atau SALAH di awal
-2. Jika benar, tambahkan skor 1 (tulis: SKOR:1)
-3. Jika salah, tulis SKOR:0
-4. Berikan penjelasan singkat yang sesuai. Siswa TIDAK diwajibkan menyertakan dalil — nilai berdasarkan kebenaran isi jawaban.
-5. Jangan lanjut ke soal berikutnya, sistem yang akan mengirim soal selanjutnya.`;
+2. Tulis SKOR:1 jika benar, SKOR:0 jika salah
+3. Sebutkan jawaban yang benar jika salah
+4. Berikan penjelasan singkat + dalil relevan
+5. Jangan buat soal baru.`;
+        } else {
+            prompt = `Kamu penguji kuis Islam. MODE: ESAI.
+Topik: ${kuisTopik}, Tingkat: ${kuisLevel}, Soal ke-${kuisSoalKe} dari ${kuisTotalSoal}.
+Soal yang diberikan: ${kuisSoalTerakhir}
+Jawaban esai pengguna: "${jawabanSiswa}"
+
+Lakukan penilaian:
+1. Nyatakan BENAR, SEBAGIAN BENAR, atau SALAH di awal
+2. Tulis SKOR:1 jika benar/sebagian benar, SKOR:0 jika salah
+3. Berikan jawaban ideal + dalil relevan
+4. Jangan buat soal baru.`;
+        }
 
         kirimKeAI(prompt, true, async (jawAI) => {
             const benar = jawAI.includes('SKOR:1');
             if (benar) kuisSkor++;
-            const skor = benar ? 1 : 0;
 
-            // Simpan jawaban siswa ke DB via endpoint khusus kuis
             try {
                 await fetch('/simpan-kuis', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
-                        nama_user:     userData?.nama || 'Anonim',
-                        peran_user:    userData?.peran || '',
-                        soal:          soalTerakhir || `Soal ${kuisSoalKe}`,
+                        nama_user: userData?.nama || 'Anonim',
+                        peran_user: userData?.peran || '',
+                        soal: kuisSoalTerakhir || `Soal ${kuisSoalKe}`,
                         jawaban_siswa: jawabanSiswa,
-                        topik:         kuisTopik,
-                        level:         kuisLevel,
-                        skor:          skor
+                        topik: kuisTopik,
+                        level: kuisLevel,
+                        skor: benar ? 1 : 0
                     })
                 });
             } catch(e) { console.error('Gagal simpan kuis:', e); }
 
-            setTimeout(() => mulaiSoal(), 1500);
-        });
+            setTimeout(() => mulaiSoal(), 1800);
+        }, true);
     }
 
     function selesaiKuis() {
         modeKuis = false;
         kuisTahap = null;
-        const persen = Math.round((kuisSkor / kuisTotalSoal) * 100);
-        let pesan = persen >= 80 ? '🌟 Luar biasa! Pemahaman Islam kamu sangat baik!' :
-                    persen >= 60 ? '👍 Bagus! Terus tingkatkan belajarmu.' :
-                    persen >= 40 ? '📚 Cukup baik, masih ada ruang untuk berkembang.' :
-                                   '💪 Jangan menyerah! Teruslah belajar.';
+        document.getElementById('kuisBadge').style.display = 'none';
 
+        const persen = Math.round((kuisSkor / kuisTotalSoal) * 100);
+        const pesan = persen >= 80 ? '🌟 Luar biasa! Pemahaman Islam kamu sangat baik!' :
+                      persen >= 60 ? '👍 Bagus! Terus tingkatkan belajarmu.' :
+                      persen >= 40 ? '📚 Cukup baik, masih ada ruang untuk berkembang.' :
+                                     '💪 Jangan menyerah! Teruslah semangat belajar.';
+        const tipeLabel = kuisTipe === 'pilgan' ? 'Pilihan Ganda' : 'Esai';
+
+        const area = document.getElementById('chatArea');
+        const wrap = document.createElement('div');
+        wrap.className = 'bubble-wrap ai';
+        const nama = document.createElement('div');
+        nama.className = 'nama-ai';
+        nama.innerHTML = '🕌 PratamaAI';
         const skor = document.createElement('div');
         skor.className = 'skor-box';
         skor.innerHTML = `
-            <div style="font-size:13px;opacity:.8;margin-bottom:4px;">Kuis ${kuisTopik} · ${kuisLevel}</div>
+            <div style="font-size:12px;opacity:.8;margin-bottom:6px;">Kuis ${kuisTopik} · ${kuisLevel} · ${tipeLabel}</div>
             <div class="angka">${kuisSkor}/${kuisTotalSoal}</div>
             <div class="label">Skor: ${persen}%</div>
             <div class="pesan">${pesan}</div>
-        `;
-        const wrap = document.createElement('div');
-        wrap.className = 'bubble-wrap ai';
+            <div><span class="btn-ulangi" onclick="mulaiKuis()">🔄 Kuis Lagi</span></div>`;
+        wrap.appendChild(nama);
         wrap.appendChild(skor);
-        document.getElementById('chatArea').appendChild(wrap);
+        area.appendChild(wrap);
         scrollBawah();
     }
 
@@ -555,20 +650,24 @@ Nilai jawabannya secara adil:
         if (!teks || !userData) return;
         input.value = '';
 
-        // Hilangkan welcome screen saat mulai ketik
         const ws = document.getElementById('welcomeScreen');
         if (ws) { ws.style.transition='opacity .3s'; ws.style.opacity='0'; setTimeout(()=>ws.remove(),300); }
 
         if (modeKuis && kuisTahap === 'berlangsung') {
-            tambahBubbleUser(teks);
-            nilaiJawaban(teks);
+            if (kuisTipe === 'pilgan') {
+                // Untuk pilgan, input teks diabaikan — harus klik bubble
+                tambahBubbleAI('Silakan pilih jawaban dengan mengklik pilihan A/B/C/D di atas. 😊', null);
+            } else {
+                tambahBubbleUser(teks);
+                nilaiJawaban(teks);
+            }
         } else {
             tambahBubbleUser(teks);
             kirimKeAI(teks, true);
         }
     }
 
-    async function kirimKeAI(pesan, tampilUser = true, callback = null, opsiKuis = null) {
+    async function kirimKeAI(pesan, tampilUser = true, callback = null, isKuis = false) {
         const loading = document.getElementById('loading');
         loading.style.display = 'flex';
         scrollBawah();
@@ -578,10 +677,10 @@ Nilai jawabannya secara adil:
                 pertanyaan: pesan,
                 user_data: userData,
                 sudah_salam: sudahSalam,
-                is_kuis: opsiKuis ? true : false,
-                topik_kuis: opsiKuis ? opsiKuis.topik : null,
-                level_kuis: opsiKuis ? opsiKuis.level : null,
-                skor_kuis: opsiKuis ? opsiKuis.skor : null
+                is_kuis: isKuis,
+                topik_kuis: isKuis ? kuisTopik : null,
+                level_kuis: isKuis ? kuisLevel : null,
+                skor_kuis: null
             };
 
             const res = await fetch('/tanya-stream', {
@@ -595,7 +694,6 @@ Nilai jawabannya secara adil:
             let jawaban = '';
             let rowId = null;
 
-            // Buat bubble kosong dulu
             const { wrap, bub } = buatBubbleAIKosong();
             loading.style.display = 'none';
 
@@ -619,7 +717,6 @@ Nilai jawabannya secara adil:
                 }
             }
 
-            // Tambah rating jika bukan pesan sistem
             if (rowId && tampilUser && !modeKuis) {
                 tambahRating(wrap, rowId);
             }
@@ -661,40 +758,6 @@ Nilai jawabannya secara adil:
         return { wrap, bub };
     }
 
-    function tampilBubbleAI(teks, id, pilihan, onPilih) {
-        const area = document.getElementById('chatArea');
-        const wrap = document.createElement('div');
-        wrap.className = 'bubble-wrap ai';
-        const nama = document.createElement('div');
-        nama.className = 'nama-ai';
-        nama.innerHTML = '🕌 PratamaAI';
-        const bub = document.createElement('div');
-        bub.className = 'bubble ai';
-        bub.innerHTML = formatJawaban(teks);
-
-        const pWrap = document.createElement('div');
-        pWrap.className = 'pilihan-wrap';
-        pilihan.forEach(p => {
-            const btn = document.createElement('div');
-            btn.className = 'pilihan-bubble';
-            btn.textContent = p;
-            btn.onclick = () => {
-                pWrap.querySelectorAll('.pilihan-bubble').forEach(b => b.classList.remove('dipilih'));
-                btn.classList.add('dipilih');
-                pWrap.querySelectorAll('.pilihan-bubble').forEach(b => b.onclick = null);
-                tambahBubbleUser(p);
-                onPilih(p);
-            };
-            pWrap.appendChild(btn);
-        });
-
-        wrap.appendChild(nama);
-        wrap.appendChild(bub);
-        wrap.appendChild(pWrap);
-        area.appendChild(wrap);
-        scrollBawah();
-    }
-
     function tambahBubbleAI(teks, id) {
         const { wrap, bub } = buatBubbleAIKosong();
         bub.innerHTML = formatJawaban(teks);
@@ -721,7 +784,6 @@ Nilai jawabannya secara adil:
     }
 
     function formatJawaban(teks) {
-        // Split per baris dulu untuk parsing blok dalil
         const lines = teks.split('\n');
         let html = '';
         let i = 0;
@@ -730,16 +792,13 @@ Nilai jawabannya secara adil:
             const line = lines[i].trim();
             if (!line) { i++; continue; }
 
-            // Deteksi baris Arab (mayoritas karakter Arab)
             const arabRatio = (line.match(/[\u0600-\u06FF]/g)||[]).length / Math.max(line.length, 1);
             if (arabRatio > 0.3 && line.length > 2) {
-                // Mulai kumpulkan blok dalil
                 let arabTeks = line;
                 let transliterasi = '';
                 let arti = '';
                 let sumber = '';
 
-                // Scan baris berikutnya untuk bagian dalil
                 let j = i + 1;
                 while (j < lines.length) {
                     const next = lines[j].trim();
@@ -753,13 +812,10 @@ Nilai jawabannya secara adil:
                     } else if (/^(Wa |Al-|An-|Inn|Qul|Kha|La |Bi |Fa |Fi |Mi |'An|Fal)/i.test(next) && !/[\u0600-\u06FF]/.test(next)) {
                         transliterasi = next;
                         j++;
-                    } else {
-                        break;
-                    }
+                    } else { break; }
                 }
                 i = j;
 
-                // Render sebagai dalil-card jika ada arti atau sumber
                 if (arti || sumber || transliterasi) {
                     html += `<div class="dalil-card">
                         <div class="arab-wrap"><span class="arab-teks">${arabTeks}</span></div>
@@ -775,19 +831,16 @@ Nilai jawabannya secara adil:
                 continue;
             }
 
-            // Deteksi sumber (QS. / HR.)
             if (/^\(QS\.|^\(HR\.|^QS\.|^HR\./.test(line)) {
                 html += `<div style="margin:4px 0 10px;"><span class="sumber" style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:var(--hijau-mid);background:var(--hijau-pale);padding:3px 10px;border-radius:20px;">📖 ${line.replace(/[()]/g,'')}</span></div>`;
                 i++; continue;
             }
 
-            // Deteksi Artinya:
             if (/^(Artinya|Terjemahan)\s*:/i.test(line)) {
                 html += `<div class="dalil-box">${line}</div>`;
                 i++; continue;
             }
 
-            // Deteksi transliterasi (baris italic latin setelah Arab)
             if (i > 0 && /^[A-Za-z'"]/.test(line) && line.length < 200 && !/^[A-Z][a-z]+ [A-Z]/.test(line) && /[aeiou]{1,}/i.test(line)) {
                 const prev = lines[i-1] ? lines[i-1].trim() : '';
                 if ((prev.match(/[\u0600-\u06FF]/g)||[]).length > 0) {
@@ -796,7 +849,6 @@ Nilai jawabannya secara adil:
                 }
             }
 
-            // Paragraph biasa — gabungkan baris kosong
             let para = line;
             i++;
             while (i < lines.length && lines[i].trim() !== '') {
@@ -815,6 +867,10 @@ Nilai jawabannya secara adil:
 
     async function resetChat() {
         await fetch('/reset', {method:'POST'});
+        modeKuis = false;
+        kuisTahap = null;
+        sudahSalam = false;
+        document.getElementById('kuisBadge').style.display = 'none';
         const area = document.getElementById('chatArea');
         area.innerHTML = `
             <div class="welcome-screen" id="welcomeScreen">
@@ -833,7 +889,6 @@ Nilai jawabannya secara adil:
                     </div>
                 </div>
             </div>`;
-        modeKuis = false; kuisTahap = null; sudahSalam = false;
         if (userData) {
             const sapaan = `Sapa kembali pengguna bernama ${userData.nama} dengan hangat setelah reset percakapan. Gunakan salam islami.`;
             const ws = document.getElementById('welcomeScreen');
