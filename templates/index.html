@@ -310,6 +310,7 @@
     let kuisSoalKe = 0;
     let kuisTotalSoal = 5;
     let kuisSoalTerakhir = '';
+	let kuisRiwayatSoal = [];
     let sudahSalam = false;
     let peranDipilih = null;
     let modalTopikDipilih = null;
@@ -455,6 +456,7 @@
         kuisSkor = 0;
         kuisSoalKe = 0;
         kuisSoalTerakhir = '';
+		kuisRiwayatSoal = [];
 
         // Hilangkan welcome screen
         const ws = document.getElementById('welcomeScreen');
@@ -485,7 +487,8 @@
 Topik: ${kuisTopik}, Tingkat: ${kuisLevel}, Soal ke-${kuisSoalKe} dari ${kuisTotalSoal}.
 ${panduanLevel[kuisLevel] || ''}
 
-Buat SATU soal pilihan ganda yang BERBEDA dari soal sebelumnya dalam sesi ini.
+Buat SATU soal pilihan ganda yang BERBEDA dan BELUM PERNAH ditanyakan sebelumnya.
+${kuisRiwayatSoal.length > 0 ? `Soal yang sudah diberikan (JANGAN ulangi):\n${kuisRiwayatSoal.map((s,i) => `${i+1}. ${s}`).join('\n')}` : ''}
 Format WAJIB (ikuti persis, gunakan baris baru):
 
 Soal ${kuisSoalKe}: [pertanyaan]
@@ -501,7 +504,8 @@ JANGAN tulis jawaban yang benar. Tunggu jawaban dari pengguna.`;
 Topik: ${kuisTopik}, Tingkat: ${kuisLevel}, Soal ke-${kuisSoalKe} dari ${kuisTotalSoal}.
 ${panduanLevel[kuisLevel] || ''}
 
-Buat SATU soal esai yang BERBEDA dari soal sebelumnya.
+Buat SATU soal esai yang BERBEDA dan BELUM PERNAH ditanyakan sebelumnya.
+${kuisRiwayatSoal.length > 0 ? `Soal yang sudah diberikan (JANGAN ulangi):\n${kuisRiwayatSoal.map((s,i) => `${i+1}. ${s}`).join('\n')}` : ''}
 Format WAJIB:
 Soal ${kuisSoalKe}: [pertanyaan esai yang membutuhkan penjelasan]
 
@@ -510,6 +514,9 @@ JANGAN tulis jawaban. Tunggu jawaban dari pengguna.`;
 
         kirimKeAI(prompt, false, (jawAI) => {
             kuisSoalTerakhir = jawAI.trim().substring(0, 500);
+			// Simpan ringkasan soal ke riwayat
+const ringkasan = jawAI.replace(/^Soal \d+:\s*/i, '').trim().substring(0, 150);
+kuisRiwayatSoal.push(ringkasan);
             // Untuk pilihan ganda, tampilkan bubble A B C D
             if (kuisTipe === 'pilgan') {
                 tampilkanPilganBubble(jawAI);
