@@ -32,11 +32,29 @@ class Percakapan(db.Model):
     is_kuis    = db.Column(db.Boolean, default=False)
     topik_kuis = db.Column(db.String(100), nullable=True)
     level_kuis = db.Column(db.String(50), nullable=True)
-    skor_kuis  = db.Column(db.Integer, nullable=True)  # 1=benar, 0=salah, None=bukan kuis
+    skor_kuis  = db.Column(db.Integer, nullable=True)
     waktu      = db.Column(db.DateTime, default=datetime.utcnow)
 
 with app.app_context():
     db.create_all()
+    # Auto-migrate: tambah kolom baru jika belum ada di database lama
+    from sqlalchemy import text
+    kolom_baru = [
+        ("nama_user",  "ALTER TABLE percakapan ADD COLUMN nama_user VARCHAR(100)"),
+        ("peran_user", "ALTER TABLE percakapan ADD COLUMN peran_user VARCHAR(50)"),
+        ("is_kuis",    "ALTER TABLE percakapan ADD COLUMN is_kuis BOOLEAN DEFAULT 0"),
+        ("topik_kuis", "ALTER TABLE percakapan ADD COLUMN topik_kuis VARCHAR(100)"),
+        ("level_kuis", "ALTER TABLE percakapan ADD COLUMN level_kuis VARCHAR(50)"),
+        ("skor_kuis",  "ALTER TABLE percakapan ADD COLUMN skor_kuis INTEGER"),
+    ]
+    for nama_kolom, sql in kolom_baru:
+        try:
+            with db.engine.connect() as conn:
+                conn.execute(text(sql))
+                conn.commit()
+                logger.info(f"Kolom '{nama_kolom}' berhasil ditambahkan.")
+        except Exception:
+            pass  # Kolom sudah ada, abaikan
 
 SISTEM_DASAR = """Kamu adalah PratamaAI, asisten pembelajaran Pendidikan Agama Islam (PAI) yang dikembangkan oleh Muhammad Ibnu Setiawan Pratama.
 
@@ -52,7 +70,7 @@ ATURAN MENJAWAB:
 4. Jika ada lafaz Arab, tuliskan teks Arabnya di baris tersendiri, lalu transliterasi latin, lalu terjemahannya.
 5. Gunakan bahasa Indonesia yang sopan, ilmiah, dan mudah dipahami.
 6. Tolak pertanyaan di luar topik Islam dengan sopan.
-8. Akhiri jawaban dengan motivasi islami singkat.
+7. Akhiri jawaban dengan motivasi islami singkat.
 
 ATURAN SALAM:
 - Jika sudah_salam = True: JANGAN gunakan salam pembuka lagi. Boleh mulai dengan Bismillah atau langsung jawab.
@@ -72,8 +90,8 @@ Artinya: [terjemahan]
 (HR. Perawi)
 - JANGAN gunakan **, ##, atau simbol markdown apapun."""
 
-MAX_HISTORY  = 10
-ADMIN_PW     = os.environ.get("ADMIN_PASSWORD", "admin123")
+MAX_HISTORY = 10
+ADMIN_PW    = os.environ.get("ADMIN_PASSWORD", "admin123")
 
 
 @app.route("/")
@@ -86,14 +104,14 @@ def home():
 
 @app.route("/tanya-stream", methods=["POST"])
 def tanya_stream():
-    data       = request.json or {}
-    pertanyaan = data.get("pertanyaan", "").strip()
-    user_data  = data.get("user_data", {})
+    data        = request.json or {}
+    pertanyaan  = data.get("pertanyaan", "").strip()
+    user_data   = data.get("user_data", {})
     sudah_salam = data.get("sudah_salam", False)
-    is_kuis    = data.get("is_kuis", False)
-    topik_kuis = data.get("topik_kuis", None)
-    level_kuis = data.get("level_kuis", None)
-    skor_kuis  = data.get("skor_kuis", None)
+    is_kuis     = data.get("is_kuis", False)
+    topik_kuis  = data.get("topik_kuis", None)
+    level_kuis  = data.get("level_kuis", None)
+    skor_kuis   = data.get("skor_kuis", None)
 
     if not pertanyaan:
         return jsonify({"error": "Pertanyaan kosong"}), 400
@@ -121,9 +139,9 @@ def tanya_stream():
             info += f"\n- Institusi: {extra}"
         sistem += info
 
-    messages  = [{"role": "system", "content": sistem}] + riwayat
-    sesi_id   = session["sesi_id"]
-    nama_user = user_data.get("nama", "Anonim") if user_data else "Anonim"
+    messages   = [{"role": "system", "content": sistem}] + riwayat
+    sesi_id    = session["sesi_id"]
+    nama_user  = user_data.get("nama", "Anonim") if user_data else "Anonim"
     peran_user = user_data.get("peran", "") if user_data else ""
 
     def generate():
@@ -144,23 +162,23 @@ def tanya_stream():
 
             with app.app_context():
                 p = Percakapan(
-                    sesi_id=sesi_id,
-                    nama_user=nama_user,
-                    peran_user=peran_user,
-                    pertanyaan=pertanyaan,
-                    jawaban=jawaban_penuh,
-                    is_kuis=is_kuis,
-                    topik_kuis=topik_kuis if is_kuis else None,
-                    level_kuis=level_kuis if is_kuis else None,
-                    skor_kuis=skor_kuis if is_kuis else None
+                    sesi_id    = sesi_id,
+                    nama_user  = nama_user,
+                    peran_user = peran_user,
+                    pertanyaan = pertanyaan,
+                    jawaban    = jawaban_penuh,
+                    is_kuis    = is_kuis,
+                    topik_kuis = topik_kuis if is_kuis else None,
+                    level_kuis = level_kuis if is_kuis else None,
+                    skor_kuis  = skor_kuis if is_kuis else None
                 )
                 db.session.add(p)
                 db.session.commit()
                 row_id = p.id
 
             riwayat.append({"role": "assistant", "content": jawaban_penuh})
-            session["riwayat"]  = riwayat
-            session.modified    = True
+            session["riwayat"] = riwayat
+            session.modified   = True
 
             yield f"data: {json.dumps({'done': True, 'id': row_id})}\n\n"
 
@@ -204,54 +222,52 @@ def admin():
     pw = request.args.get("pw", "")
     if pw != ADMIN_PW:
         return "Akses ditolak. Tambahkan ?pw=PASSWORD di URL.", 403
-    total      = Percakapan.query.count()
-    rated      = Percakapan.query.filter(Percakapan.rating != None).count()
-    avg_rating = db.session.query(db.func.avg(Percakapan.rating)).scalar()
-    terbaru    = Percakapan.query.order_by(Percakapan.waktu.desc()).limit(20).all()
-    total_sesi = db.session.query(db.func.count(db.func.distinct(Percakapan.sesi_id))).scalar()
-    hari_ini   = Percakapan.query.filter(
-                    db.func.date(Percakapan.waktu) == db.func.date(datetime.utcnow())
-                 ).count()
-    rating_dist = {i: Percakapan.query.filter_by(rating=i).count() for i in range(1,6)}
+    try:
+        from sqlalchemy import func
+        total       = Percakapan.query.count()
+        rated       = Percakapan.query.filter(Percakapan.rating != None).count()
+        avg_rating  = db.session.query(db.func.avg(Percakapan.rating)).scalar()
+        terbaru     = Percakapan.query.order_by(Percakapan.waktu.desc()).limit(20).all()
+        total_sesi  = db.session.query(db.func.count(db.func.distinct(Percakapan.sesi_id))).scalar()
+        hari_ini    = Percakapan.query.filter(
+                        db.func.date(Percakapan.waktu) == db.func.date(datetime.utcnow())
+                      ).count()
+        rating_dist = {i: Percakapan.query.filter_by(rating=i).count() for i in range(1,6)}
+        pengguna_list = db.session.query(
+            Percakapan.nama_user, Percakapan.peran_user,
+            func.count(Percakapan.id).label('jumlah_chat'),
+            func.max(Percakapan.waktu).label('terakhir_aktif'),
+            func.count(db.case((Percakapan.is_kuis == True, 1))).label('jumlah_kuis')
+        ).group_by(Percakapan.nama_user, Percakapan.peran_user)\
+         .order_by(func.max(Percakapan.waktu).desc()).all()
+        total_kuis     = Percakapan.query.filter_by(is_kuis=True).count()
+        kuis_terbaru   = Percakapan.query.filter_by(is_kuis=True)\
+                          .order_by(Percakapan.waktu.desc()).limit(20).all()
+        kuis_per_topik = db.session.query(
+            Percakapan.topik_kuis,
+            func.count(Percakapan.id).label('jumlah')
+        ).filter(Percakapan.is_kuis==True, Percakapan.topik_kuis!=None)\
+         .group_by(Percakapan.topik_kuis).all()
 
-    # Data pengguna unik dengan aktivitas
-    from sqlalchemy import func
-    pengguna_list = db.session.query(
-        Percakapan.nama_user, Percakapan.peran_user,
-        func.count(Percakapan.id).label('jumlah_chat'),
-        func.max(Percakapan.waktu).label('terakhir_aktif'),
-        func.count(db.case((Percakapan.is_kuis == True, 1))).label('jumlah_kuis')
-    ).group_by(Percakapan.nama_user, Percakapan.peran_user)\
-     .order_by(func.max(Percakapan.waktu).desc()).all()
-
-    # Data kuis
-    total_kuis  = Percakapan.query.filter_by(is_kuis=True).count()
-    kuis_terbaru = Percakapan.query.filter_by(is_kuis=True)\
-                    .order_by(Percakapan.waktu.desc()).limit(20).all()
-    kuis_per_topik = db.session.query(
-        Percakapan.topik_kuis,
-        func.count(Percakapan.id).label('jumlah')
-    ).filter(Percakapan.is_kuis==True, Percakapan.topik_kuis!=None)\
-     .group_by(Percakapan.topik_kuis).all()
-
-    return render_template("admin.html",
-        total=total, rated=rated,
-        avg_rating=round(avg_rating,2) if avg_rating else 0,
-        terbaru=terbaru, rating_dist=rating_dist,
-        total_sesi=total_sesi, hari_ini=hari_ini, pw=pw,
-        pengguna_list=pengguna_list,
-        total_kuis=total_kuis, kuis_terbaru=kuis_terbaru,
-        kuis_per_topik=kuis_per_topik
-    )
+        return render_template("admin.html",
+            total=total, rated=rated,
+            avg_rating=round(avg_rating,2) if avg_rating else 0,
+            terbaru=terbaru, rating_dist=rating_dist,
+            total_sesi=total_sesi, hari_ini=hari_ini, pw=pw,
+            pengguna_list=pengguna_list,
+            total_kuis=total_kuis, kuis_terbaru=kuis_terbaru,
+            kuis_per_topik=kuis_per_topik
+        )
+    except Exception as e:
+        logger.error(f"Admin error: {e}")
+        return f"Error admin: {str(e)}", 500
 
 
 @app.route("/simpan-kuis", methods=["POST"])
 def simpan_kuis():
-    """Simpan jawaban kuis siswa ke database secara langsung."""
     try:
-        data      = request.json or {}
-        pw_check  = request.args.get("pw", "")  # opsional
-        sesi_id   = session.get("sesi_id", os.urandom(8).hex())
+        data       = request.json or {}
+        sesi_id    = session.get("sesi_id", os.urandom(8).hex())
         p = Percakapan(
             sesi_id    = sesi_id,
             nama_user  = data.get("nama_user", "Anonim"),
@@ -268,19 +284,6 @@ def simpan_kuis():
         return jsonify({"status": "ok", "id": p.id})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-
-
-def hapus(pid):
-    pw = request.args.get("pw", "")
-    if pw != ADMIN_PW:
-        return jsonify({"error": "Akses ditolak"}), 403
-    p = db.session.get(Percakapan, pid)
-    if p:
-        db.session.delete(p)
-        db.session.commit()
-        return jsonify({"status": "ok"})
-    return jsonify({"error": "Data tidak ditemukan"}), 404
 
 
 @app.route("/edit/<int:pid>", methods=["POST"])
