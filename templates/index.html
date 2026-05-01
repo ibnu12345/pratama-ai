@@ -997,69 +997,32 @@ Lakukan penilaian:
     }
 </script>
 
-    // ── MOBILE KEYBOARD FIX ─────────────────────────────────────
+<script>
+    // ── MOBILE KEYBOARD FIX ──────────────────────────────────────
     (function() {
-        // Fix: scroll ke bawah saat keyboard muncul di Android
-        const inputEl = document.getElementById('inputPertanyaan') || document.querySelector('.input-area input');
+        const inputEl  = document.getElementById('inputPertanyaan') || document.querySelector('.input-area input');
         const chatArea = document.getElementById('chatArea');
 
         function scrollChatBawah() {
-            if (chatArea) {
-                setTimeout(() => {
-                    chatArea.scrollTop = chatArea.scrollHeight;
-                }, 100);
-            }
+            if (chatArea) setTimeout(() => { chatArea.scrollTop = chatArea.scrollHeight; }, 150);
         }
 
         if (inputEl) {
             inputEl.addEventListener('focus', () => {
-                // Android: scroll chat ke bawah saat keyboard muncul
                 scrollChatBawah();
-                // iOS: pastikan input terlihat
-                setTimeout(() => {
-                    inputEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                }, 300);
+                setTimeout(() => { inputEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 300);
             });
         }
 
-        // Visual Viewport API — cara paling reliable untuk handle keyboard
         if (window.visualViewport) {
             let lastHeight = window.visualViewport.height;
-
             window.visualViewport.addEventListener('resize', () => {
-                const currentHeight = window.visualViewport.height;
-                const inputArea = document.querySelector('.input-area');
-
-                if (inputArea) {
-                    // Keyboard muncul (height berkurang) atau hilang
-                    const offset = window.innerHeight - currentHeight - window.visualViewport.offsetTop;
-                    if (offset > 50) {
-                        // Keyboard sedang tampil
-                        inputArea.style.transform = `translateY(-${offset}px)`;
-                    } else {
-                        inputArea.style.transform = '';
-                    }
-                }
-
-                // Scroll chat ke bawah
-                if (currentHeight < lastHeight) {
-                    scrollChatBawah();
-                }
-                lastHeight = currentHeight;
+                const h = window.visualViewport.height;
+                if (h < lastHeight) scrollChatBawah();
+                lastHeight = h;
             });
         }
-
-        // Fallback: resize window
-        let prevInnerHeight = window.innerHeight;
-        window.addEventListener('resize', () => {
-            const chatArea = document.getElementById('chatArea');
-            if (chatArea && window.innerHeight < prevInnerHeight - 100) {
-                // Keyboard muncul
-                scrollChatBawah();
-            }
-            prevInnerHeight = window.innerHeight;
-        });
     })();
+</script>
 
 </body>
-</html>
