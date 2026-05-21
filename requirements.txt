@@ -4,3 +4,4 @@ gunicorn
 python-dotenv
 flask-sqlalchemy
 fpdf2
+psycopg2-binary
