@@ -366,6 +366,23 @@
                 </div>
             </div>
         </div>
+
+        <div class="section">
+            <div class="section-head"><h2>🔑 Ganti Password Owner</h2><span>Hanya berlaku untuk akun Anda sendiri</span></div>
+            <div class="tambah-admin-form" style="background:#fff8e8;border-color:rgba(201,168,76,0.3);">
+                <div class="form-row">
+                    <div class="form-group-sm">
+                        <label>Password Lama</label>
+                        <input type="password" id="pwLama" placeholder="Password saat ini">
+                    </div>
+                    <div class="form-group-sm">
+                        <label>Password Baru</label>
+                        <input type="password" id="pwBaru" placeholder="Min. 6 karakter">
+                    </div>
+                    <button class="btn-tambah" style="background:var(--emas);" onclick="gantiPassword()">🔑 Ganti</button>
+                </div>
+            </div>
+        </div>
     </div>
     {% endif %}
 
@@ -620,6 +637,27 @@ async function hapusAdmin(id, username) {
         if (card) { card.style.opacity='0'; card.style.transition='.3s'; setTimeout(()=>card.remove(),300); }
     } else {
         tampilAlert('error', d.error || 'Gagal menghapus admin.');
+    }
+}
+
+async function gantiPassword() {
+    const pwLama = document.getElementById('pwLama').value.trim();
+    const pwBaru = document.getElementById('pwBaru').value.trim();
+    if (!pwLama || !pwBaru) { tampilAlert('error', 'Password lama dan baru wajib diisi.'); return; }
+    if (pwBaru.length < 6) { tampilAlert('error', 'Password baru minimal 6 karakter.'); return; }
+    const r = await fetch('/admin/ganti-password', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({pw_lama: pwLama, pw_baru: pwBaru})
+    });
+    const d = await r.json();
+    if (d.status === 'ok') {
+        tampilAlert('sukses', '✅ Password berhasil diganti! Silakan login ulang.');
+        document.getElementById('pwLama').value = '';
+        document.getElementById('pwBaru').value = '';
+        setTimeout(() => { window.location.href = '/admin/logout'; }, 2000);
+    } else {
+        tampilAlert('error', d.error || 'Gagal mengganti password.');
     }
 }
 </script>

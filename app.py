@@ -405,6 +405,26 @@ def hapus_admin():
     return jsonify({"status": "ok"})
 
 
+@app.route("/admin/ganti-password", methods=["POST"])
+@owner_required
+def ganti_password():
+    data    = request.json or {}
+    pw_lama = data.get("pw_lama", "")
+    pw_baru = data.get("pw_baru", "")
+    if not pw_lama or not pw_baru:
+        return jsonify({"error": "Password lama dan baru wajib diisi."}), 400
+    if len(pw_baru) < 6:
+        return jsonify({"error": "Password baru minimal 6 karakter."}), 400
+    user = AdminUser.query.filter_by(username=session.get("admin_username")).first()
+    if not user:
+        return jsonify({"error": "Akun tidak ditemukan."}), 404
+    if not check_password_hash(user.password, pw_lama):
+        return jsonify({"error": "Password lama salah."}), 403
+    user.password = generate_password_hash(pw_baru)
+    db.session.commit()
+    return jsonify({"status": "ok"})
+
+
 @app.route("/simpan-kuis", methods=["POST"])
 def simpan_kuis():
     try:
