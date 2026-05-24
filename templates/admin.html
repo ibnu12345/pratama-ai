@@ -15,19 +15,25 @@
         body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--krem);min-height:100vh;}
 
         .header{background:var(--hijau-tua);color:#fff;padding:0 24px;height:58px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,0.18);position:sticky;top:0;z-index:50;}
+        .header-left{display:flex;align-items:center;gap:12px;}
         .header h1{font-size:15px;display:flex;align-items:center;gap:8px;}
+        .header-user-badge{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:20px;padding:4px 12px;font-size:12px;display:flex;align-items:center;gap:6px;}
+        .role-badge{background:var(--emas);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;text-transform:uppercase;}
         .header-actions{display:flex;gap:10px;}
         .btn{padding:6px 15px;border-radius:20px;font-size:12px;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;border:none;font-weight:500;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:5px;}
         .btn-outline{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.3);color:#fff;}
         .btn-outline:hover{background:rgba(255,255,255,0.22);}
         .btn-emas{background:var(--emas);color:#fff;}
         .btn-emas:hover{opacity:.88;}
+        .btn-merah{background:rgba(229,57,53,0.85);color:#fff;border:1px solid rgba(255,255,255,0.2);}
+        .btn-merah:hover{background:#e53935;}
 
         .tabs{background:#fff;border-bottom:2px solid var(--hijau-pale);display:flex;padding:0 24px;position:sticky;top:58px;z-index:40;box-shadow:0 2px 8px rgba(0,0,0,0.04);overflow-x:auto;}
         .tab{padding:14px 18px;font-size:13px;font-weight:600;color:#888;cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-2px;transition:all .2s;display:flex;align-items:center;gap:6px;white-space:nowrap;}
         .tab:hover{color:var(--hijau-mid);}
         .tab.aktif{color:var(--hijau-tua);border-bottom-color:var(--hijau-tua);}
         .badge{background:var(--hijau-mid);color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;}
+        .badge-emas{background:var(--emas);}
 
         .container{max-width:1150px;margin:24px auto;padding:0 20px 60px;}
         .tab-content{display:none;}
@@ -68,6 +74,8 @@
         .tag-chat{background:#e8f5ee;color:#2d6a4f;}
         .tag-benar{background:#e8f5ee;color:#2d6a4f;}
         .tag-salah{background:#fce4e4;color:#c62828;}
+        .tag-owner{background:linear-gradient(135deg,var(--emas),#e6b84a);color:#fff;}
+        .tag-admin-role{background:var(--hijau-pale);color:var(--hijau-tua);}
         .stars-on{color:#f5a623;}
 
         .btn-aksi{padding:4px 10px;border-radius:8px;font-size:11px;cursor:pointer;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;transition:all .15s;margin-right:3px;}
@@ -75,6 +83,8 @@
         .btn-edit:hover{background:#ffe0b2;}
         .btn-hapus{background:#fce4e4;color:#c62828;}
         .btn-hapus:hover{background:#ffcdd2;}
+        .btn-hijau{background:var(--hijau-pale);color:var(--hijau-tua);}
+        .btn-hijau:hover{background:#c8e6d4;}
 
         /* PENGGUNA CARDS */
         .pengguna-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;}
@@ -86,6 +96,22 @@
         .stat-mini{font-size:11px;background:#fff;padding:3px 9px;border-radius:8px;color:#444;}
         .hapus-pengguna-btn{width:100%;padding:6px;background:#fce4e4;color:#c62828;border:none;border-radius:8px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
         .hapus-pengguna-btn:hover{background:#ffcdd2;}
+
+        /* ADMIN MANAGEMENT */
+        .admin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-bottom:18px;}
+        .admin-card{background:#fff;border:1.5px solid rgba(82,183,136,0.2);border-radius:12px;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+        .admin-card .info{display:flex;align-items:center;gap:10px;}
+        .admin-avatar{width:38px;height:38px;background:var(--hijau-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+        .admin-card .username{font-size:13.5px;font-weight:700;color:var(--hijau-tua);}
+        .admin-card .sejak{font-size:11px;color:#aaa;margin-top:2px;}
+        .tambah-admin-form{background:var(--hijau-pale);border-radius:12px;padding:18px;border:1.5px dashed rgba(45,106,79,0.25);}
+        .tambah-admin-form h3{font-size:13px;font-weight:700;color:var(--hijau-tua);margin-bottom:14px;}
+        .form-row{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end;}
+        .form-group-sm label{font-size:11.5px;font-weight:600;color:#555;display:block;margin-bottom:5px;}
+        .form-group-sm input{width:100%;padding:9px 12px;border:1.5px solid #ddd;border-radius:10px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;outline:none;background:#fff;}
+        .form-group-sm input:focus{border-color:var(--hijau-mid);}
+        .btn-tambah{padding:9px 18px;background:var(--hijau-mid);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;white-space:nowrap;}
+        .btn-tambah:hover{background:var(--hijau-tua);}
 
         /* MODALS */
         .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
@@ -111,26 +137,40 @@
         .riwayat-a{font-size:12.5px;color:#666;line-height:1.6;}
         .riwayat-aksi{display:flex;gap:6px;margin-top:8px;}
 
-        /* USER STAT MINI */
         .user-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
         .user-stat{background:var(--hijau-pale);border-radius:10px;padding:12px;text-align:center;}
         .user-stat .num{font-size:22px;font-weight:700;color:var(--hijau-tua);}
         .user-stat .lbl{font-size:11px;color:#666;margin-top:2px;}
         .kuis-stat-bar{background:var(--hijau-pale);border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
 
+        .alert-sukses{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;border-radius:10px;padding:10px 14px;font-size:12.5px;margin-bottom:14px;display:none;}
+        .alert-error{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:10px;padding:10px 14px;font-size:12.5px;margin-bottom:14px;display:none;}
+
         @media(max-width:700px){
             .stats{grid-template-columns:repeat(2,1fr);}
             .user-stat-grid{grid-template-columns:repeat(2,1fr);}
+            .form-row{grid-template-columns:1fr;gap:8px;}
         }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <h1>🕌 Admin Panel · PratamaAI</h1>
+    <div class="header-left">
+        <h1>🕌 Admin Panel · PratamaAI</h1>
+        <div class="header-user-badge">
+            👤 {{ admin_username }}
+            {% if admin_role == 'owner' %}
+            <span class="role-badge">Owner</span>
+            {% else %}
+            <span class="role-badge" style="background:var(--hijau-mid);">Admin</span>
+            {% endif %}
+        </div>
+    </div>
     <div class="header-actions">
-        <a href="/export-csv?pw={{ pw }}" class="btn btn-emas">⬇ Export CSV</a>
+        <a href="/export-csv" class="btn btn-emas">⬇ Export CSV</a>
         <a href="/" class="btn btn-outline">← Kembali</a>
+        <a href="/admin/logout" class="btn btn-merah">🔓 Logout</a>
     </div>
 </div>
 
@@ -139,6 +179,9 @@
     <div class="tab" onclick="gantiTab('pengguna',this)">👥 Pengguna <span class="badge">{{ pengguna_list|length }}</span></div>
     <div class="tab" onclick="gantiTab('percakapan',this)">💬 Percakapan <span class="badge">{{ total }}</span></div>
     <div class="tab" onclick="gantiTab('kuis',this)">🎯 Kuis <span class="badge">{{ total_kuis }}</span></div>
+    {% if admin_role == 'owner' %}
+    <div class="tab" onclick="gantiTab('kelola-admin',this)">🛡️ Kelola Admin <span class="badge badge-emas">Owner</span></div>
+    {% endif %}
 </div>
 
 <div class="container">
@@ -238,7 +281,6 @@
             <div class="stat-card"><div class="ikon">📚</div><div class="angka">{{ kuis_per_topik|length }}</div><div class="label">Topik Dikerjakan</div></div>
             <div class="stat-card"><div class="ikon">👥</div><div class="angka">{{ pengguna_list|selectattr('jumlah_kuis','gt',0)|list|length }}</div><div class="label">Peserta Kuis</div></div>
         </div>
-
         {% if kuis_per_topik %}
         <div class="section">
             <div class="section-head"><h2>📊 Statistik per Topik</h2></div>
@@ -250,7 +292,6 @@
                 <div class="bar-count">{{ t.jumlah }}</div>
             </div>{% endfor %}
         </div>{% endif %}
-
         <div class="section">
             <div class="section-head"><h2>🎯 Riwayat Jawaban Kuis</h2><span>Klik nama pengguna untuk detail</span></div>
             {% if kuis_terbaru %}
@@ -277,9 +318,57 @@
                 </tbody>
             </table>
             </div>
-            {% else %}<div class="kosong">Belum ada data kuis. Data akan muncul setelah pengguna mengerjakan kuis.</div>{% endif %}
+            {% else %}<div class="kosong">Belum ada data kuis.</div>{% endif %}
         </div>
     </div>
+
+    <!-- KELOLA ADMIN (owner only) -->
+    {% if admin_role == 'owner' %}
+    <div id="tab-kelola-admin" class="tab-content">
+        <div class="section">
+            <div class="section-head"><h2>🛡️ Daftar Admin</h2><span>{{ daftar_admin|length }} admin aktif</span></div>
+            <div id="alertSukses" class="alert-sukses"></div>
+            <div id="alertError" class="alert-error"></div>
+            {% if daftar_admin %}
+            <div class="admin-grid" id="adminGrid">
+                {% for a in daftar_admin %}
+                <div class="admin-card" id="admin-card-{{ a.id }}">
+                    <div class="info">
+                        <div class="admin-avatar">👤</div>
+                        <div>
+                            <div class="username">{{ a.username }}</div>
+                            <div class="sejak">Dibuat {{ a.dibuat.strftime('%d/%m/%Y') }}</div>
+                            <span class="tag tag-admin-role" style="margin-top:4px;">Admin</span>
+                        </div>
+                    </div>
+                    <button class="btn-aksi btn-hapus" onclick="hapusAdmin({{ a.id }}, '{{ a.username }}')">🗑 Hapus</button>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="kosong" id="adminGrid">Belum ada admin. Tambahkan admin di bawah.</div>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <div class="section-head"><h2>➕ Tambah Admin Baru</h2></div>
+            <div class="tambah-admin-form">
+                <div class="form-row">
+                    <div class="form-group-sm">
+                        <label>Username Admin</label>
+                        <input type="text" id="newAdminUsername" placeholder="contoh: admin_budi">
+                    </div>
+                    <div class="form-group-sm">
+                        <label>Password</label>
+                        <input type="password" id="newAdminPassword" placeholder="Min. 6 karakter">
+                    </div>
+                    <button class="btn-tambah" onclick="tambahAdmin()">➕ Tambah</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
 </div>
 
 <!-- MODAL EDIT -->
@@ -319,8 +408,6 @@
 </div>
 
 <script>
-const PW = '{{ pw }}';
-
 function gantiTab(nama, el) {
     document.querySelectorAll('.tab').forEach(t=>t.classList.remove('aktif'));
     document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('aktif'));
@@ -337,10 +424,18 @@ function escHtml(s) {
     return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
+function tampilAlert(tipe, pesan) {
+    const el = document.getElementById(tipe === 'sukses' ? 'alertSukses' : 'alertError');
+    if (!el) return;
+    el.textContent = pesan;
+    el.style.display = 'block';
+    setTimeout(() => { el.style.display = 'none'; }, 4000);
+}
+
 // ===== HAPUS DATA =====
 function hapusData(id) {
     if (!confirm(`Yakin hapus data #${id}?`)) return;
-    fetch(`/hapus/${id}?pw=${PW}`,{method:'POST'}).then(r=>r.json()).then(d=>{
+    fetch(`/hapus/${id}`, {method:'POST'}).then(r=>r.json()).then(d=>{
         if(d.status==='ok'){
             const row=document.getElementById('row-'+id);
             if(row){row.style.opacity='0';row.style.transition='.3s';setTimeout(()=>row.remove(),300);}
@@ -350,7 +445,7 @@ function hapusData(id) {
 
 function hapusPengguna(nama) {
     if (!confirm(`Yakin hapus SEMUA data "${nama}"? Chat dan kuis akan terhapus semua!`)) return;
-    fetch(`/hapus-pengguna?pw=${PW}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nama})})
+    fetch('/hapus-pengguna',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nama})})
     .then(r=>r.json()).then(d=>{
         if(d.status==='ok'){alert('Berhasil dihapus!');location.reload();}
         else alert('Gagal: '+d.error);
@@ -368,7 +463,7 @@ function bukaEdit(id, nama, pertanyaan, jawaban) {
 
 async function simpanEdit() {
     const id=document.getElementById('editId').value;
-    const r=await fetch(`/edit/${id}?pw=${PW}`,{
+    const r=await fetch(`/edit/${id}`,{
         method:'POST',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({
             nama_user:document.getElementById('editNama').value,
@@ -387,7 +482,7 @@ async function lihatRiwayat(nama) {
     document.getElementById('riwayatBody').innerHTML='<div style="text-align:center;color:#aaa;padding:40px;">⏳ Memuat data...</div>';
     document.getElementById('modalRiwayat').classList.add('show');
 
-    const r=await fetch(`/pengguna-riwayat?pw=${PW}&nama=${encodeURIComponent(nama)}`);
+    const r=await fetch(`/pengguna-riwayat?nama=${encodeURIComponent(nama)}`);
     const data=await r.json();
 
     if(!data.length){
@@ -419,7 +514,6 @@ async function lihatRiwayat(nama) {
         </div>`;
     }
 
-    // Tabs mini
     html+=`<div style="display:flex;gap:8px;margin-bottom:14px;">
         <button onclick="filterRiwayat('semua')" id="fr-semua" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--hijau-mid);background:var(--hijau-mid);color:#fff;font-size:12px;cursor:pointer;font-family:inherit;font-weight:600;">Semua (${data.length})</button>
         <button onclick="filterRiwayat('chat')" id="fr-chat" style="padding:6px 14px;border-radius:20px;border:1.5px solid #ddd;background:#fff;color:#555;font-size:12px;cursor:pointer;font-family:inherit;">Chat (${chats.length})</button>
@@ -452,8 +546,7 @@ async function lihatRiwayat(nama) {
 
 function filterRiwayat(tipe) {
     document.querySelectorAll('#riwayat-list .riwayat-item').forEach(el=>{
-        if(tipe==='semua' || el.dataset.jenis===tipe) el.style.display='';
-        else el.style.display='none';
+        el.style.display=(tipe==='semua'||el.dataset.jenis===tipe)?'':'none';
     });
     ['semua','chat','kuis'].forEach(t=>{
         const btn=document.getElementById('fr-'+t);
@@ -465,12 +558,69 @@ function filterRiwayat(tipe) {
 
 function hapusDariModal(id) {
     if (!confirm(`Hapus data #${id}?`)) return;
-    fetch(`/hapus/${id}?pw=${PW}`,{method:'POST'}).then(r=>r.json()).then(d=>{
+    fetch(`/hapus/${id}`,{method:'POST'}).then(r=>r.json()).then(d=>{
         if(d.status==='ok'){
             const el=document.getElementById('ri-'+id);
             if(el){el.style.opacity='0';el.style.transition='.3s';setTimeout(()=>el.remove(),300);}
         } else alert('Gagal: '+d.error);
     });
+}
+
+// ===== KELOLA ADMIN (owner only) =====
+async function tambahAdmin() {
+    const username = document.getElementById('newAdminUsername').value.trim();
+    const password = document.getElementById('newAdminPassword').value.trim();
+    if (!username || !password) { tampilAlert('error','Username dan password wajib diisi.'); return; }
+    if (password.length < 6) { tampilAlert('error','Password minimal 6 karakter.'); return; }
+
+    const r = await fetch('/admin/tambah-admin', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({username, password})
+    });
+    const d = await r.json();
+    if (d.status === 'ok') {
+        tampilAlert('sukses', `✅ Admin "${username}" berhasil ditambahkan.`);
+        document.getElementById('newAdminUsername').value = '';
+        document.getElementById('newAdminPassword').value = '';
+        // Tambah card ke grid tanpa reload
+        const grid = document.getElementById('adminGrid');
+        if (grid.classList.contains('kosong') || grid.tagName !== 'DIV') location.reload();
+        const card = document.createElement('div');
+        card.className = 'admin-card';
+        card.id = `admin-card-${d.id}`;
+        const today = new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'2-digit',year:'numeric'});
+        card.innerHTML = `
+            <div class="info">
+                <div class="admin-avatar">👤</div>
+                <div>
+                    <div class="username">${escHtml(username)}</div>
+                    <div class="sejak">Dibuat ${today}</div>
+                    <span class="tag tag-admin-role" style="margin-top:4px;">Admin</span>
+                </div>
+            </div>
+            <button class="btn-aksi btn-hapus" onclick="hapusAdmin(${d.id},'${escHtml(username)}')">🗑 Hapus</button>`;
+        grid.appendChild(card);
+    } else {
+        tampilAlert('error', d.error || 'Gagal menambahkan admin.');
+    }
+}
+
+async function hapusAdmin(id, username) {
+    if (!confirm(`Yakin hapus akun admin "${username}"?`)) return;
+    const r = await fetch('/admin/hapus-admin', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({id})
+    });
+    const d = await r.json();
+    if (d.status === 'ok') {
+        tampilAlert('sukses', `✅ Admin "${username}" berhasil dihapus.`);
+        const card = document.getElementById(`admin-card-${id}`);
+        if (card) { card.style.opacity='0'; card.style.transition='.3s'; setTimeout(()=>card.remove(),300); }
+    } else {
+        tampilAlert('error', d.error || 'Gagal menghapus admin.');
+    }
 }
 </script>
 </body>

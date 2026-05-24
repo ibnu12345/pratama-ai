@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Admin — PratamaAI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hijau-tua: #1a4a2e;
+            --hijau-mid: #2d6a4f;
+            --hijau-light: #52b788;
+            --hijau-pale: #e8f5ee;
+            --emas: #c9a84c;
+            --krem: #faf8f3;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            background: var(--krem);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Dekorasi background */
+        .bg-deco {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .bg-deco::before {
+            content: '';
+            position: absolute;
+            top: -120px; right: -120px;
+            width: 420px; height: 420px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(45,106,79,0.12) 0%, transparent 70%);
+        }
+        .bg-deco::after {
+            content: '';
+            position: absolute;
+            bottom: -100px; left: -100px;
+            width: 360px; height: 360px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(201,168,76,0.10) 0%, transparent 70%);
+        }
+        .deco-arab {
+            position: fixed;
+            font-family: 'Traditional Arabic', serif;
+            color: rgba(26,74,46,0.04);
+            font-size: 200px;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 0;
+            user-select: none;
+        }
+
+        /* Card login */
+        .login-wrap {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: #fff;
+            border-radius: 24px;
+            padding: 40px 36px 36px;
+            box-shadow: 0 12px 48px rgba(26,74,46,0.14), 0 2px 8px rgba(0,0,0,0.06);
+            border: 1px solid rgba(82,183,136,0.15);
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Logo area */
+        .login-logo {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        .logo-ikon {
+            width: 64px; height: 64px;
+            background: linear-gradient(135deg, var(--hijau-tua), var(--hijau-mid));
+            border-radius: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 16px rgba(26,74,46,0.25);
+        }
+        .login-logo h1 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--hijau-tua);
+            letter-spacing: -0.3px;
+        }
+        .login-logo .sub {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        .divider-line { flex: 1; height: 1px; background: #eee; }
+        .divider-text {
+            font-size: 11px;
+            color: #bbb;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Form */
+        .form-group { margin-bottom: 16px; }
+        .form-group label {
+            display: block;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 7px;
+        }
+        .input-wrap {
+            position: relative;
+        }
+        .input-wrap .icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 15px;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 11px 14px 11px 42px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #fafafa;
+            color: #333;
+        }
+        .form-group input:focus {
+            border-color: var(--hijau-mid);
+            box-shadow: 0 0 0 3px rgba(45,106,79,0.08);
+            background: #fff;
+        }
+        .form-group input::placeholder { color: #bbb; }
+
+        /* Pesan error */
+        .alert-error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 12.5px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Tombol login */
+        .btn-login {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, var(--hijau-tua), var(--hijau-mid));
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.15s;
+            margin-top: 4px;
+            letter-spacing: 0.2px;
+        }
+        .btn-login:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-login:active { transform: translateY(0); }
+
+        /* Footer kembali */
+        .kembali {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .kembali a {
+            font-size: 12.5px;
+            color: var(--hijau-mid);
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+        .kembali a:hover { opacity: 0.75; }
+
+        /* Credit */
+        .credit {
+            text-align: center;
+            margin-top: 28px;
+            font-size: 11px;
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-deco"></div>
+<div class="deco-arab">بِسْمِ اللهِ</div>
+
+<div class="login-wrap">
+    <div class="login-card">
+        <div class="login-logo">
+            <div class="logo-ikon">🛡️</div>
+            <h1>Panel Admin</h1>
+            <p class="sub">PratamaAI · Masuk untuk melanjutkan</p>
+        </div>
+
+        <div class="divider">
+            <div class="divider-line"></div>
+            <div class="divider-text">Autentikasi</div>
+            <div class="divider-line"></div>
+        </div>
+
+        {% if error %}
+        <div class="alert-error">
+            <span>⚠️</span> {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="/admin/login">
+            <div class="form-group">
+                <label>Username</label>
+                <div class="input-wrap">
+                    <span class="icon">👤</span>
+                    <input type="text" name="username" placeholder="Masukkan username..." autocomplete="username" required autofocus>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <div class="input-wrap">
+                    <span class="icon">🔒</span>
+                    <input type="password" name="password" placeholder="Masukkan password..." autocomplete="current-password" required>
+                </div>
+            </div>
+            <button type="submit" class="btn-login">Masuk ke Dashboard →</button>
+        </form>
+
+        <div class="kembali">
+            <a href="/">← Kembali ke PratamaAI</a>
+        </div>
+    </div>
+
+    <div class="credit">
+        Dikembangkan oleh Muhammad Ibnu Setiawan Pratama
+    </div>
+</div>
+
+</body>
+</html>
