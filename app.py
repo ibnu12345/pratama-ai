@@ -65,17 +65,24 @@ with app.app_context():
             pass  # Kolom sudah ada, abaikan
 
     # Auto-create owner default jika belum ada
-    owner_username = os.environ.get("OWNER_USERNAME", "owner")
-    owner_password = os.environ.get("OWNER_PASSWORD", "owner123")
-    if not AdminUser.query.filter_by(role='owner').first():
-        owner = AdminUser(
-            username = owner_username,
-            password = generate_password_hash(owner_password),
-            role     = 'owner'
-        )
-        db.session.add(owner)
-        db.session.commit()
-        logger.info(f"Akun owner '{owner_username}' berhasil dibuat.")
+    try:
+        owner_username = os.environ.get("OWNER_USERNAME", "owner")
+        owner_password = os.environ.get("OWNER_PASSWORD", "owner123")
+        existing = AdminUser.query.filter_by(role='owner').first()
+        if not existing:
+            owner = AdminUser(
+                username = owner_username,
+                password = generate_password_hash(owner_password),
+                role     = 'owner'
+            )
+            db.session.add(owner)
+            db.session.commit()
+            logger.info(f"Akun owner '{owner_username}' berhasil dibuat.")
+        else:
+            logger.info(f"Owner sudah ada: '{existing.username}'")
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Gagal buat owner: {e}")
 
 SISTEM_DASAR = """Kamu adalah PratamaAI, asisten pembelajaran Pendidikan Agama Islam (PAI) yang dikembangkan oleh Muhammad Ibnu Setiawan Pratama.
 
@@ -142,6 +149,32 @@ def home():
         session["sesi_id"] = os.urandom(8).hex()
     session["riwayat"] = []
     return render_template("index.html")
+
+
+@app.route("/setup-owner")
+def setup_owner():
+    """Route darurat untuk buat akun owner — hapus setelah berhasil login."""
+    kunci = request.args.get("kunci", "")
+    if kunci != os.environ.get("SETUP_KEY", "pratama2026"):
+        return "Akses ditolak. Tambahkan ?kunci=SETUP_KEY", 403
+    try:
+        with app.app_context():
+            db.create_all()
+            existing = AdminUser.query.filter_by(role='owner').first()
+            if existing:
+                return f"✅ Owner sudah ada: '{existing.username}'. Silakan login di <a href='/admin/login'>/admin/login</a>"
+            owner_username = os.environ.get("OWNER_USERNAME", "owner")
+            owner_password = os.environ.get("OWNER_PASSWORD", "owner123")
+            owner = AdminUser(
+                username = owner_username,
+                password = generate_password_hash(owner_password),
+                role     = 'owner'
+            )
+            db.session.add(owner)
+            db.session.commit()
+            return f"✅ Akun owner '{owner_username}' berhasil dibuat! Silakan <a href='/admin/login'>login di sini</a>."
+    except Exception as e:
+        return f"❌ Error: {str(e)}", 500
 
 
 @app.route("/tanya-stream", methods=["POST"])
