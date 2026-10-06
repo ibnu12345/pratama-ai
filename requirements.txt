@@ -1,7 +1,7 @@
 flask
-groq
-gunicorn
-python-dotenv
 flask-sqlalchemy
-fpdf2
+groq
+fpdf
+python-dotenv
 psycopg2-binary
+gunicorn
