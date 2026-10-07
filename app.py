@@ -153,7 +153,7 @@ def tanya_stream():
         jawaban_penuh = ""
         try:
             stream = client.chat.completions.create(
-                model="llama-3.1-8b-instant",
+                model="moonshotai/kimi-k2-instruct-0905",
                 messages=messages,
                 temperature=0.7,
                 max_tokens=1200,
