@@ -1,15 +1,17 @@
-from flask import Flask, render_template, request, jsonify, session, send_file, Response, stream_with_context
+from flask import Flask, render_template, request, jsonify, session, send_file, Response, stream_with_context, redirect, url_for
 from groq import Groq
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from fpdf import FPDF
 import os, logging, tempfile, json
+from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "pratama-secret-key")
-# Fix URL untuk Neon/PostgreSQL
+app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(32).hex()
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 _db_url = os.environ.get("DATABASE_URL", "sqlite:///pratama.db")
 if _db_url.startswith("postgres://"):
     _db_url = _db_url.replace("postgres://", "postgresql://", 1)
@@ -40,6 +42,13 @@ class Percakapan(db.Model):
     skor_kuis  = db.Column(db.Integer, nullable=True)
     waktu      = db.Column(db.DateTime, default=datetime.utcnow)
 
+class AdminUser(db.Model):
+    id         = db.Column(db.Integer, primary_key=True)
+    username   = db.Column(db.String(80), unique=True, nullable=False)
+    password   = db.Column(db.String(200), nullable=False)
+    role       = db.Column(db.String(20), default='admin')  # 'owner' atau 'admin'
+    dibuat     = db.Column(db.DateTime, default=datetime.utcnow)
+
 with app.app_context():
     db.create_all()
     # Auto-migrate: tambah kolom baru jika belum ada di database lama
@@ -60,6 +69,28 @@ with app.app_context():
                 logger.info(f"Kolom '{nama_kolom}' berhasil ditambahkan.")
         except Exception:
             pass  # Kolom sudah ada, abaikan
+
+    # Auto-create akun owner dari environment variable (tanpa password default)
+    try:
+        owner_username = os.environ.get("OWNER_USERNAME", "owner")
+        owner_password = os.environ.get("OWNER_PASSWORD")
+        existing = AdminUser.query.filter_by(role='owner').first()
+        if existing:
+            logger.info(f"Owner sudah ada: '{existing.username}'")
+        elif not owner_password:
+            logger.warning("OWNER_PASSWORD belum di-set, akun owner TIDAK dibuat.")
+        else:
+            owner = AdminUser(
+                username = owner_username,
+                password = generate_password_hash(owner_password),
+                role     = 'owner'
+            )
+            db.session.add(owner)
+            db.session.commit()
+            logger.info(f"Akun owner '{owner_username}' berhasil dibuat.")
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Gagal buat owner: {e}")
 
 SISTEM_DASAR = """Kamu adalah PratamaAI, asisten pembelajaran Pendidikan Agama Islam (PAI) yang dikembangkan oleh Muhammad Ibnu Setiawan Pratama.
 
@@ -96,7 +127,28 @@ Artinya: [terjemahan]
 - JANGAN gunakan **, ##, atau simbol markdown apapun."""
 
 MAX_HISTORY = 10
-ADMIN_PW    = os.environ.get("ADMIN_PASSWORD", "admin123")
+
+def admin_required(f):
+    """Decorator: cek apakah sudah login sebagai admin/owner."""
+    from functools import wraps
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if not session.get("admin_logged_in"):
+            return redirect(url_for("admin_login"))
+        return f(*args, **kwargs)
+    return decorated
+
+def owner_required(f):
+    """Decorator: cek apakah sudah login sebagai owner."""
+    from functools import wraps
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if not session.get("admin_logged_in"):
+            return redirect(url_for("admin_login"))
+        if session.get("admin_role") != "owner":
+            return jsonify({"error": "Hanya owner yang bisa melakukan ini."}), 403
+        return f(*args, **kwargs)
+    return decorated
 
 
 @app.route("/")
@@ -222,11 +274,35 @@ def reset():
     return jsonify({"status": "ok"})
 
 
+@app.route("/admin/login", methods=["GET", "POST"])
+def admin_login():
+    error = None
+    if request.method == "POST":
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "").strip()
+        user = AdminUser.query.filter_by(username=username).first()
+        if user and check_password_hash(user.password, password):
+            session["admin_logged_in"] = True
+            session["admin_username"]  = user.username
+            session["admin_role"]      = user.role
+            session.permanent          = False  # sampai browser ditutup
+            return redirect(url_for("admin"))
+        else:
+            error = "Username atau password salah."
+    return render_template("admin_login.html", error=error)
+
+
+@app.route("/admin/logout")
+def admin_logout():
+    session.pop("admin_logged_in", None)
+    session.pop("admin_username", None)
+    session.pop("admin_role", None)
+    return redirect(url_for("admin_login"))
+
+
 @app.route("/admin")
+@admin_required
 def admin():
-    pw = request.args.get("pw", "")
-    if pw != ADMIN_PW:
-        return "Akses ditolak. Tambahkan ?pw=PASSWORD di URL.", 403
     try:
         from sqlalchemy import func
         total       = Percakapan.query.count()
@@ -254,18 +330,81 @@ def admin():
         ).filter(Percakapan.is_kuis==True, Percakapan.topik_kuis!=None)\
          .group_by(Percakapan.topik_kuis).all()
 
+        # Daftar admin (hanya untuk owner)
+        daftar_admin = AdminUser.query.filter_by(role='admin').all() if session.get("admin_role") == "owner" else []
+
         return render_template("admin.html",
             total=total, rated=rated,
             avg_rating=round(avg_rating,2) if avg_rating else 0,
             terbaru=terbaru, rating_dist=rating_dist,
-            total_sesi=total_sesi, hari_ini=hari_ini, pw=pw,
+            total_sesi=total_sesi, hari_ini=hari_ini,
             pengguna_list=pengguna_list,
             total_kuis=total_kuis, kuis_terbaru=kuis_terbaru,
-            kuis_per_topik=kuis_per_topik
+            kuis_per_topik=kuis_per_topik,
+            admin_username=session.get("admin_username"),
+            admin_role=session.get("admin_role"),
+            daftar_admin=daftar_admin
         )
     except Exception as e:
         logger.error(f"Admin error: {e}")
         return f"Error admin: {str(e)}", 500
+
+
+# ── Manajemen Admin (hanya owner) ──────────────────────────────
+
+@app.route("/admin/tambah-admin", methods=["POST"])
+@owner_required
+def tambah_admin():
+    data     = request.json or {}
+    username = data.get("username", "").strip()
+    password = data.get("password", "").strip()
+    if not username or not password:
+        return jsonify({"error": "Username dan password wajib diisi."}), 400
+    if AdminUser.query.filter_by(username=username).first():
+        return jsonify({"error": "Username sudah digunakan."}), 409
+    admin = AdminUser(
+        username = username,
+        password = generate_password_hash(password),
+        role     = "admin"
+    )
+    db.session.add(admin)
+    db.session.commit()
+    return jsonify({"status": "ok", "id": admin.id})
+
+
+@app.route("/admin/hapus-admin", methods=["POST"])
+@owner_required
+def hapus_admin():
+    data     = request.json or {}
+    admin_id = data.get("id")
+    user     = AdminUser.query.get(admin_id)
+    if not user:
+        return jsonify({"error": "Admin tidak ditemukan."}), 404
+    if user.role == "owner":
+        return jsonify({"error": "Owner tidak bisa dihapus."}), 403
+    db.session.delete(user)
+    db.session.commit()
+    return jsonify({"status": "ok"})
+
+
+@app.route("/admin/ganti-password", methods=["POST"])
+@owner_required
+def ganti_password():
+    data    = request.json or {}
+    pw_lama = data.get("pw_lama", "")
+    pw_baru = data.get("pw_baru", "")
+    if not pw_lama or not pw_baru:
+        return jsonify({"error": "Password lama dan baru wajib diisi."}), 400
+    if len(pw_baru) < 6:
+        return jsonify({"error": "Password baru minimal 6 karakter."}), 400
+    user = AdminUser.query.filter_by(username=session.get("admin_username")).first()
+    if not user:
+        return jsonify({"error": "Akun tidak ditemukan."}), 404
+    if not check_password_hash(user.password, pw_lama):
+        return jsonify({"error": "Password lama salah."}), 403
+    user.password = generate_password_hash(pw_baru)
+    db.session.commit()
+    return jsonify({"status": "ok"})
 
 
 @app.route("/simpan-kuis", methods=["POST"])
@@ -292,10 +431,8 @@ def simpan_kuis():
 
 
 @app.route("/edit/<int:pid>", methods=["POST"])
+@admin_required
 def edit(pid):
-    pw = request.args.get("pw", "")
-    if pw != ADMIN_PW:
-        return jsonify({"error": "Akses ditolak"}), 403
     p = db.session.get(Percakapan, pid)
     if not p:
         return jsonify({"error": "Data tidak ditemukan"}), 404
@@ -309,10 +446,8 @@ def edit(pid):
 
 
 @app.route("/export-csv")
+@admin_required
 def export_csv():
-    pw = request.args.get("pw", "")
-    if pw != ADMIN_PW:
-        return "Akses ditolak.", 403
     semua = Percakapan.query.order_by(Percakapan.waktu).all()
     lines = ["ID,Sesi,Nama,Peran,Jenis,Topik Kuis,Level Kuis,Skor Kuis,Pertanyaan,Jawaban,Rating,Waktu"]
     for p in semua:
@@ -370,10 +505,8 @@ def export_pdf():
 
 
 @app.route("/pengguna-riwayat")
+@admin_required
 def pengguna_riwayat():
-    pw = request.args.get("pw", "")
-    if pw != ADMIN_PW:
-        return jsonify({"error": "Akses ditolak"}), 403
     nama = request.args.get("nama", "")
     data = Percakapan.query.filter_by(nama_user=nama).order_by(Percakapan.waktu.desc()).all()
     hasil = []
@@ -393,10 +526,8 @@ def pengguna_riwayat():
 
 
 @app.route("/hapus-pengguna", methods=["POST"])
+@admin_required
 def hapus_pengguna():
-    pw = request.args.get("pw", "")
-    if pw != ADMIN_PW:
-        return jsonify({"error": "Akses ditolak"}), 403
     nama = (request.json or {}).get("nama", "")
     if not nama:
         return jsonify({"error": "Nama tidak boleh kosong"}), 400
