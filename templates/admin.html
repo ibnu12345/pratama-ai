@@ -150,6 +150,31 @@
             .stats{grid-template-columns:repeat(2,1fr);}
             .user-stat-grid{grid-template-columns:repeat(2,1fr);}
             .form-row{grid-template-columns:1fr;gap:8px;}
+
+            /* HEADER HP: 2 baris (judul+akun, lalu tombol), tidak lagi meluber */
+            .header{height:auto;padding:10px 12px;flex-wrap:wrap;gap:8px;position:static;}
+            .header-left{flex-wrap:wrap;gap:6px 10px;min-width:0;width:100%;}
+            .header h1{font-size:14px;}
+            .header-user-badge{font-size:11px;padding:3px 10px;max-width:100%;}
+            .header-actions{width:100%;gap:6px;}
+            .header-actions .btn{flex:1;justify-content:center;padding:7px 6px;font-size:11.5px;white-space:nowrap;}
+
+            /* Tab menempel di atas saat scroll */
+            .tabs{top:0;padding:0 6px;}
+            .tab{padding:12px 12px;font-size:12px;}
+
+            .container{margin:14px auto;padding:0 12px 50px;}
+
+            /* TABEL -> KARTU di HP (label diisi otomatis oleh script di bawah) */
+            .tbl-wrap{overflow-x:visible;}
+            table,thead,tbody,tr,td{display:block;width:100%;}
+            thead{display:none;}
+            tr{background:#fff;border:1px solid #e6efe9;border-radius:12px;padding:6px 12px;margin-bottom:10px;box-shadow:0 1px 6px rgba(26,74,46,0.06);}
+            tr:hover td{background:transparent;}
+            td{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:7px 0;border-bottom:1px dashed #eef3ef;text-align:right;}
+            td:last-child{border-bottom:none;}
+            td::before{content:attr(data-label);flex:0 0 auto;font-size:11px;font-weight:700;color:var(--hijau-mid);text-align:left;text-transform:uppercase;letter-spacing:.2px;}
+            td.col-teks{display:flex;max-width:none;white-space:normal;overflow:hidden;max-height:6.2em;text-overflow:clip;word-break:break-word;}
         }
     </style>
 </head>
@@ -660,6 +685,15 @@ async function gantiPassword() {
         tampilAlert('error', d.error || 'Gagal mengganti password.');
     }
 }
+</script>
+<script>
+/* Isi label kolom otomatis supaya tabel bisa tampil sebagai kartu di HP */
+document.querySelectorAll('table').forEach(function(t){
+    var heads = Array.from(t.querySelectorAll('thead th')).map(function(th){ return th.textContent.trim(); });
+    t.querySelectorAll('tbody tr').forEach(function(tr){
+        Array.from(tr.children).forEach(function(td,i){ if (heads[i]) td.setAttribute('data-label', heads[i]); });
+    });
+});
 </script>
 </body>
 </html>
