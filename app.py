@@ -153,10 +153,10 @@ def tanya_stream():
         jawaban_penuh = ""
         try:
             stream = client.chat.completions.create(
-                model="llama-3.1-8b-instant",
+                model="openai/gpt-oss-20b",
                 messages=messages,
                 temperature=0.7,
-                max_tokens=1200,
+                max_tokens=3000,
                 stream=True
             )
             for chunk in stream:
