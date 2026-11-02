@@ -37,13 +37,14 @@
 
         /* HEADER */
         .header { background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-mid)); color:#fff; padding:12px 20px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 2px 10px rgba(0,0,0,0.15); flex-shrink:0; }
-        .header-left { display:flex; align-items:center; gap:10px; }
+        .header-left { display:flex; align-items:center; gap:10px; min-width:0; }
         .logo { width:38px; height:38px; background:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; }
         .header-text h1 { font-size:16px; font-weight:700; }
         .header-text p { font-size:10px; opacity:.8; }
-        .header-user { font-size:11.5px; background:rgba(255,255,255,0.15); padding:4px 12px; border-radius:20px; }
-        .header-right { display:flex; gap:8px; align-items:center; }
-        .btn-hdr { background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); color:#fff; padding:5px 12px; border-radius:16px; cursor:pointer; font-size:11.5px; font-family:'Plus Jakarta Sans',sans-serif; }
+        .header-user { font-size:11.5px; background:rgba(255,255,255,0.15); padding:4px 12px; border-radius:20px; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .header-user:empty { display:none; }
+        .header-right { display:flex; gap:8px; align-items:center; min-width:0; }
+        .btn-hdr { display:inline-flex; align-items:center; justify-content:center; text-decoration:none; white-space:nowrap; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); color:#fff; padding:5px 12px; border-radius:16px; cursor:pointer; font-size:11.5px; font-family:'Plus Jakarta Sans',sans-serif; }
         .btn-hdr:hover { background:rgba(255,255,255,0.25); }
 
         /* CHAT */
@@ -178,10 +179,13 @@
             .header-text p  { font-size: 9px; }
             .logo { width: 34px; height: 34px; font-size: 16px; }
 
-            /* User badge lebih kecil di HP */
-            .user-badge { font-size: 10px; padding: 3px 9px; max-width: 140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-
-            .btn-hdr { padding: 4px 10px; font-size: 10.5px; }
+            /* Header HP: ringkas, satu baris, tombol jadi ikon */
+            .header-text p { display: none; }
+            .header-left { gap: 8px; }
+            .header-user { font-size: 10.5px; padding: 4px 9px; max-width: 105px; }
+            .kuis-badge { font-size: 10px; padding: 3px 8px; }
+            .btn-hdr { padding: 0; width: 34px; height: 34px; font-size: 15px; border-radius: 50%; }
+            .btn-hdr .lbl { display: none; }
 
             /* Chat area isi penuh */
             .chat-area { padding: 14px 12px 16px; gap: 14px; }
@@ -285,8 +289,9 @@
     <div class="header-right">
         <span class="kuis-badge" id="kuisBadge">🎯 Kuis Aktif</span>
         <div class="header-user" id="headerUser"></div>
-        <button class="btn-hdr" onclick="exportPDF()">⬇ PDF</button>
-        <button class="btn-hdr" onclick="resetChat()">↺ Reset</button>
+        <button class="btn-hdr" onclick="exportPDF()" title="Unduh PDF">⬇<span class="lbl"> PDF</span></button>
+        <button class="btn-hdr" onclick="resetChat()" title="Reset percakapan">↺<span class="lbl"> Reset</span></button>
+        <a class="btn-hdr btn-admin" href="/admin/login" title="Admin Panel">🔐<span class="lbl"> Admin</span></a>
     </div>
 </div>
 
