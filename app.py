@@ -70,13 +70,20 @@ with app.app_context():
         except Exception:
             pass  # Kolom sudah ada, abaikan
 
-    # Auto-create akun owner dari environment variable (tanpa password default)
+    # Akun owner dari environment variable (tanpa password default)
+    # RESET_OWNER=1 -> paksa owner yang sudah ada mengikuti OWNER_USERNAME/OWNER_PASSWORD
     try:
-        owner_username = os.environ.get("OWNER_USERNAME", "owner")
-        owner_password = os.environ.get("OWNER_PASSWORD")
+        owner_username = (os.environ.get("OWNER_USERNAME") or "owner").strip()
+        owner_password = (os.environ.get("OWNER_PASSWORD") or "").strip()
+        reset_owner    = (os.environ.get("RESET_OWNER") or "").strip() == "1"
         existing = AdminUser.query.filter_by(role='owner').first()
-        if existing:
-            logger.info(f"Owner sudah ada: '{existing.username}'")
+        if existing and reset_owner and owner_password:
+            existing.username = owner_username
+            existing.password = generate_password_hash(owner_password)
+            db.session.commit()
+            logger.info(f"Owner di-reset. Username sekarang: '{owner_username}'. Hapus RESET_OWNER dari Environment.")
+        elif existing:
+            logger.info(f"Owner sudah ada dengan username: '{existing.username}'")
         elif not owner_password:
             logger.warning("OWNER_PASSWORD belum di-set, akun owner TIDAK dibuat.")
         else:
