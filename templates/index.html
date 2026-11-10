@@ -814,7 +814,7 @@
 
 <!-- INPUT (AUTO-EXPANDING TEXTAREA) -->
 <div class="input-area">
-    <textarea id="inputPertanyaan" rows="1" placeholder="Tanyakan seputar Islam... (Shift+Enter untuk baris baru)"></textarea>
+    <textarea id="inputPertanyaan" rows="1" placeholder="Tanyakan seputar Islam..."></textarea>
     <button class="btn-menu" onclick="bukaPusatFitur()">✨ <span class="lbl">Menu</span></button>
     <button class="btn-kirim" id="btnKirim">➤</button>
 </div>
@@ -1228,22 +1228,64 @@ Lakukan penilaian:
         scrollBawah();
     }
 
-    // ===== KIRIM PESAN =====
+    // ===== DETEKSI PERANGKAT HP / TOUCHSCREEN =====
+    function isMobileDevice() {
+        const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
+        const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isSmallScreen = window.innerWidth <= 820;
+        return isMobileUA || (isTouch && isSmallScreen);
+    }
+
+    // ===== KIRIM PESAN & AUTO-RESIZE TEXTAREA CERDAS =====
     document.getElementById('btnKirim').addEventListener('click', kirim);
     const inputPertanyaanEl = document.getElementById('inputPertanyaan');
     
-    // Auto-resize textarea & kirim pesan (Shift+Enter untuk baris baru)
+    function sesuaikanTinggiInput() {
+        if (!inputPertanyaanEl) return;
+        inputPertanyaanEl.style.height = 'auto';
+        const minH = isMobileDevice() ? 40 : 42;
+        const maxH = 140;
+        const newH = Math.min(inputPertanyaanEl.scrollHeight, maxH);
+        inputPertanyaanEl.style.height = Math.max(newH, minH) + 'px';
+        inputPertanyaanEl.style.overflowY = inputPertanyaanEl.scrollHeight > maxH ? 'auto' : 'hidden';
+    }
+
+    function sesuaikanPlaceholderInput() {
+        if (!inputPertanyaanEl) return;
+        if (isMobileDevice()) {
+            inputPertanyaanEl.placeholder = "Tanyakan seputar Islam...";
+        } else {
+            inputPertanyaanEl.placeholder = "Tanyakan seputar Islam... (Enter kirim, Shift+Enter baris baru)";
+        }
+    }
+
+    // Event listener input (kompatibel desktop & mobile)
     if (inputPertanyaanEl) {
         inputPertanyaanEl.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                kirim();
+            if (e.key === 'Enter') {
+                if (isMobileDevice()) {
+                    // Di HP / Layar Sentuh:
+                    // Tombol Enter pada virtual keyboard berfungsi kebawah (baris baru).
+                    // Pengiriman pesan dilakukan melalui tombol kirim (➤).
+                    setTimeout(sesuaikanTinggiInput, 0);
+                } else {
+                    // Di PC / Laptop:
+                    // Enter langsung mengirim pesan; Shift+Enter untuk baris baru.
+                    if (!e.shiftKey) {
+                        e.preventDefault();
+                        kirim();
+                    } else {
+                        setTimeout(sesuaikanTinggiInput, 0);
+                    }
+                }
             }
         });
-        inputPertanyaanEl.addEventListener('input', function() {
-            this.style.height = 'auto';
-            const newH = Math.min(this.scrollHeight, 140);
-            this.style.height = Math.max(newH, 42) + 'px';
+
+        inputPertanyaanEl.addEventListener('input', sesuaikanTinggiInput);
+        sesuaikanPlaceholderInput();
+        window.addEventListener('resize', function() {
+            sesuaikanPlaceholderInput();
+            sesuaikanTinggiInput();
         });
     }
 
@@ -1252,7 +1294,8 @@ Lakukan penilaian:
         const teks = input.value.trim();
         if (!teks || !userData) return;
         input.value = '';
-        input.style.height = '42px'; // Reset tinggi input kembali ke 1 baris
+        input.style.height = ''; // Reset tinggi ke ukuran awal (42px di PC, 40px di HP)
+        input.style.overflowY = 'hidden';
 
         const ws = document.getElementById('welcomeScreen');
         if (ws) { ws.style.transition='opacity .3s'; ws.style.opacity='0'; setTimeout(()=>ws.remove(),300); }
