@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session, send_file, Response, stream_with_context, redirect, url_for
+from flask import Flask, render_template, request, jsonify, session, send_file, send_from_directory, Response, stream_with_context, redirect, url_for
 from groq import Groq
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -299,6 +299,10 @@ def owner_required(f):
         return f(*args, **kwargs)
     return decorated
 
+
+@app.route("/favicon.ico")
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, "static"), "favicon.ico", mimetype="image/x-icon")
 
 @app.route("/")
 def home():
