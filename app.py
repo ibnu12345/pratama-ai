@@ -748,6 +748,19 @@ def admin():
         ).filter(Percakapan.is_kuis==True, Percakapan.topik_kuis!=None)\
          .group_by(Percakapan.topik_kuis).all()
 
+        # Demografi Responden & Statistik Akademis Tesis
+        peran_counts = {
+            'Siswa': sum(1 for p in pengguna_list if p.peran_user == 'Siswa'),
+            'Mahasiswa': sum(1 for p in pengguna_list if p.peran_user == 'Mahasiswa'),
+            'Umum': sum(1 for p in pengguna_list if p.peran_user not in ['Siswa', 'Mahasiswa'])
+        }
+        total_pengguna = len(pengguna_list)
+
+        kuis_benar = Percakapan.query.filter_by(is_kuis=True, skor_kuis=1).count()
+        kuis_salah = Percakapan.query.filter_by(is_kuis=True, skor_kuis=0).count()
+        persen_lulus = round((kuis_benar / total_kuis * 100), 1) if total_kuis > 0 else 0
+        aktivitas_terkini = Percakapan.query.order_by(Percakapan.waktu.desc()).limit(6).all()
+
         # Daftar admin (hanya untuk owner)
         daftar_admin = AdminUser.query.filter_by(role='admin').all() if session.get("admin_role") == "owner" else []
 
@@ -759,6 +772,9 @@ def admin():
             pengguna_list=pengguna_list,
             total_kuis=total_kuis, kuis_terbaru=kuis_terbaru,
             kuis_per_topik=kuis_per_topik,
+            peran_counts=peran_counts, total_pengguna=total_pengguna,
+            kuis_benar=kuis_benar, kuis_salah=kuis_salah,
+            persen_lulus=persen_lulus, aktivitas_terkini=aktivitas_terkini,
             admin_username=session.get("admin_username"),
             admin_role=session.get("admin_role"),
             daftar_admin=daftar_admin
