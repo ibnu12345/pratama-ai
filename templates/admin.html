@@ -176,6 +176,240 @@
             td::before{content:attr(data-label);flex:0 0 auto;font-size:11px;font-weight:700;color:var(--hijau-mid);text-align:left;text-transform:uppercase;letter-spacing:.2px;}
             td.col-teks{display:flex;max-width:none;white-space:normal;overflow:hidden;max-height:6.2em;text-overflow:clip;word-break:break-word;}
         }
+
+        /* TOAST NOTIFICATION */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+        .toast {
+            background: #fff;
+            padding: 12px 18px;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.16);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            pointer-events: auto;
+            border-left: 5px solid var(--hijau-mid);
+            max-width: 360px;
+            animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.25s ease;
+        }
+        .toast.toast-error { border-left-color: var(--merah); }
+        .toast.toast-sukses { border-left-color: var(--hijau-mid); }
+        .toast.toast-hide { opacity: 0; transform: translateY(-10px); }
+        @keyframes toastSlideIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* MODAL KONFIRMASI MODERN */
+        .modal-confirm-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            animation: fadeIn 0.2s ease;
+        }
+        .modal-confirm-overlay.show { display: flex; }
+        .modal-confirm-box {
+            background: #fff;
+            border-radius: 22px;
+            padding: 28px 24px 22px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.22);
+            text-align: center;
+            animation: zoomUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes zoomUp { from { opacity: 0; transform: scale(0.92) translateY(12px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .modal-confirm-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            background: #fde8e8;
+            color: #c62828;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            margin: 0 auto 14px;
+        }
+        .modal-confirm-box h3 {
+            font-size: 16.5px;
+            color: var(--hijau-tua);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .modal-confirm-box p {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        .confirm-safety-box {
+            display: none;
+            background: #fff5f5;
+            border: 1.5px solid #ffcdd2;
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            text-align: left;
+        }
+        .confirm-safety-box label {
+            font-size: 12px;
+            color: #c62828;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .modal-confirm-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-confirm-batal {
+            flex: 1;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1.5px solid #ddd;
+            background: #fff;
+            color: #555;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-confirm-batal:hover { background: #f5f5f5; }
+        .btn-confirm-hapus {
+            flex: 1.2;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: none;
+            background: #e53935;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-confirm-hapus:hover { background: #c62828; }
+        .btn-confirm-hapus:disabled { background: #e0e0e0; color: #999; cursor: not-allowed; }
+
+        /* MODAL GANTI PASSWORD MANDIRI */
+        .modal-pwd-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .modal-pwd-overlay.show { display: flex; }
+        .modal-pwd-box {
+            background: #fff;
+            border-radius: 20px;
+            padding: 28px 24px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.22);
+            animation: zoomUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .modal-pwd-box h3 { font-size: 17px; color: var(--hijau-tua); font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+        .modal-pwd-box .sub { font-size: 12px; color: #888; margin-bottom: 18px; }
+        .modal-pwd-box .form-group { margin-bottom: 14px; text-align: left; }
+        .modal-pwd-box label { font-size: 12px; font-weight: 600; color: #444; display: block; margin-bottom: 5px; }
+        .modal-pwd-box input { width: 100%; padding: 10px 14px; border: 1.5px solid #ddd; border-radius: 10px; font-size: 13px; font-family: inherit; outline: none; transition: border 0.2s; box-sizing: border-box; }
+        .modal-pwd-box input:focus { border-color: var(--hijau-mid); }
+
+        /* SEARCH & FILTER BAR ADMIN */
+        .search-filter-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+            background: #fff;
+            padding: 12px 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(82,183,136,0.18);
+            box-shadow: 0 1px 6px rgba(26,74,46,0.04);
+        }
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--krem);
+            border: 1.5px solid #e0e0e0;
+            border-radius: 20px;
+            padding: 6px 14px;
+            gap: 8px;
+            flex: 1;
+            min-width: 220px;
+            max-width: 450px;
+            transition: all 0.2s;
+        }
+        .search-box:focus-within {
+            border-color: var(--hijau-mid);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(45,106,79,0.1);
+        }
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-size: 13px;
+            font-family: inherit;
+            width: 100%;
+            color: #333;
+        }
+        .search-icon { font-size: 14px; color: #888; }
+        .filter-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+        }
+        .filter-pill {
+            padding: 6px 13px;
+            border-radius: 20px;
+            border: 1.5px solid #e2e8f0;
+            background: #fff;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.15s;
+        }
+        .filter-pill:hover {
+            border-color: var(--hijau-mid);
+            color: var(--hijau-mid);
+        }
+        .filter-pill.aktif {
+            background: var(--hijau-mid);
+            color: #fff;
+            border-color: var(--hijau-mid);
+        }
     </style>
 </head>
 <body>
@@ -193,6 +427,7 @@
         </div>
     </div>
     <div class="header-actions">
+        <button class="btn btn-outline" onclick="bukaModalGantiPassword()">🔑 Ganti Password</button>
         <a href="/export-csv" class="btn btn-emas">⬇ Export CSV</a>
         <a href="/" class="btn btn-outline">← Kembali</a>
         <a href="/admin/logout" class="btn btn-merah">🔓 Logout</a>
@@ -247,9 +482,21 @@
         <div class="section">
             <div class="section-head"><h2>👥 Daftar Pengguna</h2><span>Klik kartu untuk melihat riwayat chat & kuis</span></div>
             {% if pengguna_list %}
-            <div class="pengguna-grid">
+            <div class="search-filter-wrap">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="inputCariPengguna" placeholder="Cari nama pengguna..." oninput="filterPengguna()">
+                </div>
+                <div class="filter-pills" id="filterPeranPills">
+                    <button class="filter-pill aktif" onclick="setPeranPengguna('semua', this)">Semua ({{ pengguna_list|length }})</button>
+                    <button class="filter-pill" onclick="setPeranPengguna('Siswa', this)">🎒 Siswa</button>
+                    <button class="filter-pill" onclick="setPeranPengguna('Mahasiswa', this)">🎓 Mahasiswa</button>
+                    <button class="filter-pill" onclick="setPeranPengguna('Umum', this)">👤 Umum</button>
+                </div>
+            </div>
+            <div class="pengguna-grid" id="gridPengguna">
                 {% for p in pengguna_list %}
-                <div class="pengguna-card" onclick="lihatRiwayat('{{ p.nama_user|replace("'","\\'") }}')">
+                <div class="pengguna-card" data-peran="{{ p.peran_user or 'Umum' }}" onclick="lihatRiwayat('{{ p.nama_user|replace("'","\\'") }}')">
                     <div class="nama">{{ p.nama_user or 'Anonim' }}</div>
                     <div class="info-tag">
                         {% if p.peran_user=='Siswa' %}<span class="tag tag-siswa">🎒 Siswa</span>
@@ -265,6 +512,7 @@
                 </div>
                 {% endfor %}
             </div>
+            <div id="penggunaKosongMsg" class="kosong" style="display:none;padding:30px;">Tidak ada pengguna yang cocok dengan pencarian.</div>
             {% else %}<div class="kosong">Belum ada pengguna.</div>{% endif %}
         </div>
     </div>
@@ -274,12 +522,23 @@
         <div class="section">
             <div class="section-head"><h2>💬 Riwayat Percakapan</h2><span>20 terbaru</span></div>
             {% if terbaru %}
+            <div class="search-filter-wrap">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="inputCariPercakapan" placeholder="Cari pertanyaan, jawaban, atau nama..." oninput="filterPercakapan()">
+                </div>
+                <div class="filter-pills" id="filterRatingPills">
+                    <button class="filter-pill aktif" onclick="setRatingFilter('semua', this)">Semua Chat</button>
+                    <button class="filter-pill" onclick="setRatingFilter('5', this)">⭐ Bintang 5</button>
+                    <button class="filter-pill" onclick="setRatingFilter('rendah', this)">⚠️ Rating Rendah (1-3★)</button>
+                </div>
+            </div>
             <div class="tbl-wrap">
-            <table>
+            <table id="tblPercakapan">
                 <thead><tr><th>#</th><th>Nama</th><th>Jenis</th><th>Pertanyaan</th><th>Jawaban</th><th>Rating</th><th>Waktu</th><th>Aksi</th></tr></thead>
                 <tbody>
                 {% for p in terbaru %}
-                <tr id="row-{{ p.id }}">
+                <tr id="row-{{ p.id }}" data-rating="{{ p.rating or 0 }}">
                     <td>{{ p.id }}</td>
                     <td style="font-weight:600;color:var(--hijau-tua);white-space:nowrap;cursor:pointer;" onclick="lihatRiwayat('{{ p.nama_user|replace("'","\\'") }}')">{{ p.nama_user }}</td>
                     <td>{% if p.is_kuis %}<span class="tag tag-kuis">🎯 Kuis</span>{% else %}<span class="tag tag-chat">💬 Chat</span>{% endif %}</td>
@@ -295,6 +554,7 @@
                 </tbody>
             </table>
             </div>
+            <div id="chatKosongMsg" class="kosong" style="display:none;padding:30px;">Tidak ada percakapan yang cocok dengan pencarian.</div>
             {% else %}<div class="kosong">Belum ada percakapan.</div>{% endif %}
         </div>
     </div>
@@ -320,12 +580,23 @@
         <div class="section">
             <div class="section-head"><h2>🎯 Riwayat Jawaban Kuis</h2><span>Klik nama pengguna untuk detail</span></div>
             {% if kuis_terbaru %}
+            <div class="search-filter-wrap">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="inputCariKuis" placeholder="Cari soal kuis, topik, atau nama..." oninput="filterKuis()">
+                </div>
+                <div class="filter-pills" id="filterKuisPills">
+                    <button class="filter-pill aktif" onclick="setHasilKuisFilter('semua', this)">Semua Soal</button>
+                    <button class="filter-pill" onclick="setHasilKuisFilter('benar', this)">✓ Benar</button>
+                    <button class="filter-pill" onclick="setHasilKuisFilter('salah', this)">✗ Salah</button>
+                </div>
+            </div>
             <div class="tbl-wrap">
-            <table>
+            <table id="tblKuis">
                 <thead><tr><th>#</th><th>Nama</th><th>Topik</th><th>Level</th><th>Soal</th><th>Jawaban</th><th>Hasil</th><th>Waktu</th><th>Aksi</th></tr></thead>
                 <tbody>
                 {% for p in kuis_terbaru %}
-                <tr id="row-{{ p.id }}">
+                <tr id="row-{{ p.id }}" data-hasil="{% if p.skor_kuis==1 %}benar{% elif p.skor_kuis==0 %}salah{% else %}lain{% endif %}">
                     <td>{{ p.id }}</td>
                     <td style="font-weight:600;color:var(--hijau-tua);white-space:nowrap;cursor:pointer;text-decoration:underline dotted;" onclick="lihatRiwayat('{{ p.nama_user|replace("'","\\'") }}')">{{ p.nama_user }}</td>
                     <td><span class="tag tag-kuis">{{ p.topik_kuis or '-' }}</span></td>
@@ -343,6 +614,7 @@
                 </tbody>
             </table>
             </div>
+            <div id="kuisKosongMsg" class="kosong" style="display:none;padding:30px;">Tidak ada kuis yang cocok dengan pencarian.</div>
             {% else %}<div class="kosong">Belum ada data kuis.</div>{% endif %}
         </div>
     </div>
@@ -449,6 +721,52 @@
     </div>
 </div>
 
+<!-- TOAST CONTAINER -->
+<div id="toastContainer" class="toast-container"></div>
+
+<!-- MODAL KONFIRMASI MODERN -->
+<div id="modalKonfirmasi" class="modal-confirm-overlay">
+    <div class="modal-confirm-box">
+        <div class="modal-confirm-icon" id="confirmIcon">🗑️</div>
+        <h3 id="confirmTitle">Konfirmasi Hapus</h3>
+        <p id="confirmDesc">Apakah Anda yakin ingin menghapus data ini?</p>
+        <div id="confirmSafetyWrap" class="confirm-safety-box">
+            <label>
+                <input type="checkbox" id="confirmSafetyCheck" onchange="toggleConfirmButton()">
+                <span>Saya yakin menghapus SELURUH data ini secara permanen</span>
+            </label>
+        </div>
+        <div class="modal-confirm-actions">
+            <button class="btn-confirm-batal" onclick="tutupKonfirmasi()">Batal</button>
+            <button class="btn-confirm-hapus" id="btnConfirmAction">Ya, Hapus</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL GANTI PASSWORD MANDIRI -->
+<div id="modalGantiPassword" class="modal-pwd-overlay">
+    <div class="modal-pwd-box">
+        <h3>🔑 Ganti Password Akun</h3>
+        <div class="sub">Ubah password akun Anda ({{ admin_username }})</div>
+        <div class="form-group">
+            <label>Password Lama</label>
+            <input type="password" id="modalPwLama" placeholder="Masukkan password saat ini">
+        </div>
+        <div class="form-group">
+            <label>Password Baru</label>
+            <input type="password" id="modalPwBaru" placeholder="Minimal 6 karakter">
+        </div>
+        <div class="form-group">
+            <label>Konfirmasi Password Baru</label>
+            <input type="password" id="modalPwBaru2" placeholder="Ulangi password baru">
+        </div>
+        <div class="modal-confirm-actions" style="margin-top: 18px;">
+            <button class="btn-confirm-batal" onclick="tutupModalGantiPassword()">Batal</button>
+            <button class="btn-confirm-hapus" style="background:var(--hijau-mid);" onclick="simpanPasswordMandiri()">Simpan Password</button>
+        </div>
+    </div>
+</div>
+
 <script>
 function gantiTab(nama, el) {
     document.querySelectorAll('.tab').forEach(t=>t.classList.remove('aktif'));
@@ -466,31 +784,217 @@ function escHtml(s) {
     return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
+// ===== SEARCH & FILTER PENGGUNA =====
+let peranAktif = 'semua';
+function filterPengguna() {
+    const input = document.getElementById('inputCariPengguna');
+    const q = (input ? input.value : '').toLowerCase().trim();
+    const cards = document.querySelectorAll('#gridPengguna .pengguna-card');
+    let visible = 0;
+    cards.forEach(card => {
+        const nama = (card.querySelector('.nama')?.textContent || '').toLowerCase();
+        const peran = (card.dataset.peran || '').toLowerCase();
+        const matchText = !q || nama.includes(q);
+        const matchPeran = peranAktif === 'semua' || peran === peranAktif.toLowerCase();
+        if (matchText && matchPeran) {
+            card.style.display = '';
+            visible++;
+        } else {
+            card.style.display = 'none';
+        }
+    });
+    const kosong = document.getElementById('penggunaKosongMsg');
+    if (kosong) kosong.style.display = visible === 0 ? 'block' : 'none';
+}
+
+function setPeranPengguna(peran, btn) {
+    peranAktif = peran;
+    document.querySelectorAll('#filterPeranPills .filter-pill').forEach(b => b.classList.remove('aktif'));
+    if (btn) btn.classList.add('aktif');
+    filterPengguna();
+}
+
+// ===== SEARCH & FILTER PERCAKAPAN =====
+let ratingFilterAktif = 'semua';
+function filterPercakapan() {
+    const input = document.getElementById('inputCariPercakapan');
+    const q = (input ? input.value : '').toLowerCase().trim();
+    const rows = document.querySelectorAll('#tblPercakapan tbody tr');
+    let visible = 0;
+    rows.forEach(tr => {
+        const text = tr.textContent.toLowerCase();
+        const rating = parseInt(tr.dataset.rating || '0');
+        const matchText = !q || text.includes(q);
+        let matchRating = true;
+        if (ratingFilterAktif === '5') matchRating = rating === 5;
+        else if (ratingFilterAktif === 'rendah') matchRating = rating >= 1 && rating <= 3;
+
+        if (matchText && matchRating) {
+            tr.style.display = '';
+            visible++;
+        } else {
+            tr.style.display = 'none';
+        }
+    });
+    const kosong = document.getElementById('chatKosongMsg');
+    if (kosong) kosong.style.display = visible === 0 ? 'block' : 'none';
+}
+
+function setRatingFilter(r, btn) {
+    ratingFilterAktif = r;
+    document.querySelectorAll('#filterRatingPills .filter-pill').forEach(b => b.classList.remove('aktif'));
+    if (btn) btn.classList.add('aktif');
+    filterPercakapan();
+}
+
+// ===== SEARCH & FILTER KUIS =====
+let hasilKuisFilterAktif = 'semua';
+function filterKuis() {
+    const input = document.getElementById('inputCariKuis');
+    const q = (input ? input.value : '').toLowerCase().trim();
+    const rows = document.querySelectorAll('#tblKuis tbody tr');
+    let visible = 0;
+    rows.forEach(tr => {
+        const text = tr.textContent.toLowerCase();
+        const hasil = tr.dataset.hasil || '';
+        const matchText = !q || text.includes(q);
+        const matchHasil = hasilKuisFilterAktif === 'semua' || hasil === hasilKuisFilterAktif;
+
+        if (matchText && matchHasil) {
+            tr.style.display = '';
+            visible++;
+        } else {
+            tr.style.display = 'none';
+        }
+    });
+    const kosong = document.getElementById('kuisKosongMsg');
+    if (kosong) kosong.style.display = visible === 0 ? 'block' : 'none';
+}
+
+function setHasilKuisFilter(h, btn) {
+    hasilKuisFilterAktif = h;
+    document.querySelectorAll('#filterKuisPills .filter-pill').forEach(b => b.classList.remove('aktif'));
+    if (btn) btn.classList.add('aktif');
+    filterKuis();
+}
+
+// ===== TOAST NOTIFICATION =====
+function showToast(pesan, tipe = 'sukses') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${tipe}`;
+    const icon = tipe === 'sukses' ? '✅' : '⚠️';
+    toast.innerHTML = `<span>${icon}</span> <span>${pesan}</span>`;
+    container.appendChild(toast);
+    setTimeout(() => {
+        toast.classList.add('toast-hide');
+        setTimeout(() => toast.remove(), 250);
+    }, 3200);
+}
+
 function tampilAlert(tipe, pesan) {
-    const el = document.getElementById(tipe === 'sukses' ? 'alertSukses' : 'alertError');
-    if (!el) return;
-    el.textContent = pesan;
-    el.style.display = 'block';
-    setTimeout(() => { el.style.display = 'none'; }, 4000);
+    showToast(pesan, tipe);
+}
+
+// ===== CUSTOM MODAL KONFIRMASI =====
+let pendingConfirmAction = null;
+
+function bukaKonfirmasi({ title, desc, icon = '🗑️', requireCheck = false, onConfirm }) {
+    document.getElementById('confirmTitle').textContent = title || 'Konfirmasi Tindakan';
+    document.getElementById('confirmDesc').textContent = desc || 'Apakah Anda yakin ingin melanjutkan?';
+    document.getElementById('confirmIcon').textContent = icon;
+    
+    const safetyWrap = document.getElementById('confirmSafetyWrap');
+    const safetyCheck = document.getElementById('confirmSafetyCheck');
+    const btnAction = document.getElementById('btnConfirmAction');
+    
+    if (requireCheck) {
+        safetyWrap.style.display = 'block';
+        safetyCheck.checked = false;
+        btnAction.disabled = true;
+    } else {
+        safetyWrap.style.display = 'none';
+        btnAction.disabled = false;
+    }
+
+    pendingConfirmAction = onConfirm;
+    btnAction.onclick = async () => {
+        if (pendingConfirmAction) {
+            const action = pendingConfirmAction;
+            tutupKonfirmasi();
+            await action();
+        }
+    };
+
+    document.getElementById('modalKonfirmasi').classList.add('show');
+}
+
+function toggleConfirmButton() {
+    const check = document.getElementById('confirmSafetyCheck');
+    document.getElementById('btnConfirmAction').disabled = !check.checked;
+}
+
+function tutupKonfirmasi() {
+    document.getElementById('modalKonfirmasi').classList.remove('show');
+    pendingConfirmAction = null;
 }
 
 // ===== HAPUS DATA =====
 function hapusData(id) {
-    if (!confirm(`Yakin hapus data #${id}?`)) return;
-    fetch(`/hapus/${id}`, {method:'POST'}).then(r=>r.json()).then(d=>{
-        if(d.status==='ok'){
-            const row=document.getElementById('row-'+id);
-            if(row){row.style.opacity='0';row.style.transition='.3s';setTimeout(()=>row.remove(),300);}
-        } else alert('Gagal: '+d.error);
+    bukaKonfirmasi({
+        title: 'Hapus Data Percakapan?',
+        desc: `Data percakapan #${id} akan dihapus permanen dari sistem database.`,
+        icon: '🗑️',
+        requireCheck: false,
+        onConfirm: async () => {
+            try {
+                const r = await fetch(`/hapus/${id}`, { method: 'POST' });
+                const d = await r.json();
+                if (d.status === 'ok') {
+                    showToast(`Data #${id} berhasil dihapus.`);
+                    const row = document.getElementById('row-' + id) || document.querySelector(`tr[data-id="${id}"]`);
+                    if (row) {
+                        row.style.opacity = '0';
+                        row.style.transition = '.3s';
+                        setTimeout(() => row.remove(), 300);
+                    } else {
+                        setTimeout(() => location.reload(), 600);
+                    }
+                } else {
+                    showToast(d.error || 'Gagal menghapus data.', 'error');
+                }
+            } catch(e) {
+                showToast('Gagal menghubungi server.', 'error');
+            }
+        }
     });
 }
 
 function hapusPengguna(nama) {
-    if (!confirm(`Yakin hapus SEMUA data "${nama}"? Chat dan kuis akan terhapus semua!`)) return;
-    fetch('/hapus-pengguna',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nama})})
-    .then(r=>r.json()).then(d=>{
-        if(d.status==='ok'){alert('Berhasil dihapus!');location.reload();}
-        else alert('Gagal: '+d.error);
+    bukaKonfirmasi({
+        title: `Hapus Semua Data "${nama}"?`,
+        desc: `PERINGATAN: Semua riwayat percakapan dan kuis milik pengguna "${nama}" akan dihapus permanen!`,
+        icon: '⚠️',
+        requireCheck: true,
+        onConfirm: async () => {
+            try {
+                const r = await fetch('/hapus-pengguna', {
+                    method: 'POST',
+                    headers: {'Content-Type':'application/json'},
+                    body: JSON.stringify({ nama })
+                });
+                const d = await r.json();
+                if (d.status === 'ok') {
+                    showToast(`Seluruh data pengguna "${nama}" berhasil dihapus.`);
+                    setTimeout(() => location.reload(), 800);
+                } else {
+                    showToast(d.error || 'Gagal menghapus data.', 'error');
+                }
+            } catch(e) {
+                showToast('Terjadi kesalahan koneksi.', 'error');
+            }
+        }
     });
 }
 
@@ -505,17 +1009,26 @@ function bukaEdit(id, nama, pertanyaan, jawaban) {
 
 async function simpanEdit() {
     const id=document.getElementById('editId').value;
-    const r=await fetch(`/edit/${id}`,{
-        method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({
-            nama_user:document.getElementById('editNama').value,
-            pertanyaan:document.getElementById('editPertanyaan').value,
-            jawaban:document.getElementById('editJawaban').value
-        })
-    });
-    const d=await r.json();
-    if(d.status==='ok'){tutupModal('modalEdit');location.reload();}
-    else alert('Gagal: '+d.error);
+    try {
+        const r=await fetch(`/edit/${id}`,{
+            method:'POST',headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({
+                nama_user:document.getElementById('editNama').value,
+                pertanyaan:document.getElementById('editPertanyaan').value,
+                jawaban:document.getElementById('editJawaban').value
+            })
+        });
+        const d=await r.json();
+        if(d.status==='ok'){
+            tutupModal('modalEdit');
+            showToast('Data berhasil diperbarui!');
+            setTimeout(() => location.reload(), 500);
+        } else {
+            showToast(d.error || 'Gagal menyimpan.', 'error');
+        }
+    } catch(e) {
+        showToast('Gagal menyimpan perubahan.', 'error');
+    }
 }
 
 // ===== RIWAYAT PENGGUNA =====
@@ -524,66 +1037,70 @@ async function lihatRiwayat(nama) {
     document.getElementById('riwayatBody').innerHTML='<div style="text-align:center;color:#aaa;padding:40px;">⏳ Memuat data...</div>';
     document.getElementById('modalRiwayat').classList.add('show');
 
-    const r=await fetch(`/pengguna-riwayat?nama=${encodeURIComponent(nama)}`);
-    const data=await r.json();
+    try {
+        const r=await fetch(`/pengguna-riwayat?nama=${encodeURIComponent(nama)}`);
+        const data=await r.json();
 
-    if(!data.length){
-        document.getElementById('riwayatBody').innerHTML='<div style="text-align:center;color:#aaa;padding:40px;">Belum ada riwayat.</div>';
-        return;
-    }
+        if(!data.length){
+            document.getElementById('riwayatBody').innerHTML='<div style="text-align:center;color:#aaa;padding:40px;">Belum ada riwayat.</div>';
+            return;
+        }
 
-    const chats=data.filter(d=>!d.is_kuis);
-    const kuiss=data.filter(d=>d.is_kuis);
-    const benar=data.filter(d=>d.skor_kuis===1).length;
-    const salah=data.filter(d=>d.skor_kuis===0).length;
-    const rated=data.filter(d=>d.rating);
-    const avgR=rated.length?(rated.reduce((a,b)=>a+b.rating,0)/rated.length).toFixed(1):'-';
+        const chats=data.filter(d=>!d.is_kuis);
+        const kuiss=data.filter(d=>d.is_kuis);
+        const benar=data.filter(d=>d.skor_kuis===1).length;
+        const salah=data.filter(d=>d.skor_kuis===0).length;
+        const rated=data.filter(d=>d.rating);
+        const avgR=rated.length?(rated.reduce((a,b)=>a+b.rating,0)/rated.length).toFixed(1):'-';
 
-    let html=`
-    <div class="user-stat-grid">
-        <div class="user-stat"><div class="num">${chats.length}</div><div class="lbl">💬 Chat</div></div>
-        <div class="user-stat"><div class="num">${kuiss.length}</div><div class="lbl">🎯 Kuis</div></div>
-        <div class="user-stat"><div class="num">${avgR}</div><div class="lbl">⭐ Avg Rating</div></div>
-    </div>`;
-
-    if(kuiss.length>0){
-        const akurasi=benar+salah>0?Math.round(benar/(benar+salah)*100):'-';
-        html+=`<div class="kuis-stat-bar">
-            <span style="font-size:13px;font-weight:700;color:var(--hijau-tua);">🎯 Statistik Kuis</span>
-            <span class="tag tag-benar">✓ ${benar} Benar</span>
-            <span class="tag tag-salah">✗ ${salah} Salah</span>
-            <span style="font-size:12px;color:#555;">Akurasi: <b>${akurasi}%</b></span>
+        let html=`
+        <div class="user-stat-grid">
+            <div class="user-stat"><div class="num">${chats.length}</div><div class="lbl">💬 Chat</div></div>
+            <div class="user-stat"><div class="num">${kuiss.length}</div><div class="lbl">🎯 Kuis</div></div>
+            <div class="user-stat"><div class="num">${avgR}</div><div class="lbl">⭐ Avg Rating</div></div>
         </div>`;
+
+        if(kuiss.length>0){
+            const akurasi=benar+salah>0?Math.round(benar/(benar+salah)*100):'-';
+            html+=`<div class="kuis-stat-bar">
+                <span style="font-size:13px;font-weight:700;color:var(--hijau-tua);">🎯 Statistik Kuis</span>
+                <span class="tag tag-benar">✓ ${benar} Benar</span>
+                <span class="tag tag-salah">✗ ${salah} Salah</span>
+                <span style="font-size:12px;color:#555;">Akurasi: <b>${akurasi}%</b></span>
+            </div>`;
+        }
+
+        html+=`<div style="display:flex;gap:8px;margin-bottom:14px;">
+            <button onclick="filterRiwayat('semua')" id="fr-semua" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--hijau-mid);background:var(--hijau-mid);color:#fff;font-size:12px;cursor:pointer;font-family:inherit;font-weight:600;">Semua (${data.length})</button>
+            <button onclick="filterRiwayat('chat')" id="fr-chat" style="padding:6px 14px;border-radius:20px;border:1.5px solid #ddd;background:#fff;color:#555;font-size:12px;cursor:pointer;font-family:inherit;">Chat (${chats.length})</button>
+            <button onclick="filterRiwayat('kuis')" id="fr-kuis" style="padding:6px 14px;border-radius:20px;border:1.5px solid #ddd;background:#fff;color:#555;font-size:12px;cursor:pointer;font-family:inherit;">Kuis (${kuiss.length})</button>
+        </div>
+        <div id="riwayat-list">`;
+
+        data.forEach(item=>{
+            const jenisKls=item.is_kuis?'kuis':'chat';
+            const jenisTag=item.is_kuis
+                ?`<span class="tag tag-kuis">🎯 ${escHtml(item.topik_kuis||'Kuis')} · ${escHtml(item.level_kuis||'')}</span>`
+                :`<span class="tag tag-chat">💬 Chat</span>`;
+            const hasilTag=item.is_kuis
+                ?(item.skor_kuis===1?'<span class="tag tag-benar">✓ Benar</span>':item.skor_kuis===0?'<span class="tag tag-salah">✗ Salah</span>':'')
+                :(item.rating?`<span style="color:#f5a623;font-size:13px;">${'★'.repeat(item.rating)}</span>`:'');
+
+            html+=`<div class="riwayat-item" data-jenis="${jenisKls}" id="ri-${item.id}">
+                <div class="riwayat-meta">${jenisTag}${hasilTag}<span class="col-waktu">${escHtml(item.waktu)}</span></div>
+                <div class="riwayat-q">${escHtml(item.pertanyaan)}</div>
+                <div class="riwayat-a">${escHtml(item.jawaban)}</div>
+                <div class="riwayat-aksi">
+                    <button class="btn-aksi btn-hapus" onclick="hapusDariModal(${item.id})">🗑 Hapus</button>
+                </div>
+            </div>`;
+        });
+
+        html+='</div>';
+        document.getElementById('riwayatBody').innerHTML=html;
+    } catch(e) {
+        document.getElementById('riwayatBody').innerHTML='<div style="text-align:center;color:red;padding:40px;">Gagal memuat riwayat.</div>';
     }
-
-    html+=`<div style="display:flex;gap:8px;margin-bottom:14px;">
-        <button onclick="filterRiwayat('semua')" id="fr-semua" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--hijau-mid);background:var(--hijau-mid);color:#fff;font-size:12px;cursor:pointer;font-family:inherit;font-weight:600;">Semua (${data.length})</button>
-        <button onclick="filterRiwayat('chat')" id="fr-chat" style="padding:6px 14px;border-radius:20px;border:1.5px solid #ddd;background:#fff;color:#555;font-size:12px;cursor:pointer;font-family:inherit;">Chat (${chats.length})</button>
-        <button onclick="filterRiwayat('kuis')" id="fr-kuis" style="padding:6px 14px;border-radius:20px;border:1.5px solid #ddd;background:#fff;color:#555;font-size:12px;cursor:pointer;font-family:inherit;">Kuis (${kuiss.length})</button>
-    </div>
-    <div id="riwayat-list">`;
-
-    data.forEach(item=>{
-        const jenisKls=item.is_kuis?'kuis':'chat';
-        const jenisTag=item.is_kuis
-            ?`<span class="tag tag-kuis">🎯 ${escHtml(item.topik_kuis||'Kuis')} · ${escHtml(item.level_kuis||'')}</span>`
-            :`<span class="tag tag-chat">💬 Chat</span>`;
-        const hasilTag=item.is_kuis
-            ?(item.skor_kuis===1?'<span class="tag tag-benar">✓ Benar</span>':item.skor_kuis===0?'<span class="tag tag-salah">✗ Salah</span>':'')
-            :(item.rating?`<span style="color:#f5a623;font-size:13px;">${'★'.repeat(item.rating)}</span>`:'');
-
-        html+=`<div class="riwayat-item" data-jenis="${jenisKls}" id="ri-${item.id}">
-            <div class="riwayat-meta">${jenisTag}${hasilTag}<span class="col-waktu">${escHtml(item.waktu)}</span></div>
-            <div class="riwayat-q">${escHtml(item.pertanyaan)}</div>
-            <div class="riwayat-a">${escHtml(item.jawaban)}</div>
-            <div class="riwayat-aksi">
-                <button class="btn-aksi btn-hapus" onclick="hapusDariModal(${item.id})">🗑 Hapus</button>
-            </div>
-        </div>`;
-    });
-
-    html+='</div>';
-    document.getElementById('riwayatBody').innerHTML=html;
 }
 
 function filterRiwayat(tipe) {
@@ -599,91 +1116,158 @@ function filterRiwayat(tipe) {
 }
 
 function hapusDariModal(id) {
-    if (!confirm(`Hapus data #${id}?`)) return;
-    fetch(`/hapus/${id}`,{method:'POST'}).then(r=>r.json()).then(d=>{
-        if(d.status==='ok'){
-            const el=document.getElementById('ri-'+id);
-            if(el){el.style.opacity='0';el.style.transition='.3s';setTimeout(()=>el.remove(),300);}
-        } else alert('Gagal: '+d.error);
+    bukaKonfirmasi({
+        title: 'Hapus Item Riwayat?',
+        desc: `Data #${id} akan dihapus secara permanen.`,
+        icon: '🗑️',
+        requireCheck: false,
+        onConfirm: async () => {
+            try {
+                const r = await fetch(`/hapus/${id}`, { method: 'POST' });
+                const d = await r.json();
+                if (d.status === 'ok') {
+                    showToast(`Data #${id} berhasil dihapus.`);
+                    const el = document.getElementById('ri-' + id);
+                    if (el) {
+                        el.style.opacity = '0';
+                        el.style.transition = '.3s';
+                        setTimeout(() => el.remove(), 300);
+                    }
+                } else {
+                    showToast(d.error || 'Gagal menghapus data.', 'error');
+                }
+            } catch(e) {
+                showToast('Terjadi kesalahan koneksi.', 'error');
+            }
+        }
     });
+}
+
+// ===== GANTI PASSWORD MANDIRI =====
+function bukaModalGantiPassword() {
+    document.getElementById('modalPwLama').value = '';
+    document.getElementById('modalPwBaru').value = '';
+    document.getElementById('modalPwBaru2').value = '';
+    document.getElementById('modalGantiPassword').classList.add('show');
+}
+
+function tutupModalGantiPassword() {
+    document.getElementById('modalGantiPassword').classList.remove('show');
+}
+
+async function simpanPasswordMandiri() {
+    const pwLama = document.getElementById('modalPwLama').value.trim();
+    const pwBaru = document.getElementById('modalPwBaru').value.trim();
+    const pwBaru2 = document.getElementById('modalPwBaru2').value.trim();
+    
+    if (!pwLama || !pwBaru || !pwBaru2) {
+        showToast('Semua kolom password wajib diisi.', 'error');
+        return;
+    }
+    if (pwBaru.length < 6) {
+        showToast('Password baru minimal 6 karakter.', 'error');
+        return;
+    }
+    if (pwBaru !== pwBaru2) {
+        showToast('Konfirmasi password baru tidak cocok!', 'error');
+        return;
+    }
+    
+    try {
+        const r = await fetch('/admin/ganti-password', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({pw_lama: pwLama, pw_baru: pwBaru})
+        });
+        const d = await r.json();
+        if (d.status === 'ok') {
+            tutupModalGantiPassword();
+            showToast('✅ Password berhasil diganti! Mengalihkan ke login...', 'sukses');
+            setTimeout(() => { window.location.href = '/admin/logout'; }, 1500);
+        } else {
+            showToast(d.error || 'Gagal mengganti password.', 'error');
+        }
+    } catch(e) {
+        showToast('Terjadi kesalahan koneksi.', 'error');
+    }
 }
 
 // ===== KELOLA ADMIN (owner only) =====
 async function tambahAdmin() {
     const username = document.getElementById('newAdminUsername').value.trim();
     const password = document.getElementById('newAdminPassword').value.trim();
-    if (!username || !password) { tampilAlert('error','Username dan password wajib diisi.'); return; }
-    if (password.length < 6) { tampilAlert('error','Password minimal 6 karakter.'); return; }
+    if (!username || !password) { showToast('Username dan password wajib diisi.', 'error'); return; }
+    if (password.length < 6) { showToast('Password minimal 6 karakter.', 'error'); return; }
 
-    const r = await fetch('/admin/tambah-admin', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({username, password})
-    });
-    const d = await r.json();
-    if (d.status === 'ok') {
-        tampilAlert('sukses', `✅ Admin "${username}" berhasil ditambahkan.`);
-        document.getElementById('newAdminUsername').value = '';
-        document.getElementById('newAdminPassword').value = '';
-        // Tambah card ke grid tanpa reload
-        const grid = document.getElementById('adminGrid');
-        if (grid.classList.contains('kosong') || grid.tagName !== 'DIV') location.reload();
-        const card = document.createElement('div');
-        card.className = 'admin-card';
-        card.id = `admin-card-${d.id}`;
-        const today = new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'2-digit',year:'numeric'});
-        card.innerHTML = `
-            <div class="info">
-                <div class="admin-avatar">👤</div>
-                <div>
-                    <div class="username">${escHtml(username)}</div>
-                    <div class="sejak">Dibuat ${today}</div>
-                    <span class="tag tag-admin-role" style="margin-top:4px;">Admin</span>
+    try {
+        const r = await fetch('/admin/tambah-admin', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({username, password})
+        });
+        const d = await r.json();
+        if (d.status === 'ok') {
+            showToast(`Admin "${username}" berhasil ditambahkan.`);
+            document.getElementById('newAdminUsername').value = '';
+            document.getElementById('newAdminPassword').value = '';
+            const grid = document.getElementById('adminGrid');
+            if (grid.classList.contains('kosong') || grid.tagName !== 'DIV') {
+                setTimeout(() => location.reload(), 800);
+                return;
+            }
+            const card = document.createElement('div');
+            card.className = 'admin-card';
+            card.id = `admin-card-${d.id}`;
+            const today = new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'2-digit',year:'numeric'});
+            card.innerHTML = `
+                <div class="info">
+                    <div class="admin-avatar">👤</div>
+                    <div>
+                        <div class="username">${escHtml(username)}</div>
+                        <div class="sejak">Dibuat ${today}</div>
+                        <span class="tag tag-admin-role" style="margin-top:4px;">Admin</span>
+                    </div>
                 </div>
-            </div>
-            <button class="btn-aksi btn-hapus" onclick="hapusAdmin(${d.id},'${escHtml(username)}')">🗑 Hapus</button>`;
-        grid.appendChild(card);
-    } else {
-        tampilAlert('error', d.error || 'Gagal menambahkan admin.');
+                <button class="btn-aksi btn-hapus" onclick="hapusAdmin(${d.id},'${escHtml(username)}')">🗑 Hapus</button>`;
+            grid.appendChild(card);
+        } else {
+            showToast(d.error || 'Gagal menambahkan admin.', 'error');
+        }
+    } catch(e) {
+        showToast('Terjadi kesalahan koneksi.', 'error');
     }
 }
 
-async function hapusAdmin(id, username) {
-    if (!confirm(`Yakin hapus akun admin "${username}"?`)) return;
-    const r = await fetch('/admin/hapus-admin', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({id})
+function hapusAdmin(id, username) {
+    bukaKonfirmasi({
+        title: 'Hapus Akun Admin?',
+        desc: `Akun admin "${username}" akan dicabut aksesnya dan dihapus secara permanen.`,
+        icon: '👤',
+        requireCheck: false,
+        onConfirm: async () => {
+            try {
+                const r = await fetch('/admin/hapus-admin', {
+                    method: 'POST',
+                    headers: {'Content-Type':'application/json'},
+                    body: JSON.stringify({id})
+                });
+                const d = await r.json();
+                if (d.status === 'ok') {
+                    showToast(`Admin "${username}" berhasil dihapus.`);
+                    const card = document.getElementById(`admin-card-${id}`);
+                    if (card) { card.style.opacity='0'; card.style.transition='.3s'; setTimeout(()=>card.remove(),300); }
+                } else {
+                    showToast(d.error || 'Gagal menghapus admin.', 'error');
+                }
+            } catch(e) {
+                showToast('Terjadi kesalahan koneksi.', 'error');
+            }
+        }
     });
-    const d = await r.json();
-    if (d.status === 'ok') {
-        tampilAlert('sukses', `✅ Admin "${username}" berhasil dihapus.`);
-        const card = document.getElementById(`admin-card-${id}`);
-        if (card) { card.style.opacity='0'; card.style.transition='.3s'; setTimeout(()=>card.remove(),300); }
-    } else {
-        tampilAlert('error', d.error || 'Gagal menghapus admin.');
-    }
 }
 
 async function gantiPassword() {
-    const pwLama = document.getElementById('pwLama').value.trim();
-    const pwBaru = document.getElementById('pwBaru').value.trim();
-    if (!pwLama || !pwBaru) { tampilAlert('error', 'Password lama dan baru wajib diisi.'); return; }
-    if (pwBaru.length < 6) { tampilAlert('error', 'Password baru minimal 6 karakter.'); return; }
-    const r = await fetch('/admin/ganti-password', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({pw_lama: pwLama, pw_baru: pwBaru})
-    });
-    const d = await r.json();
-    if (d.status === 'ok') {
-        tampilAlert('sukses', '✅ Password berhasil diganti! Silakan login ulang.');
-        document.getElementById('pwLama').value = '';
-        document.getElementById('pwBaru').value = '';
-        setTimeout(() => { window.location.href = '/admin/logout'; }, 2000);
-    } else {
-        tampilAlert('error', d.error || 'Gagal mengganti password.');
-    }
+    await simpanPasswordMandiri();
 }
 </script>
 <script>

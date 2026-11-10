@@ -34,6 +34,9 @@
         .btn-mulai { width:100%; margin-top:20px; padding:12px; background:var(--hijau-mid); color:#fff; border:none; border-radius:12px; font-size:14px; font-weight:700; font-family:'Plus Jakarta Sans',sans-serif; cursor:pointer; transition:background .2s; }
         .btn-mulai:hover { background:var(--hijau-tua); }
         .btn-mulai:disabled { background:#aaa; cursor:not-allowed; }
+        .auth-admin-link { margin-top:16px; padding-top:14px; border-top:1px dashed #e2e8f0; text-align:center; }
+        .auth-admin-link a { font-size:12px; font-weight:600; color:#64748b; text-decoration:none; padding:7px 14px; border-radius:10px; transition:all .2s; display:inline-flex; align-items:center; gap:6px; background:#f8fafc; border:1px solid #e2e8f0; }
+        .auth-admin-link a:hover { background:var(--hijau-pale); color:var(--hijau-tua); border-color:var(--hijau-mid); }
 
         /* HEADER */
         .header { background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-mid)); color:#fff; padding:12px 20px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 2px 10px rgba(0,0,0,0.15); flex-shrink:0; }
@@ -66,7 +69,79 @@
         .dalil-card .dalil-body { padding:12px 16px; }
         .dalil-card .transliterasi { font-style:italic; color:#777; font-size:12.5px; display:block; margin-bottom:6px; line-height:1.6; }
         .dalil-card .arti { color:#333; font-size:13px; line-height:1.7; margin-bottom:8px; }
-        .dalil-card .sumber { display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:600; color:var(--hijau-mid); background:var(--hijau-pale); padding:3px 10px; border-radius:20px; }
+        .dalil-card .sumber { display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:600; color:var(--hijau-mid); background:var(--hijau-pale); padding:4px 12px; border-radius:20px; }
+        .sumber.sumber-klik { cursor:pointer; transition:all .2s; text-decoration:none; }
+        .sumber.sumber-klik:hover { background:var(--hijau-mid); color:#fff; transform:translateY(-1px); box-shadow:0 3px 10px rgba(45,106,79,0.25); }
+        .murottal-ayat-item.sorot-ayat { border:2px solid var(--emas) !important; background:#fdf9ee !important; box-shadow:0 4px 16px rgba(201,168,76,0.25) !important; }
+        .dalil-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; padding-top:10px; border-top:1px dashed rgba(45,106,79,0.18); align-items:center; }
+        .btn-dalil-act { background:var(--hijau-pale); color:var(--hijau-tua); border:1px solid rgba(45,106,79,0.25); border-radius:18px; padding:6px 13px; font-size:11.5px; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all .2s; font-family:'Plus Jakarta Sans',sans-serif; }
+        .btn-dalil-act:hover { background:var(--hijau-mid); color:#fff; border-color:var(--hijau-mid); }
+        .btn-dalil-act.playing { background:var(--emas); color:#fff; border-color:var(--emas); animation:pulseAudio 1.3s infinite; }
+        @keyframes pulseAudio { 0%,100%{transform:scale(1)} 50%{transform:scale(1.03)} }
+        .badge-kemenag { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:600; color:var(--hijau-tua); background:rgba(82,183,136,0.18); border:1px solid rgba(45,106,79,0.25); padding:3px 10px; border-radius:12px; margin-top:8px; animation:fadeInDalil 0.35s ease; }
+        @keyframes fadeInDalil { from { opacity:0; transform:translateY(3px); } to { opacity:1; transform:translateY(0); } }
+
+        /* MODAL TAFSIR & MODAL MUROTTAL */
+        .tafsir-box { max-width:620px !important; }
+        .tafsir-content { font-size:13px; line-height:1.85; color:#333; max-height:60vh; overflow-y:auto; padding-right:6px; }
+        .tafsir-content p { margin-bottom:12px; }
+        .murottal-box { max-width:540px !important; }
+
+        /* KALKULATOR WARIS FARAIDH */
+        .waris-box { max-width:640px !important; max-height:88vh; overflow-y:auto; padding:22px 24px; }
+        .waris-sec-title { font-size:13px; font-weight:700; color:var(--hijau-tua); margin-bottom:8px; display:flex; align-items:center; gap:6px; border-bottom:1px dashed #e2e8f0; padding-bottom:5px; }
+        .waris-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+        @media(max-width:540px) { .waris-grid-2 { grid-template-columns:1fr; gap:8px; } }
+        .waris-field label { font-size:11.5px; font-weight:600; color:#555; display:block; margin-bottom:4px; }
+        .inp-rp-wrap { display:flex; align-items:center; border:1.5px solid #ddd; border-radius:10px; background:#fff; overflow:hidden; transition:border .2s; }
+        .inp-rp-wrap:focus-within { border-color:var(--hijau-mid); box-shadow:0 0 0 3px rgba(45,106,79,0.1); }
+        .rp-prefix { padding:0 10px; font-size:12.5px; font-weight:700; color:var(--hijau-tua); background:var(--hijau-pale); height:38px; display:flex; align-items:center; }
+        .inp-rp-wrap input { flex:1; border:none; padding:8px 12px; font-size:13px; font-family:'Plus Jakarta Sans',sans-serif; outline:none; }
+        .gender-toggle-row { display:flex; gap:8px; }
+        .btn-gender { flex:1; padding:9px 12px; border-radius:10px; border:1.5px solid #ddd; background:#fff; font-size:12.5px; font-weight:600; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; transition:all .2s; }
+        .btn-gender:hover { border-color:var(--hijau-mid); color:var(--hijau-mid); }
+        .btn-gender.aktif { background:var(--hijau-mid); color:#fff; border-color:var(--hijau-mid); }
+        .waris-card-field { display:flex; justify-content:space-between; align-items:center; padding:9px 12px; background:#fbfbfb; border:1px solid #e8e8e8; border-radius:10px; transition:border .2s; }
+        .waris-card-field:hover { border-color:var(--hijau-light); background:#fff; }
+        .wcf-info .wcf-title { font-size:12px; font-weight:700; color:#333; }
+        .wcf-info .wcf-sub { font-size:10.5px; color:#888; }
+        .stepper { display:flex; align-items:center; gap:6px; }
+        .stepper button { width:26px; height:26px; border-radius:6px; border:1px solid #ccc; background:#fff; font-weight:700; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+        .stepper button:hover { background:var(--hijau-pale); border-color:var(--hijau-mid); color:var(--hijau-tua); }
+        .stepper span { font-size:13px; font-weight:700; width:18px; text-align:center; }
+        .btn-hitung-waris { width:100%; margin-top:14px; padding:12px; background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-mid)); color:#fff; border:none; border-radius:12px; font-size:14px; font-weight:700; font-family:'Plus Jakarta Sans',sans-serif; cursor:pointer; transition:transform .2s; box-shadow:0 3px 12px rgba(26,74,46,0.2); }
+        .btn-hitung-waris:hover { transform:translateY(-1px); }
+        .waris-hasil-header { background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-mid)); border-radius:14px; padding:16px 18px; color:#fff; display:flex; justify-content:space-between; align-items:center; }
+        .waris-list-ahli { display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+        .waris-item-card { border:1px solid #e2e8f0; border-radius:12px; padding:11px 14px; background:#fff; display:flex; justify-content:space-between; align-items:center; gap:10px; transition:all .2s; }
+        .waris-item-card:hover { border-color:var(--hijau-mid); box-shadow:0 2px 8px rgba(45,106,79,0.08); }
+        .wic-left .wic-nama { font-size:13.5px; font-weight:700; color:var(--hijau-tua); }
+        .wic-left .wic-dalil { font-size:11px; color:#777; margin-top:2px; }
+        .wic-badge { display:inline-block; font-size:10.5px; font-weight:600; padding:1px 7px; border-radius:8px; background:var(--hijau-pale); color:var(--hijau-tua); margin-left:6px; }
+        .wic-right { text-align:right; }
+        .wic-right .wic-rp { font-size:14px; font-weight:800; color:var(--hijau-mid); }
+        .wic-right .wic-porsi { font-size:11px; font-weight:600; color:#c9a84c; }
+        .waris-catatan-box { background:#fdf9ee; border:1px solid #fae6b2; border-radius:10px; padding:10px 14px; font-size:12px; color:#856404; margin-top:10px; }
+        .waris-dalil-card { background:var(--hijau-pale); border-radius:10px; padding:10px 14px; font-size:12px; color:var(--hijau-tua); margin-top:12px; border-left:3px solid var(--hijau-mid); }
+        .murottal-player-card { background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-mid)); border-radius:16px; padding:18px 20px; color:#fff; margin-bottom:16px; display:flex; flex-direction:column; gap:12px; }
+        .mp-surah-title { font-size:16px; font-weight:700; display:flex; justify-content:space-between; align-items:center; }
+        .mp-controls { display:flex; align-items:center; gap:12px; }
+        .mp-btn-play { background:var(--emas); color:#fff; border:none; width:44px; height:44px; border-radius:50%; font-size:18px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:transform .2s; }
+        .mp-btn-play:hover { transform:scale(1.08); }
+        .mp-progress-wrap { flex:1; display:flex; flex-direction:column; gap:4px; }
+        .mp-progress-bar { width:100%; height:6px; background:rgba(255,255,255,0.25); border-radius:3px; overflow:hidden; cursor:pointer; }
+        .mp-progress-fill { height:100%; width:0%; background:var(--emas); border-radius:3px; transition:width .1s; }
+        .mp-time { font-size:11px; opacity:.85; display:flex; justify-content:space-between; }
+        .murottal-select-row { display:flex; gap:10px; margin-bottom:14px; }
+        .murottal-select { flex:1; padding:9px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:13px; font-family:'Plus Jakarta Sans',sans-serif; outline:none; }
+        .murottal-select:focus { border-color:var(--hijau-mid); }
+        .murottal-ayat-list { max-height:45vh; overflow-y:auto; display:flex; flex-direction:column; gap:10px; padding-right:4px; }
+        .murottal-ayat-item { border:1px solid #eee; border-radius:12px; padding:12px 14px; background:#fff; display:flex; flex-direction:column; gap:8px; transition:background .2s; }
+        .murottal-ayat-item:hover { background:var(--hijau-pale); border-color:rgba(45,106,79,0.2); }
+        .mai-head { display:flex; justify-content:space-between; align-items:center; }
+        .mai-no { font-size:11.5px; font-weight:700; color:var(--hijau-mid); background:var(--hijau-pale); padding:2px 8px; border-radius:10px; }
+        .mai-arab { font-family:'Traditional Arabic','Scheherazade New',serif; font-size:22px; color:var(--hijau-tua); direction:rtl; text-align:right; line-height:1.9; }
+        .mai-arti { font-size:12.5px; color:#555; line-height:1.6; }
         .arab { font-family:'Traditional Arabic','Arial Unicode MS',serif; font-size:22px; direction:rtl; text-align:right; display:block; margin:10px 0; color:var(--hijau-tua); line-height:2.2; }
         .dalil-box { background:var(--hijau-pale); border-left:3px solid var(--hijau-mid); padding:10px 14px; border-radius:8px; margin:8px 0; font-size:12.5px; color:#444; line-height:1.8; }
         .transliterasi { font-style:italic; color:#666; font-size:12.5px; margin:4px 0; display:block; }
@@ -114,8 +189,27 @@
         .input-area input:focus { border-color:var(--hijau-mid); }
         .btn-kirim { background:var(--hijau-mid); color:#fff; border:none; width:42px; height:42px; border-radius:50%; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
         .btn-kirim:hover { background:var(--hijau-tua); }
-        .btn-kuis { background:var(--emas); color:#fff; border:none; padding:0 16px; height:42px; border-radius:21px; cursor:pointer; font-size:12px; font-weight:600; font-family:'Plus Jakarta Sans',sans-serif; white-space:nowrap; }
-        .btn-kuis:hover { opacity:.88; }
+        .btn-menu { background:var(--emas); color:#fff; border:none; padding:0 16px; height:42px; border-radius:21px; cursor:pointer; font-size:12px; font-weight:600; font-family:'Plus Jakarta Sans',sans-serif; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+        .btn-menu:hover { opacity:.88; }
+
+        /* ===== PUSAT FITUR MODAL ===== */
+        .pusat-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:300; display:none; align-items:center; justify-content:center; backdrop-filter:blur(6px); }
+        .pusat-overlay.aktif { display:flex; }
+        .pusat-box { background:#fff; border-radius:24px; padding:30px 24px; width:100%; max-width:480px; box-shadow:0 12px 50px rgba(0,0,0,0.22); animation:fadeUp .25s ease; max-height:92vh; overflow-y:auto; }
+        .pusat-box h3 { font-size:16px; color:var(--hijau-tua); font-weight:700; margin-bottom:4px; }
+        .pusat-box .sub { font-size:12px; color:#999; margin-bottom:22px; }
+        .pusat-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; }
+        .pusat-kartu { background:#fff; border:1.5px solid #eee; border-radius:16px; padding:18px 10px; display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; transition:all .2s; text-align:center; }
+        .pusat-kartu:hover { border-color:var(--hijau-mid); background:var(--hijau-pale); transform:translateY(-2px); box-shadow:0 4px 16px rgba(45,106,79,0.12); }
+        .pusat-kartu.emas:hover { border-color:var(--emas); background:#fdf9ee; }
+        .pusat-kartu .pk-ikon { font-size:28px; }
+        .pusat-kartu .pk-judul { font-size:12px; font-weight:700; color:var(--hijau-tua); line-height:1.3; }
+        .pusat-kartu .pk-desc { font-size:10.5px; color:#999; line-height:1.4; }
+        .pusat-kartu .pk-badge { font-size:9.5px; font-weight:700; padding:2px 8px; border-radius:10px; }
+        .pk-badge.segera { background:#fff3cd; color:#856404; }
+        .pk-badge.aktif { background:#d4edda; color:#155724; }
+        .pusat-close { position:absolute; top:16px; right:18px; background:rgba(0,0,0,0.07); border:none; border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; }
+        .pusat-box-wrap { position:relative; }
 
         .footer { text-align:center; padding:5px; font-size:11px; color:#bbb; background:#fff; border-top:1px solid #f0f0f0; flex-shrink:0; }
         .footer a { color:var(--hijau-mid); text-decoration:none; }
@@ -213,7 +307,12 @@
                 padding: 9px 14px;
             }
 
-            .btn-kuis { padding: 0 12px; height: 40px; font-size: 11.5px; }
+            .btn-menu { padding: 0 12px; height: 40px; font-size: 11.5px; }
+            .pusat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .pusat-box { padding: 22px 16px; padding-bottom: max(22px, env(safe-area-inset-bottom, 22px)); border-radius: 20px 20px 0 0; max-height: 88vh; }
+            .pusat-overlay { align-items: flex-end; }
+            .pusat-kartu { padding: 14px 8px; }
+            .pusat-kartu .pk-ikon { font-size: 24px; }
             .btn-kirim { width: 40px; height: 40px; font-size: 15px; }
 
             /* Welcome card */
@@ -274,6 +373,9 @@
             <input type="text" id="inputExtra" placeholder="" />
         </div>
         <button class="btn-mulai" id="btnMulai" onclick="mulaiChat()" disabled>Mulai Belajar →</button>
+        <div class="auth-admin-link">
+            <a href="/admin/login">🔐 Masuk sebagai Admin / Pengajar →</a>
+        </div>
     </div>
 </div>
 
@@ -323,7 +425,7 @@
 <!-- INPUT -->
 <div class="input-area">
     <input type="text" id="inputPertanyaan" placeholder="Tanyakan seputar Islam..." />
-    <button class="btn-kuis" onclick="mulaiKuis()">🎯 Kuis</button>
+    <button class="btn-menu" onclick="bukaPusatFitur()">✨ <span class="lbl">Menu</span></button>
     <button class="btn-kirim" id="btnKirim">➤</button>
 </div>
 
@@ -813,6 +915,9 @@ Lakukan penilaian:
                 }
             }
 
+            // Sinkronkan dalil Al-Qur'an dengan Mushaf Resmi Kemenag RI
+            sinkronkanMushafKemenag(bub);
+
             if (rowId && tampilUser && !modeKuis) {
                 tambahRating(wrap, rowId);
             }
@@ -857,6 +962,7 @@ Lakukan penilaian:
     function tambahBubbleAI(teks, id) {
         const { wrap, bub } = buatBubbleAIKosong();
         bub.innerHTML = formatJawaban(teks);
+        sinkronkanMushafKemenag(bub);
         if (id) tambahRating(wrap, id);
     }
 
@@ -879,6 +985,348 @@ Lakukan penilaian:
         wrap.appendChild(rArea);
     }
 
+    // ===== DATABASE 114 SURAH AL-QUR'AN & MUROTTAL HELPER =====
+    const DAFTAR_SURAH = [
+        { no: 1, nama: "Al-Fatihah", ayat: 7 },
+        { no: 2, nama: "Al-Baqarah", ayat: 286 },
+        { no: 3, nama: "Ali 'Imran", ayat: 200 },
+        { no: 4, nama: "An-Nisa'", ayat: 176 },
+        { no: 5, nama: "Al-Ma'idah", ayat: 120 },
+        { no: 6, nama: "Al-An'am", ayat: 165 },
+        { no: 7, nama: "Al-A'raf", ayat: 206 },
+        { no: 8, nama: "Al-Anfal", ayat: 75 },
+        { no: 9, nama: "At-Taubah", ayat: 129 },
+        { no: 10, nama: "Yunus", ayat: 109 },
+        { no: 11, nama: "Hud", ayat: 123 },
+        { no: 12, nama: "Yusuf", ayat: 111 },
+        { no: 13, nama: "Ar-Ra'd", ayat: 43 },
+        { no: 14, nama: "Ibrahim", ayat: 52 },
+        { no: 15, nama: "Al-Hijr", ayat: 99 },
+        { no: 16, nama: "An-Nahl", ayat: 128 },
+        { no: 17, nama: "Al-Isra'", ayat: 111 },
+        { no: 18, nama: "Al-Kahf", ayat: 110 },
+        { no: 19, nama: "Maryam", ayat: 98 },
+        { no: 20, nama: "Taha", ayat: 135 },
+        { no: 21, nama: "Al-Anbiya'", ayat: 112 },
+        { no: 22, nama: "Al-Hajj", ayat: 78 },
+        { no: 23, nama: "Al-Mu'minun", ayat: 118 },
+        { no: 24, nama: "An-Nur", ayat: 64 },
+        { no: 25, nama: "Al-Furqan", ayat: 77 },
+        { no: 26, nama: "Asy-Syu'ara'", ayat: 227 },
+        { no: 27, nama: "An-Naml", ayat: 93 },
+        { no: 28, nama: "Al-Qasas", ayat: 88 },
+        { no: 29, nama: "Al-'Ankabut", ayat: 69 },
+        { no: 30, nama: "Ar-Rum", ayat: 60 },
+        { no: 31, nama: "Luqman", ayat: 34 },
+        { no: 32, nama: "As-Sajdah", ayat: 30 },
+        { no: 33, nama: "Al-Ahzab", ayat: 73 },
+        { no: 34, nama: "Saba'", ayat: 54 },
+        { no: 35, nama: "Fatir", ayat: 45 },
+        { no: 36, nama: "Yasin", ayat: 83 },
+        { no: 37, nama: "As-Saffat", ayat: 182 },
+        { no: 38, nama: "Sad", ayat: 88 },
+        { no: 39, nama: "Az-Zumar", ayat: 75 },
+        { no: 40, nama: "Ghafir", ayat: 85 },
+        { no: 41, nama: "Fussilat", ayat: 54 },
+        { no: 42, nama: "Asy-Syura", ayat: 53 },
+        { no: 43, nama: "Az-Zukhruf", ayat: 89 },
+        { no: 44, nama: "Ad-Dukhan", ayat: 59 },
+        { no: 45, nama: "Al-Jasiyah", ayat: 37 },
+        { no: 46, nama: "Al-Ahqaf", ayat: 35 },
+        { no: 47, nama: "Muhammad", ayat: 38 },
+        { no: 48, nama: "Al-Fath", ayat: 29 },
+        { no: 49, nama: "Al-Hujurat", ayat: 18 },
+        { no: 50, nama: "Qaf", ayat: 45 },
+        { no: 51, nama: "Az-Zariyat", ayat: 60 },
+        { no: 52, nama: "At-Tur", ayat: 49 },
+        { no: 53, nama: "An-Najm", ayat: 62 },
+        { no: 54, nama: "Al-Qamar", ayat: 55 },
+        { no: 55, nama: "Ar-Rahman", ayat: 78 },
+        { no: 56, nama: "Al-Waqi'ah", ayat: 96 },
+        { no: 57, nama: "Al-Hadid", ayat: 29 },
+        { no: 58, nama: "Al-Mujadilah", ayat: 22 },
+        { no: 59, nama: "Al-Hasyr", ayat: 24 },
+        { no: 60, nama: "Al-Mumtahanah", ayat: 13 },
+        { no: 61, nama: "As-Saff", ayat: 14 },
+        { no: 62, nama: "Al-Jumu'ah", ayat: 11 },
+        { no: 63, nama: "Al-Munafiqun", ayat: 11 },
+        { no: 64, nama: "At-Tagabun", ayat: 18 },
+        { no: 65, nama: "At-Talaq", ayat: 12 },
+        { no: 66, nama: "At-Tahrim", ayat: 12 },
+        { no: 67, nama: "Al-Mulk", ayat: 30 },
+        { no: 68, nama: "Al-Qalam", ayat: 52 },
+        { no: 69, nama: "Al-Haqqah", ayat: 52 },
+        { no: 70, nama: "Al-Ma'arij", ayat: 44 },
+        { no: 71, nama: "Nuh", ayat: 28 },
+        { no: 72, nama: "Al-Jinn", ayat: 28 },
+        { no: 73, nama: "Al-Muzzammil", ayat: 20 },
+        { no: 74, nama: "Al-Muddassir", ayat: 56 },
+        { no: 75, nama: "Al-Qiyamah", ayat: 40 },
+        { no: 76, nama: "Al-Insan", ayat: 31 },
+        { no: 77, nama: "Al-Mursalat", ayat: 50 },
+        { no: 78, nama: "An-Naba'", ayat: 40 },
+        { no: 79, nama: "An-Nazi'at", ayat: 46 },
+        { no: 80, nama: "'Abasa", ayat: 42 },
+        { no: 81, nama: "At-Takwir", ayat: 29 },
+        { no: 82, nama: "Al-Infitar", ayat: 19 },
+        { no: 83, nama: "Al-Mutaffifin", ayat: 36 },
+        { no: 84, nama: "Al-Insyiqaq", ayat: 25 },
+        { no: 85, nama: "Al-Buruj", ayat: 22 },
+        { no: 86, nama: "At-Tariq", ayat: 17 },
+        { no: 87, nama: "Al-A'la", ayat: 19 },
+        { no: 88, nama: "Al-Gasyiyah", ayat: 26 },
+        { no: 89, nama: "Al-Fajr", ayat: 30 },
+        { no: 90, nama: "Al-Balad", ayat: 20 },
+        { no: 91, nama: "Asy-Syams", ayat: 15 },
+        { no: 92, nama: "Al-Lail", ayat: 21 },
+        { no: 93, nama: "Ad-Duha", ayat: 11 },
+        { no: 94, nama: "Asy-Syarh", ayat: 8 },
+        { no: 95, nama: "At-Tin", ayat: 8 },
+        { no: 96, nama: "Al-'Alaq", ayat: 19 },
+        { no: 97, nama: "Al-Qadr", ayat: 5 },
+        { no: 98, nama: "Al-Bayyinah", ayat: 8 },
+        { no: 99, nama: "Az-Zalzalah", ayat: 8 },
+        { no: 100, nama: "Al-'Adiyat", ayat: 11 },
+        { no: 101, nama: "Al-Qari'ah", ayat: 11 },
+        { no: 102, nama: "At-Takasur", ayat: 8 },
+        { no: 103, nama: "Al-'Asr", ayat: 3 },
+        { no: 104, nama: "Al-Humazah", ayat: 9 },
+        { no: 105, nama: "Al-Fil", ayat: 5 },
+        { no: 106, nama: "Quraisy", ayat: 4 },
+        { no: 107, nama: "Al-Ma'un", ayat: 7 },
+        { no: 108, nama: "Al-Kausar", ayat: 3 },
+        { no: 109, nama: "Al-Kafirun", ayat: 6 },
+        { no: 110, nama: "An-Nasr", ayat: 3 },
+        { no: 111, nama: "Al-Lahab", ayat: 5 },
+        { no: 112, nama: "Al-Ikhlas", ayat: 4 },
+        { no: 113, nama: "Al-Falaq", ayat: 5 },
+        { no: 114, nama: "An-Nas", ayat: 6 }
+    ];
+
+    function normalisasiTeksSurah(str) {
+        if (!str) return '';
+        return str
+            .replace(/[\u2010\u2011\u2012\u2013\u2014\u2212]/g, '-')
+            .replace(/[\u2018\u2019\u0060\u00B4]/g, "'")
+            .replace(/[\u00A0\u200B\uFEFF]/g, ' ')
+            .replace(/[*_#`]/g, '')
+            .trim();
+    }
+
+    function cariNomorSurah(namaStr) {
+        if (!namaStr) return null;
+        const clean = normalisasiTeksSurah(namaStr).toLowerCase().replace(/^(qs\.?|surah|surat)\s*/i, '').replace(/[^a-z0-9]/g, '');
+        let found = DAFTAR_SURAH.find(s => s.nama.toLowerCase().replace(/[^a-z0-9]/g, '') === clean);
+        if (found) return found;
+        found = DAFTAR_SURAH.find(s => {
+            const sClean = s.nama.toLowerCase().replace(/[^a-z0-9]/g, '');
+            return sClean.includes(clean) || clean.includes(sClean);
+        });
+        return found || null;
+    }
+
+    function parseRefQuran(sumberStr) {
+        if (!sumberStr) return null;
+        let s = normalisasiTeksSurah(sumberStr);
+        // Hapus nomor urut surah di dalam kurung, misal "Surah Al-Baqarah (2) ayat 183" -> "Surah Al-Baqarah ayat 183"
+        s = s.replace(/(\b[A-Za-z\'-]+)\s*\(\d+\)/g, '$1');
+        // Bersihkan sisa tanda kurung siku dan kurung biasa
+        s = s.replace(/[\[\]()]/g, '');
+        // Tangani pola nomor ganda AI misal ": 4:29" atau ". 4.29" -> ambil angka ayat terakhir
+        s = s.replace(/[:.]\s*\d+\s*[:.]\s*(\d+)/g, ': $1');
+        s = s.replace(/ayat\s*\d+\.(\d+)/i, 'ayat $1');
+
+        const m = s.match(/(?:QS\.?|Surat|Surah)\s*([A-Za-z\s'-]+?)[,:\s]+(?:ayat\s*)?(\d+)(?:-(\d+))?/i);
+        if (!m) return null;
+        const namaRaw = m[1].trim();
+        const ayatAwal = parseInt(m[2], 10);
+        const ayatAkhir = m[3] ? parseInt(m[3], 10) : ayatAwal;
+        const surahObj = cariNomorSurah(namaRaw);
+        if (!surahObj) return null;
+        return { nomor: surahObj.no, namaSurah: surahObj.nama, ayatAwal, ayatAkhir };
+    }
+
+    // Cache detail surah Kemenag
+    window.cacheSurahDetail = window.cacheSurahDetail || {};
+    const cacheSurahDetail = window.cacheSurahDetail;
+
+    async function sinkronkanMushafKemenag(container) {
+        if (!container) return;
+        const cards = container.querySelectorAll('.dalil-card[data-surah][data-ayat]');
+        if (!cards || cards.length === 0) return;
+
+        cards.forEach(async (card) => {
+            if (card.dataset.kemenagSynced === '1') return;
+            const noSurah = parseInt(card.dataset.surah, 10);
+            const noAyat  = parseInt(card.dataset.ayat, 10);
+            const namaSurah = card.dataset.namasurah;
+            if (!noSurah || !noAyat) return;
+
+            try {
+                let surahData = cacheSurahDetail[noSurah];
+                if (!surahData) {
+                    const res = await fetch(`https://equran.id/api/v2/surat/${noSurah}`);
+                    const json = await res.json();
+                    if (json.code === 200 && json.data) {
+                        surahData = json.data;
+                        cacheSurahDetail[noSurah] = surahData;
+                    }
+                }
+
+                if (surahData && surahData.ayat) {
+                    const ayatObj = surahData.ayat.find(a => a.nomorAyat === noAyat);
+                    if (ayatObj) {
+                        card.dataset.kemenagSynced = '1';
+
+                        // 1. Sinkronkan teks Arab otentik mushaf Kemenag RI
+                        const elArab = card.querySelector('.arab-teks');
+                        if (elArab && ayatObj.teksArab) {
+                            elArab.textContent = ayatObj.teksArab;
+                        }
+
+                        // 2. Sinkronkan transliterasi latin resmi Kemenag
+                        let elLatin = card.querySelector('.transliterasi');
+                        if (ayatObj.teksLatin) {
+                            if (!elLatin) {
+                                elLatin = document.createElement('span');
+                                elLatin.className = 'transliterasi';
+                                const b = card.querySelector('.dalil-body');
+                                if (b) b.insertBefore(elLatin, b.firstChild);
+                            }
+                            if (elLatin) elLatin.textContent = ayatObj.teksLatin;
+                        }
+
+                        // 3. Sinkronkan terjemahan resmi Kemenag RI
+                        let elArti = card.querySelector('.arti');
+                        if (ayatObj.teksIndonesia) {
+                            if (!elArti) {
+                                elArti = document.createElement('div');
+                                elArti.className = 'arti';
+                                const b = card.querySelector('.dalil-body');
+                                if (b) b.appendChild(elArti);
+                            }
+                            if (elArti) elArti.textContent = `Artinya: "${ayatObj.teksIndonesia}"`;
+                        }
+
+                        // 4. Tambahkan badge status verifikasi resmi
+                        let badge = card.querySelector('.badge-kemenag');
+                        if (!badge) {
+                            badge = document.createElement('div');
+                            badge.className = 'badge-kemenag';
+                            badge.innerHTML = `✨ Terverifikasi Mushaf Standar Kemenag RI · QS. ${namaSurah}: ${noAyat}`;
+                            const body = card.querySelector('.dalil-body');
+                            if (body) body.appendChild(badge);
+                        }
+                    }
+                }
+            } catch (err) {
+                console.warn('Gagal sinkronkan mushaf resmi Kemenag:', err);
+            }
+        });
+    }
+
+    window.activeAudio = null;
+    window.activeAudioBtn = null;
+
+    function putarMurottal(noSurah, noAyat, btn) {
+        if (window.activeAudio && window.activeAudioBtn === btn) {
+            if (!window.activeAudio.paused) {
+                window.activeAudio.pause();
+                btn.classList.remove('playing');
+                const ic = btn.querySelector('.btn-icon');
+                if (ic) ic.textContent = '▶';
+                return;
+            } else {
+                window.activeAudio.play();
+                btn.classList.add('playing');
+                const ic = btn.querySelector('.btn-icon');
+                if (ic) ic.textContent = '⏸';
+                return;
+            }
+        }
+
+        if (window.activeAudio) {
+            window.activeAudio.pause();
+            if (window.activeAudioBtn) {
+                window.activeAudioBtn.classList.remove('playing');
+                const ic = window.activeAudioBtn.querySelector('.btn-icon');
+                if (ic) ic.textContent = '▶';
+            }
+        }
+
+        if (typeof activeFullAudio !== 'undefined' && activeFullAudio) {
+            activeFullAudio.pause();
+            const btnF = document.getElementById('mpBtnPlayFull');
+            if (btnF) btnF.textContent = '▶';
+        }
+
+        const s = String(noSurah).padStart(3, '0');
+        const a = String(noAyat).padStart(3, '0');
+        const url = `https://cdn.equran.id/audio-partial/Misyari-Rasyid-Al-Afasi/${s}${a}.mp3`;
+
+        const audio = new Audio(url);
+        window.activeAudio = audio;
+        window.activeAudioBtn = btn;
+
+        btn.classList.add('playing');
+        const ic = btn.querySelector('.btn-icon');
+        if (ic) ic.textContent = '⏸';
+
+        audio.play().catch(e => {
+            btn.classList.remove('playing');
+            if (ic) ic.textContent = '▶';
+        });
+
+        audio.onended = () => {
+            btn.classList.remove('playing');
+            if (ic) ic.textContent = '▶';
+            window.activeAudio = null;
+            window.activeAudioBtn = null;
+        };
+    }
+
+    async function bukaModalTafsir(noSurah, noAyat, namaSurah) {
+        const modal = document.getElementById('modalTafsir');
+        const judul = document.getElementById('tafsirJudul');
+        const sub   = document.getElementById('tafsirSub');
+        const isi   = document.getElementById('tafsirIsi');
+
+        judul.textContent = `📜 Tafsir QS. ${namaSurah}: ${noAyat}`;
+        sub.textContent   = `Kementerian Agama RI · Surah ke-${noSurah}`;
+        isi.innerHTML     = `<div style="text-align:center;padding:36px;color:#888;"><div class="dots" style="margin-bottom:8px;"><span></span><span></span><span></span></div>Memuat tafsir Kemenag RI...</div>`;
+        modal.classList.add('aktif');
+
+        try {
+            const res = await fetch(`https://equran.id/api/v2/tafsir/${noSurah}`);
+            const json = await res.json();
+            if (json.code === 200 && json.data && json.data.tafsir) {
+                const list = json.data.tafsir;
+                const targetAyat = list.find(t => t.ayat === noAyat);
+                if (targetAyat) {
+                    isi.innerHTML = `
+                        <div style="background:var(--hijau-pale);border-radius:12px;padding:12px 16px;margin-bottom:14px;border-left:3px solid var(--hijau-mid);font-size:12.5px;color:var(--hijau-tua);font-weight:600;">
+                            Tafsir Ayat ke-${noAyat} (Surat ${namaSurah})
+                        </div>
+                        <div style="font-size:13.5px;line-height:1.9;color:#2d3748;">
+                            ${targetAyat.teks.split('\n\n').map(p => `<p style="margin-bottom:12px;">${p.trim()}</p>`).join('')}
+                        </div>
+                    `;
+                } else {
+                    isi.innerHTML = `<div style="text-align:center;padding:24px;color:#666;">Tafsir untuk ayat ${noAyat} tidak ditemukan. Silakan cek surah lainnya.</div>`;
+                }
+            } else {
+                isi.innerHTML = `<div style="text-align:center;padding:24px;color:#c0392b;">Gagal memuat tafsir. Periksa koneksi internet.</div>`;
+            }
+        } catch (e) {
+            isi.innerHTML = `<div style="text-align:center;padding:24px;color:#c0392b;">Terjadi kesalahan koneksi saat mengambil data tafsir.</div>`;
+        }
+    }
+
+    function tutupModalTafsir() {
+        const m = document.getElementById('modalTafsir');
+        if (m) m.classList.remove('aktif');
+    }
+
     function formatJawaban(teks) {
         const lines = teks.split('\n');
         let html = '';
@@ -898,27 +1346,53 @@ Lakukan penilaian:
                 let j = i + 1;
                 while (j < lines.length) {
                     const next = lines[j].trim();
-                    if (!next) { j++; break; }
-                    if (/^(Artinya|Terjemahan)\s*:/i.test(next)) {
-                        arti = next.replace(/^(Artinya|Terjemahan)\s*:\s*/i, '');
+                    if (!next) { j++; continue; }
+                    const cleanNext = next.replace(/[*_#`]/g, '').trim();
+
+                    if (/^(Artinya|Terjemahan)\s*:/i.test(cleanNext)) {
+                        arti = cleanNext.replace(/^(Artinya|Terjemahan)\s*:\s*/i, '');
                         j++;
-                    } else if (/^\(QS\.|^\(HR\.|^QS\.|^HR\./.test(next)) {
-                        sumber = next.replace(/[()]/g, '');
+                    } else if (/^\(?(?:QS\.?|HR\.?|Surah|Surat)\b/i.test(cleanNext)) {
+                        sumber = cleanNext.replace(/[()]/g, '');
                         j++; break;
-                    } else if (/^(Wa |Al-|An-|Inn|Qul|Kha|La |Bi |Fa |Fi |Mi |'An|Fal)/i.test(next) && !/[\u0600-\u06FF]/.test(next)) {
-                        transliterasi = next;
-                        j++;
-                    } else { break; }
+                    } else {
+                        const cleanT = cleanNext.replace(/^[\[\(]/, '').replace(/[\]\)]$/, '').trim();
+                        if (/^[A-Za-zāīūḍṣṭẓḥ' -]+/i.test(cleanT) && !/[\u0600-\u06FF]/.test(cleanT) && cleanT.length < 350 && /[aeiouāīū]/i.test(cleanT)) {
+                            transliterasi = cleanT;
+                            j++;
+                        } else {
+                            break;
+                        }
+                    }
                 }
                 i = j;
 
                 if (arti || sumber || transliterasi) {
-                    html += `<div class="dalil-card">
+                    let actionHtml = '';
+                    let sumberBadge = '';
+                    const qref = parseRefQuran(sumber);
+                    let dalilCardAttr = '';
+                    if (qref) {
+                        dalilCardAttr = ` data-surah="${qref.nomor}" data-ayat="${qref.ayatAwal}" data-namasurah="${qref.namaSurah.replace(/"/g, '&quot;')}"`;
+                        sumberBadge = `<span class="sumber sumber-klik" onclick="bukaModalMurottal(${qref.nomor}, ${qref.ayatAwal})" title="Klik untuk lihat Surah & Ayat lengkap">📖 ${sumber} <span style="font-size:10px;opacity:.9;background:rgba(255,255,255,0.28);padding:1px 6px;border-radius:10px;margin-left:4px;">↗ Buka Ayat Lengkap</span></span>`;
+                        actionHtml = `<div class="dalil-actions">
+                            <button class="btn-dalil-act" onclick="putarMurottal(${qref.nomor}, ${qref.ayatAwal}, this)">
+                                <span class="btn-icon">▶</span> Putar Murottal (QS. ${qref.namaSurah}: ${qref.ayatAwal})
+                            </button>
+                            <button class="btn-dalil-act" onclick="bukaModalTafsir(${qref.nomor}, ${qref.ayatAwal}, '${qref.namaSurah.replace(/'/g, "\\'")}')">
+                                📜 Baca Tafsir
+                            </button>
+                        </div>`;
+                    } else if (sumber) {
+                        sumberBadge = `<span class="sumber">📖 ${sumber}</span>`;
+                    }
+                    html += `<div class="dalil-card"${dalilCardAttr}>
                         <div class="arab-wrap"><span class="arab-teks">${arabTeks}</span></div>
                         <div class="dalil-body">
                             ${transliterasi ? `<span class="transliterasi">${transliterasi}</span>` : ''}
                             ${arti ? `<div class="arti">Artinya: ${arti}</div>` : ''}
-                            ${sumber ? `<span class="sumber">📖 ${sumber}</span>` : ''}
+                            ${sumberBadge}
+                            ${actionHtml}
                         </div>
                     </div>`;
                 } else {
@@ -927,12 +1401,33 @@ Lakukan penilaian:
                 continue;
             }
 
-            if (/^\(QS\.|^\(HR\.|^QS\.|^HR\./.test(line)) {
-                html += `<div style="margin:4px 0 10px;"><span class="sumber" style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:var(--hijau-mid);background:var(--hijau-pale);padding:3px 10px;border-radius:20px;">📖 ${line.replace(/[()]/g,'')}</span></div>`;
+            const cleanLine = line.replace(/[*_#`]/g, '').trim();
+            if (/^\(?(?:QS\.?|HR\.?|Surah|Surat)\b/i.test(cleanLine)) {
+                const rawSum = cleanLine.replace(/[()]/g,'');
+                const qref = parseRefQuran(rawSum);
+                let extraBtns = '';
+                let sumberHtml = '';
+                if (qref) {
+                    sumberHtml = `<span class="sumber sumber-klik" onclick="bukaModalMurottal(${qref.nomor}, ${qref.ayatAwal})" title="Klik untuk lihat Surah & Ayat lengkap">📖 ${rawSum} <span style="font-size:10px;opacity:.9;background:rgba(255,255,255,0.28);padding:1px 6px;border-radius:10px;margin-left:4px;">↗ Buka Ayat Lengkap</span></span>`;
+                    extraBtns = `<div class="dalil-actions" style="margin-top:6px;border-top:none;padding-top:0;">
+                        <button class="btn-dalil-act" onclick="putarMurottal(${qref.nomor}, ${qref.ayatAwal}, this)">
+                            <span class="btn-icon">▶</span> Putar Murottal (QS. ${qref.namaSurah}: ${qref.ayatAwal})
+                        </button>
+                        <button class="btn-dalil-act" onclick="bukaModalTafsir(${qref.nomor}, ${qref.ayatAwal}, '${qref.namaSurah.replace(/'/g, "\\'")}')">
+                            📜 Baca Tafsir
+                        </button>
+                    </div>`;
+                } else {
+                    sumberHtml = `<span class="sumber" style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:var(--hijau-mid);background:var(--hijau-pale);padding:4px 12px;border-radius:20px;">📖 ${rawSum}</span>`;
+                }
+                html += `<div style="margin:6px 0 12px;">
+                    ${sumberHtml}
+                    ${extraBtns}
+                </div>`;
                 i++; continue;
             }
 
-            if (/^(Artinya|Terjemahan)\s*:/i.test(line)) {
+            if (/^(Artinya|Terjemahan)\s*:/i.test(cleanLine)) {
                 html += `<div class="dalil-box">${line}</div>`;
                 i++; continue;
             }
@@ -1028,6 +1523,804 @@ Lakukan penilaian:
             });
         }
     })();
+</script>
+
+<!-- ===== MODAL PUSAT FITUR ===== -->
+<div class="pusat-overlay" id="pusatFitur">
+    <div class="pusat-box-wrap" style="width:100%;max-width:480px;padding:0 16px;position:relative;">
+        <div class="pusat-box" id="pusatBox">
+            <button class="pusat-close" onclick="tutupPusatFitur()" title="Tutup">✕</button>
+            <h3>✨ Pusat Layanan</h3>
+            <div class="sub">Pilih fitur yang kamu butuhkan</div>
+
+            <div class="pusat-grid">
+                <!-- Kuis PAI -->
+                <div class="pusat-kartu" onclick="bukaDariPusat('kuis')">
+                    <div class="pk-ikon">🎯</div>
+                    <div class="pk-judul">Kuis PAI</div>
+                    <div class="pk-desc">Uji pemahamanmu</div>
+                    <span class="pk-badge aktif">Aktif</span>
+                </div>
+
+                <!-- Kalkulator Waris -->
+                <div class="pusat-kartu emas" onclick="bukaDariPusat('waris')">
+                    <div class="pk-ikon">⚖️</div>
+                    <div class="pk-judul">Kalkulator Waris</div>
+                    <div class="pk-desc">Faraidh Islam</div>
+                    <span class="pk-badge aktif">Aktif</span>
+                </div>
+
+                <!-- Doa & Dzikir -->
+                <div class="pusat-kartu" onclick="bukaDariPusat('doa')">
+                    <div class="pk-ikon">🤲</div>
+                    <div class="pk-judul">Doa & Dzikir</div>
+                    <div class="pk-desc">Koleksi doa harian</div>
+                    <span class="pk-badge segera">Segera</span>
+                </div>
+
+                <!-- Murottal -->
+                <div class="pusat-kartu" onclick="bukaDariPusat('murottal')">
+                    <div class="pk-ikon">📖</div>
+                    <div class="pk-judul">Murottal</div>
+                    <div class="pk-desc">Audio Al-Qur'an 30 Juz</div>
+                    <span class="pk-badge aktif">Aktif</span>
+                </div>
+
+                <!-- Tafsir Kemenag -->
+                <div class="pusat-kartu" onclick="bukaDariPusat('tafsir')">
+                    <div class="pk-ikon">📜</div>
+                    <div class="pk-judul">Tafsir Kemenag</div>
+                    <div class="pk-desc">Tafsir Al-Qur'an resmi</div>
+                    <span class="pk-badge aktif">Aktif</span>
+                </div>
+
+                <!-- Jadwal Shalat -->
+                <div class="pusat-kartu" onclick="bukaDariPusat('shalat')">
+                    <div class="pk-ikon">🕌</div>
+                    <div class="pk-judul">Jadwal Shalat</div>
+                    <div class="pk-desc">Waktu shalat harian</div>
+                    <span class="pk-badge segera">Segera</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL SEGERA HADIR ===== -->
+<div class="modal-overlay" id="modalSegeraHadir">
+    <div class="modal-box" style="max-width:340px;text-align:center;">
+        <div style="font-size:48px;margin-bottom:14px;" id="segeraIkon">🚧</div>
+        <h3 id="segeraJudul" style="margin-bottom:8px;">Segera Hadir</h3>
+        <p style="font-size:13px;color:#777;line-height:1.7;margin-bottom:20px;" id="segeraDesc">Fitur ini sedang dalam pengembangan. Nantikan pembaruannya!</p>
+        <button class="btn-modal-mulai" style="width:100%;" onclick="document.getElementById('modalSegeraHadir').classList.remove('aktif')">Oke, Paham!</button>
+    </div>
+</div>
+
+<!-- ===== MODAL KALKULATOR WARIS ISLAM (FARAIDH) ===== -->
+<div class="modal-overlay" id="modalWaris">
+    <div class="modal-box waris-box">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+            <div>
+                <h3 style="font-size:16.5px;color:var(--hijau-tua);font-weight:700;">⚖️ Kalkulator Waris Islam (Faraidh)</h3>
+                <div class="sub" style="margin-bottom:0;margin-top:2px;">Sesuai Kompilasi Hukum Islam (KHI) & Fiqih Syafi'iyyah</div>
+            </div>
+            <button class="pusat-close" style="position:static;" onclick="tutupModalWaris()" title="Tutup">✕</button>
+        </div>
+
+        <div id="warisFormWrap">
+            <!-- SECTION 1: HARTA & PENGURANG -->
+            <div class="waris-sec-title">💰 1. Harta Peninggalan & Pengurang</div>
+            <div class="waris-grid-2">
+                <div class="waris-field">
+                    <label>Total Harta Peninggalan (Rp) <span style="color:#e74c3c;">*</span></label>
+                    <div class="inp-rp-wrap">
+                        <span class="rp-prefix">Rp</span>
+                        <input type="text" id="warisTotalHarta" placeholder="Contoh: 150.000.000" oninput="formatRupiahInput(this)">
+                    </div>
+                </div>
+                <div class="waris-field">
+                    <label>Hutang Pewaris (Rp)</label>
+                    <div class="inp-rp-wrap">
+                        <span class="rp-prefix">Rp</span>
+                        <input type="text" id="warisHutang" placeholder="0" oninput="formatRupiahInput(this)">
+                    </div>
+                </div>
+                <div class="waris-field">
+                    <label>Biaya Pengurusan Jenazah (Rp)</label>
+                    <div class="inp-rp-wrap">
+                        <span class="rp-prefix">Rp</span>
+                        <input type="text" id="warisJenazah" placeholder="0" oninput="formatRupiahInput(this)">
+                    </div>
+                </div>
+                <div class="waris-field">
+                    <label>Wasiat Pewaris (Maksimal 1/3)</label>
+                    <div class="inp-rp-wrap">
+                        <span class="rp-prefix">Rp</span>
+                        <input type="text" id="warisWasiat" placeholder="0" oninput="formatRupiahInput(this)">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: PEWARIS & AHLI WARIS -->
+            <div class="waris-sec-title" style="margin-top:14px;">👥 2. Pewaris & Ahli Waris yang Masih Hidup</div>
+            
+            <div style="margin-bottom:12px;">
+                <label style="font-size:12px;font-weight:600;color:#555;display:block;margin-bottom:6px;">Pewaris yang Meninggal Dunia:</label>
+                <div class="gender-toggle-row">
+                    <button type="button" class="btn-gender aktif" id="btnGenderPria" onclick="pilihPewarisGender('laki-laki')">
+                        👨 Laki-laki (Suami / Ayah)
+                    </button>
+                    <button type="button" class="btn-gender" id="btnGenderWanita" onclick="pilihPewarisGender('perempuan')">
+                        👩 Perempuan (Istri / Ibu)
+                    </button>
+                </div>
+            </div>
+
+            <div class="waris-grid-2">
+                <!-- Pasangan -->
+                <div class="waris-card-field" id="wrapFieldIstri">
+                    <div class="wcf-info">
+                        <div class="wcf-title">Istri (0-4 orang)</div>
+                        <div class="wcf-sub">1/8 (bila ada anak) / 1/4</div>
+                    </div>
+                    <div class="stepper">
+                        <button type="button" onclick="ubahCounterWaris('warisIstri', -1)">-</button>
+                        <span id="warisIstriVal">1</span>
+                        <button type="button" onclick="ubahCounterWaris('warisIstri', 1)">+</button>
+                    </div>
+                </div>
+
+                <div class="waris-card-field" id="wrapFieldSuami" style="display:none;">
+                    <div class="wcf-info">
+                        <div class="wcf-title">Suami</div>
+                        <div class="wcf-sub">1/4 (bila ada anak) / 1/2</div>
+                    </div>
+                    <div class="stepper">
+                        <button type="button" onclick="ubahCounterWaris('warisSuami', -1)">-</button>
+                        <span id="warisSuamiVal">1</span>
+                        <button type="button" onclick="ubahCounterWaris('warisSuami', 1)">+</button>
+                    </div>
+                </div>
+
+                <!-- Anak Laki-laki -->
+                <div class="waris-card-field">
+                    <div class="wcf-info">
+                        <div class="wcf-title">Anak Laki-laki</div>
+                        <div class="wcf-sub">Ashabah (menghabiskan sisa)</div>
+                    </div>
+                    <div class="stepper">
+                        <button type="button" onclick="ubahCounterWaris('warisAnakLaki', -1)">-</button>
+                        <span id="warisAnakLakiVal">1</span>
+                        <button type="button" onclick="ubahCounterWaris('warisAnakLaki', 1)">+</button>
+                    </div>
+                </div>
+
+                <!-- Anak Perempuan -->
+                <div class="waris-card-field">
+                    <div class="wcf-info">
+                        <div class="wcf-title">Anak Perempuan</div>
+                        <div class="wcf-sub">1/2 (1 anak) / 2/3 (>=2) / Ashabah</div>
+                    </div>
+                    <div class="stepper">
+                        <button type="button" onclick="ubahCounterWaris('warisAnakPuan', -1)">-</button>
+                        <span id="warisAnakPuanVal">1</span>
+                        <button type="button" onclick="ubahCounterWaris('warisAnakPuan', 1)">+</button>
+                    </div>
+                </div>
+
+                <!-- Ayah Kandung -->
+                <div class="waris-card-field">
+                    <div class="wcf-info">
+                        <div class="wcf-title">Ayah Kandung</div>
+                        <div class="wcf-sub">1/6 (ada anak) atau Ashabah</div>
+                    </div>
+                    <div class="stepper">
+                        <button type="button" onclick="ubahCounterWaris('warisAyah', -1)">-</button>
+                        <span id="warisAyahVal">1</span>
+                        <button type="button" onclick="ubahCounterWaris('warisAyah', 1)">+</button>
+                    </div>
+                </div>
+
+                <!-- Ibu Kandung -->
+                <div class="waris-card-field">
+                    <div class="wcf-info">
+                        <div class="wcf-title">Ibu Kandung</div>
+                        <div class="wcf-sub">1/6 (ada anak) / 1/3</div>
+                    </div>
+                    <div class="stepper">
+                        <button type="button" onclick="ubahCounterWaris('warisIbu', -1)">-</button>
+                        <span id="warisIbuVal">1</span>
+                        <button type="button" onclick="ubahCounterWaris('warisIbu', 1)">+</button>
+                    </div>
+                </div>
+
+                <!-- Saudara Laki-laki -->
+                <div class="waris-card-field">
+                    <div class="wcf-info">
+                        <div class="wcf-title">Saudara Laki-laki</div>
+                        <div class="wcf-sub">Mahjub jika ada Ayah/Anak Lk</div>
+                    </div>
+                    <div class="stepper">
+                        <button type="button" onclick="ubahCounterWaris('warisSdrLaki', -1)">-</button>
+                        <span id="warisSdrLakiVal">0</span>
+                        <button type="button" onclick="ubahCounterWaris('warisSdrLaki', 1)">+</button>
+                    </div>
+                </div>
+
+                <!-- Saudara Perempuan -->
+                <div class="waris-card-field">
+                    <div class="wcf-info">
+                        <div class="wcf-title">Saudara Perempuan</div>
+                        <div class="wcf-sub">Mahjub jika ada Ayah/Anak Lk</div>
+                    </div>
+                    <div class="stepper">
+                        <button type="button" onclick="ubahCounterWaris('warisSdrPuan', -1)">-</button>
+                        <span id="warisSdrPuanVal">0</span>
+                        <button type="button" onclick="ubahCounterWaris('warisSdrPuan', 1)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn-hitung-waris" id="btnDoHitungWaris" onclick="prosesHitungWaris()">
+                ⚖️ Hitung Pembagian Waris Sekarang
+            </button>
+        </div>
+
+        <!-- AREA HASIL PERHITUNGAN -->
+        <div id="warisHasilWrap" style="display:none;">
+            <div class="waris-hasil-header">
+                <div>
+                    <div style="font-size:11px;opacity:.85;text-transform:uppercase;letter-spacing:0.5px;">Harta Waris Bersih Siap Bagi (Tirkah Netto)</div>
+                    <div style="font-size:22px;font-weight:800;color:var(--emas);" id="hasilTirkahBersih">Rp 0</div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-size:11px;opacity:.85;">Status Fiqih</div>
+                    <div style="font-size:12px;font-weight:700;color:#fff;" id="hasilKaidahStatus">Syar'i Sempurna</div>
+                </div>
+            </div>
+
+            <div class="waris-catatan-box" id="warisCatatanBox" style="display:none;"></div>
+
+            <div class="waris-list-ahli" id="warisListAhli">
+                <!-- Diisi via JS -->
+            </div>
+
+            <div class="waris-dalil-card">
+                <b>📖 Landasan Fiqih Mawaris:</b>
+                <p style="margin-top:4px;font-size:12px;line-height:1.6;color:#333;">
+                    Perhitungan didasarkan pada ketentuan nash Al-Qur'an Surat An-Nisa ayat 11–12, hadits riwayat Bukhari-Muslim, serta Kompilasi Hukum Islam (KHI) Buku II Bab II.
+                </p>
+            </div>
+
+            <div style="display:flex;gap:10px;margin-top:14px;">
+                <button type="button" class="btn-modal-batal" style="flex:1;" onclick="kembaliKeFormWaris()">
+                    ← Hitung Ulang
+                </button>
+                <button type="button" class="btn-modal-mulai" style="flex:1.6;" onclick="konsultasiWarisKeAI()">
+                    💬 Konsultasi ke AI →
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-overlay" id="modalTafsir">
+    <div class="modal-box tafsir-box">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+            <div>
+                <h3 id="tafsirJudul" style="font-size:16px;color:var(--hijau-tua);font-weight:700;">📜 Tafsir Al-Qur'an (Kemenag RI)</h3>
+                <div class="sub" id="tafsirSub" style="margin-bottom:0;margin-top:2px;">Kementerian Agama Republik Indonesia</div>
+            </div>
+            <button class="pusat-close" style="position:static;" onclick="tutupModalTafsir()" title="Tutup">✕</button>
+        </div>
+        <div class="tafsir-content" id="tafsirIsi">
+            <div style="text-align:center;padding:30px;color:#888;">Memuat tafsir... ⏳</div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL MUROTTAL AL-QUR'AN ===== -->
+<div class="modal-overlay" id="modalMurottal">
+    <div class="modal-box murottal-box">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+            <div>
+                <h3 style="font-size:16px;color:var(--hijau-tua);font-weight:700;">📖 Murottal Al-Qur'an 30 Juz</h3>
+                <div class="sub" style="margin-bottom:0;margin-top:2px;">Dengarkan lantunan ayat suci per surah atau per ayat</div>
+            </div>
+            <button class="pusat-close" style="position:static;" onclick="tutupModalMurottal()" title="Tutup">✕</button>
+        </div>
+
+        <div class="murottal-select-row">
+            <select class="murottal-select" id="selectSurahMurottal" onchange="gantiSurahMurottal(this.value)">
+                <!-- 114 Surah -->
+            </select>
+            <select class="murottal-select" id="selectQariMurottal" style="max-width:160px;" onchange="gantiQariMurottal(this.value)">
+                <option value="05">Misyari Rasyid</option>
+                <option value="03">As-Sudais</option>
+                <option value="01">Al-Juhany</option>
+            </select>
+        </div>
+
+        <!-- Player Card Full Surah -->
+        <div class="murottal-player-card">
+            <div class="mp-surah-title">
+                <span id="mpSurahNama">QS. Al-Fatihah (7 Ayat)</span>
+                <span style="font-size:11.5px;opacity:.9;background:rgba(255,255,255,0.18);padding:3px 9px;border-radius:10px;" id="mpQariNama">Misyari Rasyid</span>
+            </div>
+            <div class="mp-controls">
+                <button class="mp-btn-play" id="mpBtnPlayFull" onclick="togglePlayFullSurah()">▶</button>
+                <div class="mp-progress-wrap">
+                    <div class="mp-progress-bar" id="mpProgressBar" onclick="seekFullSurah(event)">
+                        <div class="mp-progress-fill" id="mpProgressFill"></div>
+                    </div>
+                    <div class="mp-time">
+                        <span id="mpTimeCurrent">0:00</span>
+                        <span id="mpTimeTotal">0:00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <span class="modal-label" style="margin-bottom:8px;">📜 Teks Arab, Latin & Terjemahan:</span>
+        <div class="murottal-ayat-list" id="murottalAyatList">
+            <div style="text-align:center;padding:20px;color:#888;">Memuat ayat... ⏳</div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ===== MODAL MUROTTAL AL-QUR'AN =====
+window.cacheSurahDetail = window.cacheSurahDetail || {};
+var activeFullAudio = null;
+
+window.bukaModalMurottal = function(targetSurah, targetAyat) {
+    const modal = document.getElementById('modalMurottal');
+    if (!modal) return;
+    const sel = document.getElementById('selectSurahMurottal');
+    if (sel && sel.options.length === 0) {
+        DAFTAR_SURAH.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s.no;
+            opt.textContent = `${s.no}. ${s.nama} (${s.ayat} Ayat)`;
+            sel.appendChild(opt);
+        });
+    }
+    if (targetSurah && sel) {
+        sel.value = String(targetSurah);
+    } else if (sel && !sel.value) {
+        sel.value = '1';
+    }
+    modal.classList.add('aktif');
+    loadSurahMurottal(parseInt(sel ? sel.value : 1, 10), targetAyat);
+};
+function bukaModalMurottal(targetSurah, targetAyat) {
+    window.bukaModalMurottal(targetSurah, targetAyat);
+}
+
+window.tutupModalMurottal = function() {
+    if (activeFullAudio) {
+        activeFullAudio.pause();
+        const btn = document.getElementById('mpBtnPlayFull');
+        if (btn) btn.textContent = '▶';
+    }
+    const m = document.getElementById('modalMurottal');
+    if (m) m.classList.remove('aktif');
+};
+function tutupModalMurottal() {
+    window.tutupModalMurottal();
+}
+
+async function loadSurahMurottal(noSurah, targetAyat) {
+    const listEl = document.getElementById('murottalAyatList');
+    const titleEl = document.getElementById('mpSurahNama');
+    const sObj = DAFTAR_SURAH.find(s => s.no === noSurah) || { nama: 'Surah', ayat: 0 };
+    titleEl.textContent = `QS. ${sObj.nama} (${sObj.ayat} Ayat)`;
+    listEl.innerHTML = `<div style="text-align:center;padding:24px;color:#888;"><div class="dots" style="margin-bottom:8px;"><span></span><span></span><span></span></div>Memuat ayat & audio...</div>`;
+
+    if (activeFullAudio) {
+        activeFullAudio.pause();
+        activeFullAudio = null;
+        document.getElementById('mpBtnPlayFull').textContent = '▶';
+        document.getElementById('mpProgressFill').style.width = '0%';
+        document.getElementById('mpTimeCurrent').textContent = '0:00';
+    }
+
+    try {
+        let d = cacheSurahDetail[noSurah];
+        if (!d) {
+            const res = await fetch(`https://equran.id/api/v2/surat/${noSurah}`);
+            const json = await res.json();
+            if (json.code === 200 && json.data) {
+                d = json.data;
+                cacheSurahDetail[noSurah] = d;
+            }
+        }
+        if (d && d.ayat) {
+            renderAyatList(d.ayat, noSurah, sObj.nama, targetAyat);
+        } else {
+            listEl.innerHTML = `<div style="text-align:center;padding:20px;color:#c0392b;">Gagal memuat ayat.</div>`;
+        }
+    } catch(e) {
+        listEl.innerHTML = `<div style="text-align:center;padding:20px;color:#c0392b;">Koneksi gagal.</div>`;
+    }
+}
+
+function gantiSurahMurottal(val) {
+    loadSurahMurottal(parseInt(val, 10));
+}
+
+function gantiQariMurottal(val) {
+    const qariNames = { '05': 'Misyari Rasyid', '03': 'As-Sudais', '01': 'Al-Juhany' };
+    document.getElementById('mpQariNama').textContent = qariNames[val] || 'Qari';
+    if (activeFullAudio) {
+        activeFullAudio.pause();
+        activeFullAudio = null;
+        document.getElementById('mpBtnPlayFull').textContent = '▶';
+        document.getElementById('mpProgressFill').style.width = '0%';
+        document.getElementById('mpTimeCurrent').textContent = '0:00';
+    }
+}
+
+function togglePlayFullSurah() {
+    const selSurah = parseInt(document.getElementById('selectSurahMurottal').value || '1', 10);
+    const selQari = document.getElementById('selectQariMurottal').value || '05';
+    const sStr = String(selSurah).padStart(3, '0');
+    const qariPaths = {
+        '05': 'Misyari-Rasyid-Al-Afasi',
+        '03': 'Abdurrahman-as-Sudais',
+        '01': 'Abdullah-Al-Juhany'
+    };
+    const qPath = qariPaths[selQari] || 'Misyari-Rasyid-Al-Afasi';
+    const url = `https://cdn.equran.id/audio-full/${qPath}/${sStr}.mp3`;
+
+    const btn = document.getElementById('mpBtnPlayFull');
+
+    if (activeFullAudio && !activeFullAudio.paused) {
+        activeFullAudio.pause();
+        btn.textContent = '▶';
+        return;
+    }
+
+    if (activeFullAudio && activeFullAudio.paused) {
+        activeFullAudio.play();
+        btn.textContent = '⏸';
+        return;
+    }
+
+    if (window.activeAudio) {
+        window.activeAudio.pause();
+        if (window.activeAudioBtn) {
+            window.activeAudioBtn.classList.remove('playing');
+            const ic = window.activeAudioBtn.querySelector('.btn-icon');
+            if (ic) ic.textContent = '▶';
+        }
+    }
+
+    activeFullAudio = new Audio(url);
+    btn.textContent = '⏸';
+    activeFullAudio.play().catch(e => {
+        btn.textContent = '▶';
+    });
+
+    activeFullAudio.ontimeupdate = () => {
+        if (!activeFullAudio.duration) return;
+        const pct = (activeFullAudio.currentTime / activeFullAudio.duration) * 100;
+        document.getElementById('mpProgressFill').style.width = pct + '%';
+        document.getElementById('mpTimeCurrent').textContent = formatMenitDetik(activeFullAudio.currentTime);
+        document.getElementById('mpTimeTotal').textContent = formatMenitDetik(activeFullAudio.duration);
+    };
+
+    activeFullAudio.onended = () => {
+        btn.textContent = '▶';
+        document.getElementById('mpProgressFill').style.width = '0%';
+        activeFullAudio = null;
+    };
+}
+
+function seekFullSurah(e) {
+    if (!activeFullAudio || !activeFullAudio.duration) return;
+    const bar = document.getElementById('mpProgressBar');
+    const rect = bar.getBoundingClientRect();
+    const pos = (e.clientX - rect.left) / rect.width;
+    activeFullAudio.currentTime = Math.max(0, Math.min(1, pos)) * activeFullAudio.duration;
+}
+
+function formatMenitDetik(sec) {
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    return `${m}:${s < 10 ? '0' : ''}${s}`;
+}
+
+function renderAyatList(ayats, noSurah, namaSurah, targetAyat) {
+    const listEl = document.getElementById('murottalAyatList');
+    listEl.innerHTML = ayats.map(a => `
+        <div class="murottal-ayat-item ${targetAyat && a.nomorAyat === targetAyat ? 'sorot-ayat' : ''}" id="ayat-item-${a.nomorAyat}">
+            <div class="mai-head">
+                <span class="mai-no">Ayat ${a.nomorAyat}</span>
+                <div style="display:flex;gap:6px;">
+                    <button class="btn-dalil-act" onclick="putarMurottal(${noSurah}, ${a.nomorAyat}, this)">
+                        <span class="btn-icon">▶</span> Putar
+                    </button>
+                    <button class="btn-dalil-act" onclick="bukaModalTafsir(${noSurah}, ${a.nomorAyat}, '${namaSurah.replace(/'/g, "\\'")}')">
+                        📜 Tafsir
+                    </button>
+                </div>
+            </div>
+            <div class="mai-arab">${a.teksArab}</div>
+            <div style="font-size:12px;font-style:italic;color:#666;line-height:1.6;">${a.teksLatin || ''}</div>
+            <div class="mai-arti">${a.teksIndonesia || ''}</div>
+        </div>
+    `).join('');
+
+    if (targetAyat) {
+        setTimeout(() => {
+            const el = document.getElementById(`ayat-item-${targetAyat}`);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 280);
+    }
+}
+
+// ===== PUSAT FITUR =====
+function bukaPusatFitur() {
+    document.getElementById('pusatFitur').classList.add('aktif');
+}
+
+function tutupPusatFitur() {
+    document.getElementById('pusatFitur').classList.remove('aktif');
+}
+
+function bukaDariPusat(fitur) {
+    tutupPusatFitur();
+    if (fitur === 'kuis') {
+        setTimeout(() => { mulaiKuis(); }, 220);
+        return;
+    }
+    if (fitur === 'waris') {
+        setTimeout(() => { bukaModalWaris(); }, 220);
+        return;
+    }
+    if (fitur === 'murottal') {
+        setTimeout(() => { bukaModalMurottal(); }, 220);
+        return;
+    }
+    if (fitur === 'tafsir') {
+        setTimeout(() => { 
+            // Buka tafsir surah pertama (Al-Fatihah ayat 1) atau surah pilihan
+            bukaModalTafsir(1, 1, 'Al-Fatihah');
+        }, 220);
+        return;
+    }
+    const info = {
+        doa:     { ikon:'🤲', judul:'Doa & Dzikir Harian',   desc:'Koleksi doa & dzikir harian lengkap dengan Arab, Latin, dan arti sedang disiapkan. Nantikan pembaruannya!' },
+        shalat:  { ikon:'🕌', judul:'Jadwal Shalat',          desc:'Fitur jadwal shalat berdasarkan lokasi sedang dalam pengembangan. Akan segera hadir!' },
+    };
+    const d = info[fitur];
+    if (d) {
+        document.getElementById('segeraIkon').textContent   = d.ikon;
+        document.getElementById('segeraJudul').textContent  = d.judul;
+        document.getElementById('segeraDesc').textContent   = d.desc;
+        setTimeout(() => { document.getElementById('modalSegeraHadir').classList.add('aktif'); }, 220);
+    }
+}
+
+// ===== KALKULATOR WARIS ISLAM (FARAIDH) =====
+let warisGenderPewaris = 'laki-laki';
+let warisCounters = {
+    warisIstri: 1,
+    warisSuami: 0,
+    warisAnakLaki: 1,
+    warisAnakPuan: 1,
+    warisAyah: 1,
+    warisIbu: 1,
+    warisSdrLaki: 0,
+    warisSdrPuan: 0
+};
+let lastHasilWaris = null;
+
+function bukaModalWaris() {
+    const modal = document.getElementById('modalWaris');
+    if (modal) modal.classList.add('aktif');
+    kembaliKeFormWaris();
+}
+
+function tutupModalWaris() {
+    const modal = document.getElementById('modalWaris');
+    if (modal) modal.classList.remove('aktif');
+}
+
+function pilihPewarisGender(gender) {
+    warisGenderPewaris = gender;
+    const btnPria = document.getElementById('btnGenderPria');
+    const btnWanita = document.getElementById('btnGenderWanita');
+    const wrapIstri = document.getElementById('wrapFieldIstri');
+    const wrapSuami = document.getElementById('wrapFieldSuami');
+
+    if (gender === 'laki-laki') {
+        btnPria.classList.add('aktif');
+        btnWanita.classList.remove('aktif');
+        wrapIstri.style.display = 'flex';
+        wrapSuami.style.display = 'none';
+        warisCounters.warisSuami = 0;
+        if (warisCounters.warisIstri === 0) warisCounters.warisIstri = 1;
+        document.getElementById('warisIstriVal').textContent = warisCounters.warisIstri;
+    } else {
+        btnWanita.classList.add('aktif');
+        btnPria.classList.remove('aktif');
+        wrapIstri.style.display = 'none';
+        wrapSuami.style.display = 'flex';
+        warisCounters.warisIstri = 0;
+        if (warisCounters.warisSuami === 0) warisCounters.warisSuami = 1;
+        document.getElementById('warisSuamiVal').textContent = warisCounters.warisSuami;
+    }
+}
+
+function ubahCounterWaris(key, delta) {
+    let minVal = 0;
+    let maxVal = 20;
+    if (key === 'warisIstri') { maxVal = 4; }
+    if (key === 'warisSuami') { maxVal = 1; }
+    if (key === 'warisAyah' || key === 'warisIbu') { maxVal = 1; }
+
+    let curr = warisCounters[key] || 0;
+    let next = curr + delta;
+    if (next < minVal) next = minVal;
+    if (next > maxVal) next = maxVal;
+    warisCounters[key] = next;
+
+    const el = document.getElementById(key + 'Val');
+    if (el) el.textContent = next;
+}
+
+function formatRupiahInput(el) {
+    let val = el.value.replace(/[^0-9]/g, '');
+    if (!val) { el.value = ''; return; }
+    el.value = parseInt(val, 10).toLocaleString('id-ID');
+}
+
+function getRupiahVal(id) {
+    const el = document.getElementById(id);
+    if (!el) return 0;
+    const clean = el.value.replace(/[^0-9]/g, '');
+    return clean ? parseInt(clean, 10) : 0;
+}
+
+async function prosesHitungWaris() {
+    const totalHarta = getRupiahVal('warisTotalHarta');
+    if (totalHarta <= 0) {
+        alert('Mohon masukkan total harta peninggalan waris.');
+        document.getElementById('warisTotalHarta').focus();
+        return;
+    }
+
+    const hutang = getRupiahVal('warisHutang');
+    const jenazah = getRupiahVal('warisJenazah');
+    const wasiat = getRupiahVal('warisWasiat');
+
+    const btn = document.getElementById('btnDoHitungWaris');
+    btn.disabled = true;
+    btn.textContent = 'Menghitung Faraidh... ⏳';
+
+    const payload = {
+        total_harta: totalHarta,
+        hutang: hutang,
+        biaya_jenazah: jenazah,
+        wasiat: wasiat,
+        jenis_kelamin_pewaris: warisGenderPewaris,
+        ahli_waris: {
+            istri: warisGenderPewaris === 'laki-laki' ? warisCounters.warisIstri : 0,
+            suami: warisGenderPewaris === 'perempuan' ? warisCounters.warisSuami : 0,
+            anak_laki: warisCounters.warisAnakLaki,
+            anak_perempuan: warisCounters.warisAnakPuan,
+            ayah: warisCounters.warisAyah,
+            ibu: warisCounters.warisIbu,
+            saudara_laki: warisCounters.warisSdrLaki,
+            saudara_perempuan: warisCounters.warisSdrPuan
+        }
+    };
+
+    try {
+        const res = await fetch('/hitung-waris', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        btn.disabled = false;
+        btn.textContent = '⚖️ Hitung Pembagian Waris Sekarang';
+
+        if (json.status !== 'ok') {
+            alert(json.message || 'Gagal menghitung waris.');
+            return;
+        }
+
+        tampilkanHasilWaris(json);
+    } catch (e) {
+        btn.disabled = false;
+        btn.textContent = '⚖️ Hitung Pembagian Waris Sekarang';
+        alert('Terjadi kesalahan koneksi saat menghitung waris.');
+    }
+}
+
+function tampilkanHasilWaris(data) {
+    lastHasilWaris = data;
+    document.getElementById('warisFormWrap').style.display = 'none';
+    const resWrap = document.getElementById('warisHasilWrap');
+    resWrap.style.display = 'block';
+
+    const r = data.ringkasan;
+    document.getElementById('hasilTirkahBersih').textContent = 'Rp ' + Math.round(r.tirkah_bersih).toLocaleString('id-ID');
+    document.getElementById('hasilKaidahStatus').textContent = r.catatan_kaidah ? 'Kaidah Khusus' : 'Syar\'i Sempurna';
+
+    const catBox = document.getElementById('warisCatatanBox');
+    if (r.catatan_kaidah || r.catatan_wasiat) {
+        catBox.style.display = 'block';
+        catBox.innerHTML = `
+            ${r.catatan_wasiat ? `<div>⚠️ ${r.catatan_wasiat}</div>` : ''}
+            ${r.catatan_kaidah ? `<div>📌 <b>Kaidah Mawaris:</b> ${r.catatan_kaidah}</div>` : ''}
+        `;
+    } else {
+        catBox.style.display = 'none';
+    }
+
+    const listEl = document.getElementById('warisListAhli');
+    listEl.innerHTML = data.daftar_ahli.map(a => `
+        <div class="waris-item-card">
+            <div class="wic-left">
+                <div class="wic-nama">
+                    ${a.nama}
+                    <span class="wic-badge">${a.status}</span>
+                </div>
+                <div class="wic-dalil">${a.dalil}</div>
+                ${a.jumlah > 1 && a.nominal_per_orang ? `<div style="font-size:11.5px;color:var(--hijau-mid);font-weight:600;margin-top:3px;">Masing-masing per orang: Rp ${Math.round(a.nominal_per_orang).toLocaleString('id-ID')}</div>` : ''}
+            </div>
+            <div class="wic-right">
+                <div class="wic-rp">Rp ${Math.round(a.nominal_total).toLocaleString('id-ID')}</div>
+                <div class="wic-porsi">${a.porsi_syari} (${a.persen})</div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function kembaliKeFormWaris() {
+    document.getElementById('warisFormWrap').style.display = 'block';
+    document.getElementById('warisHasilWrap').style.display = 'none';
+}
+
+function konsultasiWarisKeAI() {
+    if (!lastHasilWaris) return;
+    tutupModalWaris();
+    const r = lastHasilWaris.ringkasan;
+    let teksTanya = `Saya ingin konsultasi fiqih mawaris kasus berikut:\n`;
+    teksTanya += `- Total Harta Waris Bersih: Rp ${Math.round(r.tirkah_bersih).toLocaleString('id-ID')}\n`;
+    teksTanya += `- Pewaris: ${warisGenderPewaris === 'laki-laki' ? 'Laki-laki (Suami/Ayah)' : 'Perempuan (Istri/Ibu)'}\n`;
+    teksTanya += `- Rincian Pembagian Ahli Waris:\n`;
+    lastHasilWaris.daftar_ahli.forEach(a => {
+        teksTanya += `  * ${a.nama}: Rp ${Math.round(a.nominal_total).toLocaleString('id-ID')} (${a.porsi_syari})\n`;
+    });
+    teksTanya += `Mohon berikan penjelasan syariat, hikmah pembagian, dan nasehat kekeluargaan agar pembagian waris ini berkah dan tidak memicu perselisihan keluarga.`;
+
+    const inp = document.getElementById('inputPertanyaan');
+    if (inp) {
+        inp.value = teksTanya;
+        kirim();
+    }
+}
+
+// Tutup overlay click handlers
+document.getElementById('pusatFitur').addEventListener('click', function(e) {
+    if (e.target === this) tutupPusatFitur();
+});
+document.getElementById('modalSegeraHadir').addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('aktif');
+});
+document.getElementById('modalTafsir').addEventListener('click', function(e) {
+    if (e.target === this) tutupModalTafsir();
+});
+document.getElementById('modalMurottal').addEventListener('click', function(e) {
+    if (e.target === this) tutupModalMurottal();
+});
+document.getElementById('modalWaris').addEventListener('click', function(e) {
+    if (e.target === this) tutupModalWaris();
+});
 </script>
 
 </body>

@@ -23,10 +23,89 @@ db = SQLAlchemy(app)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-API_KEY = os.environ.get("GROQ_API_KEY")
-if not API_KEY:
-    raise RuntimeError("GROQ_API_KEY tidak ditemukan!")
-client = Groq(api_key=API_KEY)
+def ambil_kunci_groq():
+    raw = os.environ.get("GROQ_API_KEYS") or os.environ.get("GROQ_API_KEY") or ""
+    keys = [k.strip() for k in raw.split(",") if k.strip()]
+    return keys
+
+GROQ_MODELS = [
+    "qwen/qwen3.8-27b",
+    "openai/gpt-oss-120b",
+    "allam-2-7b"
+]
+
+def stream_ai_multi(messages):
+    """
+    Smart Multi-AI Orchestrator:
+    1. Rotasi & Fallback Multi-Key Groq (Akun 1 -> Akun 2 -> dst).
+    2. Multi-Model Fallback Groq (Qwen 27b -> GPT 120b -> Allam 7b).
+    3. Emergency Backup Provider: Google Gemini API.
+    """
+    groq_keys = ambil_kunci_groq()
+    for k_idx, key in enumerate(groq_keys):
+        try:
+            client_instance = Groq(api_key=key)
+        except Exception:
+            continue
+        for model in GROQ_MODELS:
+            try:
+                stream = client_instance.chat.completions.create(
+                    model=model,
+                    messages=messages,
+                    temperature=0.3,
+                    max_tokens=3000,
+                    stream=True
+                )
+                emitted = False
+                for chunk in stream:
+                    delta = chunk.choices[0].delta.content or ""
+                    if delta:
+                        emitted = True
+                        yield delta
+                if emitted:
+                    return
+            except Exception as e:
+                logger.warning(f"Groq Key #{k_idx+1} Model {model} limit/gagal: {e}. Beralih ke cadangan...")
+                continue
+
+    # Fallback darurat ke Google Gemini jika seluruh Groq limit
+    gemini_key = (os.environ.get("GEMINI_API_KEY") or "").strip()
+    if gemini_key:
+        try:
+            import urllib.request
+            logger.info("Mengaktifkan Fallback Emergency: Google Gemini API...")
+            sys_text = ""
+            user_texts = []
+            for m in messages:
+                if m.get("role") == "system":
+                    sys_text += m.get("content", "") + "\n\n"
+                elif m.get("role") == "user":
+                    user_texts.append(m.get("content", ""))
+                elif m.get("role") == "assistant":
+                    user_texts.append("(Asisten sebelumnya): " + m.get("content", ""))
+
+            full_prompt = (sys_text + "\n\nPertanyaan: " + "\n".join(user_texts)).strip()
+            for g_model in ["gemini-flash-latest", "gemini-3.8-flash", "gemini-pro-latest"]:
+                try:
+                    url = f"https://generativelanguage.googleapis.com/v1beta/models/{g_model}:generateContent?key={gemini_key}"
+                    payload = {"contents": [{"parts": [{"text": full_prompt}]}]}
+                    req = urllib.request.Request(
+                        url,
+                        data=json.dumps(payload).encode("utf-8"),
+                        headers={"Content-Type": "application/json"}
+                    )
+                    with urllib.request.urlopen(req, timeout=12) as resp:
+                        g_data = json.loads(resp.read().decode("utf-8"))
+                        g_cand = g_data.get("candidates", [{}])[0]
+                        g_text = g_cand.get("content", {}).get("parts", [{}])[0].get("text", "")
+                        if g_text:
+                            yield g_text
+                            return
+                except Exception as ge:
+                    logger.warning(f"Gemini model {g_model} gagal: {ge}")
+                    continue
+        except Exception as err:
+            logger.error(f"Seluruh fallback Gemini gagal: {err}")
 
 class Percakapan(db.Model):
     id         = db.Column(db.Integer, primary_key=True)
@@ -99,39 +178,102 @@ with app.app_context():
         db.session.rollback()
         logger.error(f"Gagal buat owner: {e}")
 
-SISTEM_DASAR = """Kamu adalah PratamaAI, asisten pembelajaran Pendidikan Agama Islam (PAI) yang dikembangkan oleh Muhammad Ibnu Setiawan Pratama.
+SISTEM_DASAR = """Kamu adalah PratamaAI, asisten pembelajaran Pendidikan Agama Islam (PAI) berbasis kecerdasan buatan.
 
-IDENTITAS DIRI:
-- Nama: PratamaAI
-- Pengembang: Muhammad Ibnu Setiawan Pratama (Mahasiswa S2 PAI)
-- Perkenalkan diri HANYA jika ditanya siapa kamu.
+IDENTITAS & PENGEMBANG:
+- Nama AI: PratamaAI
+- Pengembang: Muhamad Ibnu Setiawan Pratama
+- Profil Pengembang:
+  * Mahasiswa Program Magister (S2) Pendidikan Agama Islam (PAI) di UIN Sultan Maulana Hasanuddin Banten (UIN Banten).
+  * Peneliti dan akademisi muda yang aktif mempublikasikan berbagai karya ilmiah dan memiliki portofolio riset di bidang inovasi media pembelajaran berbasis teknologi, mobile learning, serta integrasi Artificial Intelligence (AI) dalam transformasi pendidikan Islam.
+  * PratamaAI dikembangkan sebagai bagian dari riset inovasi tesis magister (S2) beliau untuk menghadirkan asisten cerdas PAI yang interaktif, berbobot ilmiah, dan berlandaskan dalil otentik Al-Qur'an dan Hadist.
 
-ATURAN MENJAWAB:
-1. Jawab HANYA pertanyaan seputar Islam (aqidah, fiqih, akhlak, sejarah Islam, tafsir, hadist, dll).
-2. Setiap jawaban WAJIB menyertakan minimal satu dalil dari Al-Quran atau Hadist yang relevan.
-3. Sebutkan sumber dalil dengan jelas (nama surah + nomor ayat, atau nama kitab hadist + perawi).
-4. Jika ada lafaz Arab, tuliskan teks Arabnya di baris tersendiri, lalu transliterasi latin, lalu terjemahannya.
+ATURAN MEMPERKENALKAN DIRI:
+- Perkenalkan diri dan profil pengembang HANYA jika pengguna bertanya seputar: siapa kamu, siapa pembuatmu, siapa pengembangmu, deskripsi tentang AI ini, atau profil Muhamad Ibnu Setiawan Pratama.
+- Sampaikan profil pengembang dengan bahasa yang santun, ilmiah, dan membanggakan, menegaskan status beliau sebagai mahasiswa S2 PAI UIN Banten beserta rekam jejak riset, publikasi ilmiah, dan portofolio teknologi pendidikannya.
+
+ATURAN MENJAWAB & KEOTENTIKAN DALIL:
+1. Jawab HANYA pertanyaan seputar Islam (aqidah, fiqih, akhlak, sejarah Islam, tafsir, hadist, dll) atau pertanyaan mengenai identitas PratamaAI dan pengembangnya.
+2. JAWABAN WAJIB MEMILIKI PENJELASAN MATERI LENGKAP & BERBOBOT EDUKATIF:
+   - DILARANG HANYA MENGUTIP DALIL SAJA TANPA PENJELASAN! Kamu adalah asisten guru/dosen PAI, pengguna membutuhkan pemahaman konsep, latar belakang hukum, rincian fiqih, dan hikmahnya.
+   - Uraikan jawaban secara komprehensif: jelaskan pengertiannya, status hukumnya, rukun/syarat/sebabnya, pandangan ulama/madzhab jika relevan, baru sertakan dalil naqli Al-Qur'an dan Hadist sebagai penguat.
+3. KEOTENTIKAN DALIL AL-QUR'AN (SANGAT KRUSIAL - DILARANG HALUSINASI):
+   - DILARANG KERAS MENGARANG ATAU MERANGKAI SENDIRI TEKS ARAB DAN NOMOR AYAT AL-QUR'AN! Teks Arab Al-Qur'an adalah kalamullah yang suci, setiap kata dan harakat harus mutawatir.
+   - Nama surah dan nomor ayat WAJIB tepat sesuai mushaf standar Kemenag RI.
+   - KAMUS RUJUKAN DALIL POKOK MATERI PAI & FIQIH (GUNAKAN INI SECARA TEPAT):
+     * Hukum Membunuh / Jinayah / Menghilangkan Nyawa:
+       - QS. Al-Ma'idah: 32 (Larangan membunuh satu manusia bagaikan membunuh seluruh manusia)
+       - QS. Al-Isra: 33 (Larangan membunuh jiwa yang diharamkan Allah kecuali dengan hak)
+       - QS. An-Nisa: 93 (Balasan neraka jahannam bagi pembunuh orang beriman secara sengaja)
+       - QS. An-Nisa: 29 (Larangan memakan harta sesama secara batil dan larangan bunuh diri)
+       - (PERINGATAN KERAS: JANGAN PERNAH sebut Al-Baqarah untuk dalil larangan membunuh!)
+     * Hukum Zina, Aurat, & Pergaulan:
+       - QS. Al-Isra: 32 (وَلَا تَقْرَبُوا الزِّنَىٰ ۖ إِنَّهُ كَانَ فَاحِشَةً وَسَاءَ سَبِيلًا - Larangan mendekati zina)
+       - QS. An-Nur: 2 (Hukuman dera 100 kali bagi pezina ghairu muhshan)
+       - QS. An-Nur: 30 (Perintah menundukkan pandangan & menjaga kemaluan bagi laki-laki mukmin)
+       - QS. An-Nur: 31 (Perintah menundukkan pandangan, menjaga kemaluan & menutup jilbab bagi wanita mukminah)
+       - QS. Al-Ahzab: 59 (Perintah mengulurkan jilbab ke seluruh tubuh)
+       - (PERINGATAN KERAS: JANGAN PERNAH menisbatkan larangan zina ke QS. Al-Ahzab: 33!)
+     * Ibadah Pokok (Rukun Islam):
+       - Kewajiban Puasa Ramadhan: QS. Al-Baqarah: 183
+       - Penjelasan Bulan Ramadhan & Turunnya Al-Qur'an: QS. Al-Baqarah: 185
+       - Kewajiban Shalat & Menunaikan Zakat: QS. Al-Baqarah: 43
+       - Waktu-Waktu Shalat: QS. Al-Isra: 78
+       - Kewajiban Haji bagi yang Mampu: QS. Ali 'Imran: 97
+     * Muamalah & Harta:
+       - Larangan Riba & Halalnya Jual Beli: QS. Al-Baqarah: 275
+       - Perintah Pencatatan Hutang: QS. Al-Baqarah: 282
+       - Pembagian Harta Waris (Faraidh): QS. An-Nisa: 11 dan QS. An-Nisa: 12
+       - Larangan Mengurangi Timbangan / Curang: QS. Al-Mutaffifin: 1-3
+       - Hukuman Pencurian: QS. Al-Ma'idah: 38
+     * Pernikahan (Munakahat):
+       - Tujuan Pernikahan (Sakinah, Mawaddah, Rahmah): QS. Ar-Rum: 21
+       - Pergaulan Suami Istri yang Baik: QS. An-Nisa: 19
+     * Akhlak, Toleransi & Akidah:
+       - Berbakti kepada Orang Tua (Birrul Walidain): QS. Al-Isra: 23-24
+       - Larangan Ghibah & Mencari Kesalahan Orang: QS. Al-Hujurat: 12
+       - Persaudaraan Antar Mukmin: QS. Al-Hujurat: 10
+       - Toleransi Beragama: QS. Al-Kafirun: 1-6 dan QS. Al-Mumtahanah: 8
+       - Menuntut Ilmu: QS. Al-Mujadilah: 11
+       - Sabar & Shalat sebagai Penolong: QS. Al-Baqarah: 153
+       - Keesaan Allah SWT (Tauhid): QS. Al-Ikhlas: 1-4
+   - Jika kamu ragu nomor ayat persisnya atau tidak hafal teks Arab aslinya secara harfiah, LEBIH BAIK sebutkan terjemahan maknanya atau gunakan Hadist Sahih daripada mengarang teks Arab palsu!
+4. Jika ada lafaz Arab, tuliskan teks Arab otentiknya di baris tersendiri, lalu transliterasi latin, lalu terjemahannya.
 5. Gunakan bahasa Indonesia yang sopan, ilmiah, dan mudah dipahami.
-6. Tolak pertanyaan di luar topik Islam dengan sopan.
+6. Tolak pertanyaan di luar topik Islam (kecuali pertanyaan tentang identitas AI/pengembang) dengan sopan.
 7. Akhiri jawaban dengan motivasi islami singkat.
 
 ATURAN SALAM:
 - Jika sudah_salam = True: JANGAN gunakan salam pembuka lagi. Boleh mulai dengan Bismillah atau langsung jawab.
 - Jika sudah_salam = False: Gunakan salam islami lengkap di awal.
 
-FORMAT WAJIB:
-- Pisahkan setiap paragraf dengan SATU baris kosong.
-- Gunakan penomoran (1. 2. 3.) untuk daftar.
-- Format dalil Al-Quran:
-[teks Arab]
+STRUKTUR WAJIB JAWABAN PEMBELAJARAN PAI:
+1. PENJELASAN KONSEP & HUKUM:
+   - Buka dengan penjelasan definisi, kedudukan hukum dalam Islam, dan latar belakang materi yang ditanyakan secara lugas dan ilmiah.
+2. URAIAN RINCIAN MATERI:
+   - Jelaskan aspek fiqih, rukun, syarat, kategori, atau hikmah materi secara berbobot (2-3 paragraf penjelasan).
+3. DALIL NAQLI PENDUKUNG (AL-QUR'AN & HADIST):
+   - Letakkan dalil di posisi yang tepat untuk memperkuat penjelasan di atas dengan format baku:
+[teks Arab asli]
 [transliterasi latin]
-Artinya: [terjemahan]
-(QS. NamaSurah: Ayat)
+Artinya: "[terjemahan bahasa Indonesia]"
+QS. NamaSurah: NomorAyat
+4. HIKMAH & PENUTUP:
+   - Jelaskan hikmah pembelajaran (nilai tarbawi) bagi kehidupan kita hari ini, dan tutup dengan nasihat motivasi singkat.
+
+ATURAN KETAT FORMAT SUMBER SURAH:
+- Tuliskan HANYA satu nama surah dan nomor ayat pokok, contoh:
+  QS. Al-Ma'idah: 32
+  QS. Al-Isra: 32
+  QS. Al-Baqarah: 183
+  QS. An-Nur: 2
+- DILARANG KERAS menulis nomor surah dalam kurung seperti "Surah Al-Baqarah (2) ayat 4.29" atau "Surah Al-Ma'idah (5) ayat 32"!
+- DILARANG menulis nomor ayat memakai titik seperti "4.29" atau "2.183"!
 - Format Hadist:
 [teks Arab jika ada]
-Artinya: [terjemahan]
-(HR. Perawi)
-- JANGAN gunakan **, ##, atau simbol markdown apapun."""
+Artinya: "[terjemahan]"
+HR. Perawi
+- JANGAN gunakan simbol markdown seperti **, ##, atau ``` pada teks."""
 
 MAX_HISTORY = 10
 
@@ -211,18 +353,9 @@ def tanya_stream():
     def generate():
         jawaban_penuh = ""
         try:
-            stream = client.chat.completions.create(
-                model="openai/gpt-oss-20b",
-                messages=messages,
-                temperature=0.7,
-                max_tokens=3000,
-                stream=True
-            )
-            for chunk in stream:
-                delta = chunk.choices[0].delta.content or ""
-                if delta:
-                    jawaban_penuh += delta
-                    yield f"data: {json.dumps({'token': delta})}\n\n"
+            for token in stream_ai_multi(messages):
+                jawaban_penuh += token
+                yield f"data: {json.dumps({'token': token})}\n\n"
 
             with app.app_context():
                 p = Percakapan(
@@ -255,6 +388,284 @@ def tanya_stream():
         mimetype="text/event-stream",
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"}
     )
+
+
+@app.route("/hitung-waris", methods=["POST"])
+def hitung_waris():
+    try:
+        from fractions import Fraction
+        data = request.json or {}
+        tirkah_kotor  = data.get("total_harta", 0)
+        hutang        = data.get("hutang", 0)
+        biaya_jenazah = data.get("biaya_jenazah", 0)
+        wasiat_input  = data.get("wasiat", 0)
+        jenis_pewaris = data.get("jenis_kelamin_pewaris", "laki-laki")
+        ahli          = data.get("ahli_waris", {})
+
+        hasil = kalkulasi_faraidh(tirkah_kotor, hutang, biaya_jenazah, wasiat_input, jenis_pewaris, ahli)
+        if hasil.get("status") == "error":
+            return jsonify(hasil), 400
+        return jsonify(hasil)
+    except Exception as e:
+        logger.error(f"Error hitung waris: {e}")
+        return jsonify({"status": "error", "message": f"Terjadi kesalahan: {str(e)}"}), 500
+
+
+def kalkulasi_faraidh(tirkah_kotor, hutang, biaya_jenazah, wasiat_input, jenis_pewaris, ahli):
+    from fractions import Fraction
+    tirkah_kotor = max(0.0, float(tirkah_kotor or 0))
+    hutang = max(0.0, float(hutang or 0))
+    biaya_jenazah = max(0.0, float(biaya_jenazah or 0))
+    wasiat_input = max(0.0, float(wasiat_input or 0))
+
+    kewajiban = hutang + biaya_jenazah
+    sisa_setelah_kewajiban = max(0.0, tirkah_kotor - kewajiban)
+
+    wasiat_maksimal = sisa_setelah_kewajiban / 3.0
+    wasiat_disetujui = min(wasiat_input, wasiat_maksimal)
+    catatan_wasiat = ""
+    if wasiat_input > wasiat_maksimal:
+        catatan_wasiat = f"Wasiat dibatasi maksimal 1/3 harta bersih (Rp {wasiat_maksimal:,.0f}) sesuai kaidah syariat."
+
+    tirkah_bersih = max(0.0, sisa_setelah_kewajiban - wasiat_disetujui)
+    if tirkah_bersih <= 0:
+        return {
+            "status": "error",
+            "message": "Harta waris habis untuk melunasi hutang dan pengurusan jenazah. Tidak ada harta yang dibagikan."
+        }
+
+    suami = 1 if (jenis_pewaris == 'perempuan' and ahli.get('suami', 0) > 0) else 0
+    istri = ahli.get('istri', 0) if jenis_pewaris == 'laki-laki' else 0
+    istri = min(4, max(0, int(istri)))
+
+    anak_laki = max(0, int(ahli.get('anak_laki', 0)))
+    anak_puan = max(0, int(ahli.get('anak_perempuan', 0)))
+    ayah = 1 if int(ahli.get('ayah', 0)) > 0 else 0
+    ibu = 1 if int(ahli.get('ibu', 0)) > 0 else 0
+    saudara_laki = max(0, int(ahli.get('saudara_laki', 0)))
+    saudara_puan = max(0, int(ahli.get('saudara_perempuan', 0)))
+
+    ada_anak = (anak_laki > 0 or anak_puan > 0)
+    jml_saudara = saudara_laki + saudara_puan
+
+    total_ahli = suami + istri + anak_laki + anak_puan + ayah + ibu + saudara_laki + saudara_puan
+    if total_ahli == 0:
+        return {"status": "error", "message": "Pilih minimal satu ahli waris yang masih hidup."}
+
+    hasil_ahli = []
+    furudh = {}
+
+    # 1. Pasangan
+    if suami > 0:
+        porsi = Fraction(1, 4) if ada_anak else Fraction(1, 2)
+        furudh['suami'] = porsi
+        hasil_ahli.append({
+            "key": "suami", "nama": "Suami", "jumlah": 1,
+            "status": "Ashabul Furudh",
+            "dalil": "QS. An-Nisa: 12 (1/4 bila ada keturunan, 1/2 bila tanpa keturunan)",
+            "porsi_syari": f"{porsi.numerator}/{porsi.denominator}",
+            "porsi_frac": porsi
+        })
+    elif istri > 0:
+        porsi = Fraction(1, 8) if ada_anak else Fraction(1, 4)
+        furudh['istri'] = porsi
+        hasil_ahli.append({
+            "key": "istri", "nama": f"Istri ({istri} orang)" if istri > 1 else "Istri", "jumlah": istri,
+            "status": "Ashabul Furudh",
+            "dalil": "QS. An-Nisa: 12 (1/8 bila ada keturunan, 1/4 bila tanpa keturunan)",
+            "porsi_syari": f"{porsi.numerator}/{porsi.denominator} (dibagi rata)" if istri > 1 else f"{porsi.numerator}/{porsi.denominator}",
+            "porsi_frac": porsi
+        })
+
+    # 2. Ibu
+    if ibu > 0:
+        if ada_anak or jml_saudara >= 2:
+            porsi = Fraction(1, 6)
+            ket = "1/6 (karena ada anak/dua saudara atau lebih)"
+        else:
+            if ayah > 0 and (suami > 0 or istri > 0) and not ada_anak and jml_saudara == 0:
+                porsi_pasangan = furudh.get('suami') or furudh.get('istri')
+                sisa_pasangan = Fraction(1, 1) - porsi_pasangan
+                porsi = sisa_pasangan * Fraction(1, 3)
+                ket = "1/3 dari sisa setelah pasangan (Gharrawain)"
+            else:
+                porsi = Fraction(1, 3)
+                ket = "1/3 (karena tidak ada keturunan & saudara < 2)"
+        furudh['ibu'] = porsi
+        hasil_ahli.append({
+            "key": "ibu", "nama": "Ibu", "jumlah": 1,
+            "status": "Ashabul Furudh",
+            "dalil": f"QS. An-Nisa: 11 ({ket})",
+            "porsi_syari": f"{porsi.numerator}/{porsi.denominator}",
+            "porsi_frac": porsi
+        })
+
+    # 3. Ayah
+    ayah_tipe = None
+    if ayah > 0:
+        if anak_laki > 0:
+            porsi = Fraction(1, 6)
+            furudh['ayah'] = porsi
+            ayah_tipe = 'fardh'
+            hasil_ahli.append({
+                "key": "ayah", "nama": "Ayah", "jumlah": 1,
+                "status": "Ashabul Furudh",
+                "dalil": "QS. An-Nisa: 11 (1/6 karena ada anak laki-laki)",
+                "porsi_syari": "1/6",
+                "porsi_frac": porsi
+            })
+        elif anak_puan > 0:
+            porsi = Fraction(1, 6)
+            furudh['ayah'] = porsi
+            ayah_tipe = 'fardh_ashabah'
+            hasil_ahli.append({
+                "key": "ayah", "nama": "Ayah", "jumlah": 1,
+                "status": "Ashabul Furudh + Ashabah",
+                "dalil": "QS. An-Nisa: 11 (Menerima 1/6 fardh dan menghabiskan sisa harta)",
+                "porsi_syari": "1/6 + Sisa",
+                "porsi_frac": porsi
+            })
+        else:
+            ayah_tipe = 'ashabah'
+            hasil_ahli.append({
+                "key": "ayah", "nama": "Ayah", "jumlah": 1,
+                "status": "Ashabah bin Nafs",
+                "dalil": "HR. Bukhari-Muslim (Ahli waris laki-laki terdekat menghabiskan sisa)",
+                "porsi_syari": "Sisa Harta (Ashabah)",
+                "porsi_frac": Fraction(0, 1)
+            })
+
+    # 4. Anak Perempuan (jika tanpa anak laki-laki)
+    if anak_puan > 0 and anak_laki == 0:
+        porsi = Fraction(1, 2) if anak_puan == 1 else Fraction(2, 3)
+        furudh['anak_perempuan'] = porsi
+        hasil_ahli.append({
+            "key": "anak_perempuan",
+            "nama": f"Anak Perempuan ({anak_puan} orang)" if anak_puan > 1 else "Anak Perempuan",
+            "jumlah": anak_puan,
+            "status": "Ashabul Furudh",
+            "dalil": "QS. An-Nisa: 11 (1/2 jika tunggal, 2/3 jika 2 orang atau lebih)",
+            "porsi_syari": f"{porsi.numerator}/{porsi.denominator} (dibagi rata)" if anak_puan > 1 else f"{porsi.numerator}/{porsi.denominator}",
+            "porsi_frac": porsi
+        })
+
+    # 5. Saudara (Cek Hijab Hirman)
+    if saudara_laki > 0 or saudara_puan > 0:
+        if ayah > 0 or anak_laki > 0:
+            if saudara_laki > 0:
+                hasil_ahli.append({
+                    "key": "saudara_laki", "nama": f"Saudara Laki-laki ({saudara_laki} orang)", "jumlah": saudara_laki,
+                    "status": "Mahjub (Terhalang)", "dalil": "Terhalang (Mahjub Hirman) karena adanya Ayah / Anak Laki-laki",
+                    "porsi_syari": "0 (Mahjub)", "porsi_frac": Fraction(0, 1), "nominal_total": 0.0, "nominal_per_orang": 0.0
+                })
+            if saudara_puan > 0:
+                hasil_ahli.append({
+                    "key": "saudara_perempuan", "nama": f"Saudara Perempuan ({saudara_puan} orang)", "jumlah": saudara_puan,
+                    "status": "Mahjub (Terhalang)", "dalil": "Terhalang (Mahjub Hirman) karena adanya Ayah / Anak Laki-laki",
+                    "porsi_syari": "0 (Mahjub)", "porsi_frac": Fraction(0, 1), "nominal_total": 0.0, "nominal_per_orang": 0.0
+                })
+
+    total_fardh = sum(furudh.values())
+    sisa_frac = Fraction(1, 1) - total_fardh
+    catatan_kaidah = ""
+
+    # Sisa Ashabah ke Anak
+    if anak_laki > 0:
+        total_saham = (anak_laki * 2) + (anak_puan * 1)
+        sisa_rp = max(0.0, float(sisa_frac) * tirkah_bersih)
+        nilai_per_saham = sisa_rp / total_saham if total_saham > 0 else 0.0
+
+        total_anak_laki_rp = nilai_per_saham * (anak_laki * 2)
+        hasil_ahli.append({
+            "key": "anak_laki",
+            "nama": f"Anak Laki-laki ({anak_laki} orang)" if anak_laki > 1 else "Anak Laki-laki",
+            "jumlah": anak_laki,
+            "status": "Ashabah bin Nafs" if anak_puan == 0 else "Ashabah bil Ghair (Rasio 2 : 1)",
+            "dalil": "QS. An-Nisa: 11 (Bagian 1 anak laki-laki setara bagian 2 anak perempuan)",
+            "porsi_syari": "Ashabah (Sisa)",
+            "porsi_frac": Fraction(anak_laki * 2, total_saham) * sisa_frac if sisa_frac > 0 else Fraction(0, 1),
+            "nominal_total": total_anak_laki_rp,
+            "nominal_per_orang": total_anak_laki_rp / anak_laki if anak_laki > 0 else 0
+        })
+
+        if anak_puan > 0:
+            total_anak_puan_rp = nilai_per_saham * (anak_puan * 1)
+            hasil_ahli.append({
+                "key": "anak_perempuan",
+                "nama": f"Anak Perempuan ({anak_puan} orang)" if anak_puan > 1 else "Anak Perempuan",
+                "jumlah": anak_puan,
+                "status": "Ashabah bil Ghair (Rasio 2 : 1)",
+                "dalil": "QS. An-Nisa: 11 (Bagian anak perempuan 1 saham berbanding 2)",
+                "porsi_syari": "Ashabah (Sisa)",
+                "porsi_frac": Fraction(anak_puan * 1, total_saham) * sisa_frac if sisa_frac > 0 else Fraction(0, 1),
+                "nominal_total": total_anak_puan_rp,
+                "nominal_per_orang": total_anak_puan_rp / anak_puan if anak_puan > 0 else 0
+            })
+    elif ayah_tipe in ['ashabah', 'fardh_ashabah'] and sisa_frac > 0:
+        sisa_rp = float(sisa_frac) * tirkah_bersih
+        for h in hasil_ahli:
+            if h['key'] == 'ayah':
+                if ayah_tipe == 'ashabah':
+                    h['nominal_total'] = sisa_rp
+                    h['nominal_per_orang'] = sisa_rp
+                    h['porsi_frac'] = sisa_frac
+                else:
+                    fardh_rp = float(h['porsi_frac']) * tirkah_bersih
+                    h['nominal_total'] = fardh_rp + sisa_rp
+                    h['nominal_per_orang'] = h['nominal_total']
+                    h['porsi_frac'] = h['porsi_frac'] + sisa_frac
+
+    # Kaidah 'Aul & Radd
+    if not anak_laki and ayah_tipe != 'ashabah':
+        if total_fardh > Fraction(1, 1):
+            catatan_kaidah = f"Kaidah 'Aul diterapkan: Total furudh ({total_fardh.numerator}/{total_fardh.denominator}) melebihi 1, bagian disesuaikan secara proporsional."
+            for h in hasil_ahli:
+                if h.get('porsi_frac', Fraction(0, 1)) > 0:
+                    p_baru = h['porsi_frac'] / total_fardh
+                    h['porsi_frac'] = p_baru
+                    h['porsi_syari'] += f" ('Aul: {p_baru.numerator}/{p_baru.denominator})"
+                    h['nominal_total'] = float(p_baru) * tirkah_bersih
+                    h['nominal_per_orang'] = h['nominal_total'] / h['jumlah']
+        elif total_fardh < Fraction(1, 1) and sisa_frac > 0 and ayah_tipe != 'fardh_ashabah':
+            ahli_radd = [h for h in hasil_ahli if h['key'] not in ['suami', 'istri'] and h.get('porsi_frac', Fraction(0, 1)) > 0]
+            if ahli_radd:
+                total_radd_frac = sum(h['porsi_frac'] for h in ahli_radd)
+                catatan_kaidah = f"Kaidah Radd diterapkan: Sisa harta ({sisa_frac.numerator}/{sisa_frac.denominator}) dikembalikan proporsional kepada ahli waris nasabiah."
+                sisa_rp = float(sisa_frac) * tirkah_bersih
+                for h in ahli_radd:
+                    rasio = h['porsi_frac'] / total_radd_frac
+                    tambah_rp = float(rasio) * sisa_rp
+                    h['nominal_total'] = (float(h['porsi_frac']) * tirkah_bersih) + tambah_rp
+                    h['nominal_per_orang'] = h['nominal_total'] / h['jumlah']
+                    h['porsi_syari'] += " (+ Radd)"
+
+    for h in hasil_ahli:
+        if 'nominal_total' not in h:
+            nom_tot = float(h.get('porsi_frac', Fraction(0, 1))) * tirkah_bersih
+            h['nominal_total'] = nom_tot
+            h['nominal_per_orang'] = nom_tot / h['jumlah']
+
+    for h in hasil_ahli:
+        h['porsi_desimal'] = round(float(h.get('porsi_frac', 0)), 4)
+        h['persen'] = f"{h['porsi_desimal'] * 100:.2f}%"
+        h.pop('porsi_frac', None)
+
+    total_terbagi = sum(h['nominal_total'] for h in hasil_ahli)
+
+    return {
+        "status": "ok",
+        "ringkasan": {
+            "tirkah_kotor": tirkah_kotor,
+            "kewajiban": kewajiban,
+            "wasiat": wasiat_disetujui,
+            "catatan_wasiat": catatan_wasiat,
+            "tirkah_bersih": tirkah_bersih,
+            "total_fardh": f"{total_fardh.numerator}/{total_fardh.denominator}",
+            "catatan_kaidah": catatan_kaidah
+        },
+        "daftar_ahli": hasil_ahli,
+        "total_terbagi": round(total_terbagi, 2)
+    }
 
 
 @app.route("/rating", methods=["POST"])
@@ -395,7 +806,7 @@ def hapus_admin():
 
 
 @app.route("/admin/ganti-password", methods=["POST"])
-@owner_required
+@admin_required
 def ganti_password():
     data    = request.json or {}
     pw_lama = data.get("pw_lama", "")
@@ -410,6 +821,17 @@ def ganti_password():
     if not check_password_hash(user.password, pw_lama):
         return jsonify({"error": "Password lama salah."}), 403
     user.password = generate_password_hash(pw_baru)
+    db.session.commit()
+    return jsonify({"status": "ok"})
+
+
+@app.route("/hapus/<int:pid>", methods=["POST"])
+@admin_required
+def hapus_data(pid):
+    p = db.session.get(Percakapan, pid)
+    if not p:
+        return jsonify({"error": "Data tidak ditemukan."}), 404
+    db.session.delete(p)
     db.session.commit()
     return jsonify({"status": "ok"})
 
