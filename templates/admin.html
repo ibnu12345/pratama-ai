@@ -859,7 +859,7 @@
                 </div>
                 <div class="sc-angka">{{ total }}</div>
                 <div class="sc-label">Total Percakapan Belajar</div>
-                <div class="sc-subinfo"><span>📈</span> Rata-rata {{ (total / (total_pengguna or 1))|round(1) }} chat / siswa</div>
+                <div class="sc-subinfo"><span><i data-lucide="trending-up" style="width:12px;height:12px;vertical-align:-1px;margin-right:3px;"></i></span>Rata-rata {{ (total / (total_pengguna or 1))|round(1) }} chat / siswa</div>
             </div>
 
             <!-- 2. Partisipan Riset -->
@@ -870,7 +870,7 @@
                 </div>
                 <div class="sc-angka">{{ total_pengguna }}</div>
                 <div class="sc-label">Responden Siswa / Pengguna</div>
-                <div class="sc-subinfo"><span>🎓</span> Tersebar di 3 kategori peran</div>
+                <div class="sc-subinfo"><span><i data-lucide="graduation-cap" style="width:12px;height:12px;vertical-align:-1px;margin-right:3px;"></i></span>Tersebar di 3 kategori peran</div>
             </div>
 
             <!-- 3. Evaluasi Kuis -->
@@ -980,7 +980,7 @@
                         {% endfor %}
                     {% else %}
                         <div style="text-align:center;padding:24px 0;color:#94a3b8;font-size:12.5px;">
-                            🎯 Belum ada data pengerjaan kuis materi PAI.
+                            Belum ada data pengerjaan kuis materi PAI.
                         </div>
                     {% endif %}
                 </div>
@@ -1028,7 +1028,7 @@
     <!-- PENGGUNA -->
     <div id="tab-pengguna" class="tab-content">
         <div class="section">
-            <div class="section-head"><h2>👥 Daftar Pengguna</h2><span>Klik kartu untuk melihat riwayat chat & kuis</span></div>
+            <div class="section-head"><h2><i data-lucide="users" style="width:16px;height:16px;vertical-align:-2px;margin-right:5px;"></i>Daftar Pengguna</h2><span>Klik kartu untuk melihat riwayat chat & kuis</span></div>
             {% if pengguna_list %}
             <div class="search-filter-wrap">
                 <div class="search-box">
@@ -1037,24 +1037,24 @@
                 </div>
                 <div class="filter-pills" id="filterPeranPills">
                     <button class="filter-pill aktif" onclick="setPeranPengguna('semua', this)">Semua ({{ pengguna_list|length }})</button>
-                    <button class="filter-pill" onclick="setPeranPengguna('Siswa', this)">🎒 Siswa</button>
-                    <button class="filter-pill" onclick="setPeranPengguna('Mahasiswa', this)">🎓 Mahasiswa</button>
-                    <button class="filter-pill" onclick="setPeranPengguna('Umum', this)">👤 Umum</button>
+                    <button class="filter-pill" onclick="setPeranPengguna('Siswa', this)"><i data-lucide="backpack" style="width:13px;height:13px;vertical-align:-1px;margin-right:3px;"></i>Siswa</button>
+                    <button class="filter-pill" onclick="setPeranPengguna('Mahasiswa', this)"><i data-lucide="graduation-cap" style="width:13px;height:13px;vertical-align:-1px;margin-right:3px;"></i>Mahasiswa</button>
+                    <button class="filter-pill" onclick="setPeranPengguna('Umum', this)"><i data-lucide="user" style="width:13px;height:13px;vertical-align:-1px;margin-right:3px;"></i>Umum</button>
                 </div>
             </div>
             <div class="pengguna-grid" id="gridPengguna">
                 {% for p in pengguna_list %}
-                <div class="pengguna-card" data-peran="{{ p.peran_user or 'Umum' }}" onclick="lihatRiwayat('{{ p.nama_user|replace("'","\\'") }}')">
+                <div class="pengguna-card" data-peran="{{ 'Umum' if 'umum' in (p.peran_user or '').lower() else (p.peran_user or 'Umum') }}" onclick="lihatRiwayat('{{ p.nama_user|replace("'","\\'") }}')">
                     <div class="nama">{{ p.nama_user or 'Anonim' }}</div>
                     <div class="info-tag">
-                        {% if p.peran_user=='Siswa' %}<span class="tag tag-siswa">🎒 Siswa</span>
-                        {% elif p.peran_user=='Mahasiswa' %}<span class="tag tag-mhs">🎓 Mahasiswa</span>
-                        {% else %}<span class="tag tag-umum">👤 {{ p.peran_user or 'Umum' }}</span>{% endif %}
+                        {% if p.peran_user=='Siswa' %}<span class="tag tag-siswa"><i data-lucide="backpack" style="width:11px;height:11px;vertical-align:-1px;margin-right:2px;"></i>Siswa</span>
+                        {% elif p.peran_user=='Mahasiswa' %}<span class="tag tag-mhs"><i data-lucide="graduation-cap" style="width:11px;height:11px;vertical-align:-1px;margin-right:2px;"></i>Mahasiswa</span>
+                        {% else %}<span class="tag tag-umum"><i data-lucide="user" style="width:11px;height:11px;vertical-align:-1px;margin-right:2px;"></i>{{ p.peran_user or 'Umum' }}</span>{% endif %}
                     </div>
                     <div class="stats-mini">
-                        <span class="stat-mini">💬 {{ p.jumlah_chat }}</span>
-                        <span class="stat-mini">🎯 {{ p.jumlah_kuis }}</span>
-                        <span class="stat-mini">🕐 {{ p.terakhir_aktif.strftime('%d/%m/%y') }}</span>
+                        <span class="stat-mini"><i data-lucide="message-square" style="width:11px;height:11px;vertical-align:-1px;margin-right:2px;"></i>{{ p.jumlah_chat }}</span>
+                        <span class="stat-mini"><i data-lucide="help-circle" style="width:11px;height:11px;vertical-align:-1px;margin-right:2px;"></i>{{ p.jumlah_kuis }}</span>
+                        <span class="stat-mini"><i data-lucide="clock" style="width:11px;height:11px;vertical-align:-1px;margin-right:2px;"></i>{{ p.terakhir_aktif.strftime('%d/%m/%y') }}</span>
                     </div>
                     <button class="hapus-pengguna-btn" onclick="event.stopPropagation();hapusPengguna('{{ p.nama_user|replace("'","\\'") }}')"><i data-lucide="trash-2" style="width:12px;height:12px;vertical-align:-1px;margin-right:3px;"></i>Hapus Semua Data</button>
                 </div>
@@ -1068,7 +1068,7 @@
     <!-- PERCAKAPAN -->
     <div id="tab-percakapan" class="tab-content">
         <div class="section">
-            <div class="section-head"><h2>💬 Riwayat Percakapan</h2><span>20 terbaru</span></div>
+            <div class="section-head"><h2><i data-lucide="messages-square" style="width:16px;height:16px;vertical-align:-2px;margin-right:5px;"></i>Riwayat Percakapan</h2><span>20 terbaru</span></div>
             {% if terbaru %}
             <div class="search-filter-wrap">
                 <div class="search-box">
@@ -1089,14 +1089,14 @@
                 <tr id="row-{{ p.id }}" data-rating="{{ p.rating or 0 }}">
                     <td>{{ p.id }}</td>
                     <td style="font-weight:600;color:var(--hijau-tua);white-space:nowrap;cursor:pointer;" onclick="lihatRiwayat('{{ p.nama_user|replace("'","\\'") }}')">{{ p.nama_user }}</td>
-                    <td>{% if p.is_kuis %}<span class="tag tag-kuis">🎯 Kuis</span>{% else %}<span class="tag tag-chat">💬 Chat</span>{% endif %}</td>
+                    <td>{% if p.is_kuis %}<span class="tag tag-kuis"><i data-lucide="help-circle" style="width:11px;height:11px;vertical-align:-1px;margin-right:2px;"></i>Kuis</span>{% else %}<span class="tag tag-chat"><i data-lucide="message-square" style="width:11px;height:11px;vertical-align:-1px;margin-right:2px;"></i>Chat</span>{% endif %}</td>
                     <td class="col-teks" title="{{ p.pertanyaan }}">{{ p.pertanyaan }}</td>
                     <td class="col-teks" title="{{ p.jawaban }}">{{ p.jawaban }}</td>
                     <td>{% if p.rating %}<span class="stars-on">{{ '★'*p.rating }}</span>{% else %}<span style="color:#ccc">-</span>{% endif %}</td>
                     <td class="col-waktu">{{ p.waktu.strftime('%d/%m/%y %H:%M') }}</td>
                     <td style="white-space:nowrap;">
                         <button class="btn-aksi btn-edit" onclick="bukaEdit({{ p.id }},'{{ p.nama_user|replace("'","\\'") }}',`{{ p.pertanyaan|replace('`','\\`')|replace('\n',' ')|truncate(300,True,'') }}`,`{{ p.jawaban|replace('`','\\`')|replace('\n',' ')|truncate(300,True,'') }}`)">✏ Edit</button>
-                        <button class="btn-aksi btn-hapus" onclick="hapusData({{ p.id }})">🗑</button>
+                        <button class="btn-aksi btn-hapus" onclick="hapusData({{ p.id }})" title="Hapus"><i data-lucide="trash-2" style="width:12px;height:12px;"></i></button>
                     </td>
                 </tr>{% endfor %}
                 </tbody>
@@ -1110,13 +1110,13 @@
     <!-- KUIS -->
     <div id="tab-kuis" class="tab-content">
         <div class="stats" style="grid-template-columns:repeat(3,1fr);">
-            <div class="stat-card"><div class="ikon">🎯</div><div class="angka">{{ total_kuis }}</div><div class="label">Total Sesi Kuis</div></div>
-            <div class="stat-card"><div class="ikon">📚</div><div class="angka">{{ kuis_per_topik|length }}</div><div class="label">Topik Dikerjakan</div></div>
-            <div class="stat-card"><div class="ikon">👥</div><div class="angka">{{ pengguna_list|selectattr('jumlah_kuis','gt',0)|list|length }}</div><div class="label">Peserta Kuis</div></div>
+            <div class="stat-card"><div class="ikon"><i data-lucide="help-circle" style="width:24px;height:24px;color:var(--hijau-mid);"></i></div><div class="angka">{{ total_kuis }}</div><div class="label">Total Sesi Kuis</div></div>
+            <div class="stat-card"><div class="ikon"><i data-lucide="book-open" style="width:24px;height:24px;color:var(--emas);"></i></div><div class="angka">{{ kuis_per_topik|length }}</div><div class="label">Topik Dikerjakan</div></div>
+            <div class="stat-card"><div class="ikon"><i data-lucide="users" style="width:24px;height:24px;color:#2e7d32;"></i></div><div class="angka">{{ pengguna_list|selectattr('jumlah_kuis','gt',0)|list|length }}</div><div class="label">Peserta Kuis</div></div>
         </div>
         {% if kuis_per_topik %}
         <div class="section">
-            <div class="section-head"><h2>📊 Statistik per Topik</h2></div>
+            <div class="section-head"><h2><i data-lucide="bar-chart-2" style="width:16px;height:16px;vertical-align:-2px;margin-right:5px;"></i>Statistik per Topik</h2></div>
             {% set mk2=[1] %}{% for t in kuis_per_topik %}{% if t.jumlah>mk2[0] %}{% set _=mk2.append(t.jumlah) %}{% endif %}{% endfor %}
             {% for t in kuis_per_topik %}
             <div class="bar-row">
@@ -1126,7 +1126,7 @@
             </div>{% endfor %}
         </div>{% endif %}
         <div class="section">
-            <div class="section-head"><h2>🎯 Riwayat Jawaban Kuis</h2><span>Klik nama pengguna untuk detail</span></div>
+            <div class="section-head"><h2><i data-lucide="check-square" style="width:16px;height:16px;vertical-align:-2px;margin-right:5px;"></i>Riwayat Jawaban Kuis</h2><span>Klik nama pengguna untuk detail</span></div>
             {% if kuis_terbaru %}
             <div class="search-filter-wrap">
                 <div class="search-box">
@@ -1157,7 +1157,7 @@
                         {% else %}<span style="color:#ccc;font-size:11px;">-</span>{% endif %}
                     </td>
                     <td class="col-waktu">{{ p.waktu.strftime('%d/%m/%y %H:%M') }}</td>
-                    <td><button class="btn-aksi btn-hapus" onclick="hapusData({{ p.id }})">🗑</button></td>
+                    <td><button class="btn-aksi btn-hapus" onclick="hapusData({{ p.id }})" title="Hapus"><i data-lucide="trash-2" style="width:12px;height:12px;"></i></button></td>
                 </tr>{% endfor %}
                 </tbody>
             </table>
@@ -1171,7 +1171,7 @@
     {% if admin_role == 'owner' %}
     <div id="tab-kelola-admin" class="tab-content">
         <div class="section">
-            <div class="section-head"><h2>🛡️ Daftar Admin</h2><span>{{ daftar_admin|length }} admin aktif</span></div>
+            <div class="section-head"><h2><i data-lucide="shield" style="width:16px;height:16px;vertical-align:-2px;margin-right:5px;"></i>Daftar Admin</h2><span>{{ daftar_admin|length }} admin aktif</span></div>
             <div id="alertSukses" class="alert-sukses"></div>
             <div id="alertError" class="alert-error"></div>
             {% if daftar_admin %}
@@ -1179,14 +1179,14 @@
                 {% for a in daftar_admin %}
                 <div class="admin-card" id="admin-card-{{ a.id }}">
                     <div class="info">
-                        <div class="admin-avatar">👤</div>
+                        <div class="admin-avatar"><i data-lucide="user-check" style="width:18px;height:18px;color:var(--hijau-mid);"></i></div>
                         <div>
                             <div class="username">{{ a.username }}</div>
                             <div class="sejak">Dibuat {{ a.dibuat.strftime('%d/%m/%Y') }}</div>
                             <span class="tag tag-admin-role" style="margin-top:4px;">Admin</span>
                         </div>
                     </div>
-                    <button class="btn-aksi btn-hapus" onclick="hapusAdmin({{ a.id }}, '{{ a.username }}')">🗑 Hapus</button>
+                    <button class="btn-aksi btn-hapus" onclick="hapusAdmin({{ a.id }}, '{{ a.username }}')"><i data-lucide="trash-2" style="width:12px;height:12px;vertical-align:-1px;margin-right:3px;"></i>Hapus</button>
                 </div>
                 {% endfor %}
             </div>
@@ -1213,7 +1213,7 @@
         </div>
 
         <div class="section">
-            <div class="section-head"><h2>🔑 Ganti Password Owner</h2><span>Hanya berlaku untuk akun Anda sendiri</span></div>
+            <div class="section-head"><h2><i data-lucide="key" style="width:16px;height:16px;vertical-align:-2px;margin-right:5px;"></i>Ganti Password Owner</h2><span>Hanya berlaku untuk akun Anda sendiri</span></div>
             <div class="tambah-admin-form" style="background:#fff8e8;border-color:rgba(201,168,76,0.3);">
                 <div class="form-row">
                     <div class="form-group-sm">
@@ -1224,7 +1224,7 @@
                         <label>Password Baru</label>
                         <input type="password" id="pwBaru" placeholder="Min. 6 karakter">
                     </div>
-                    <button class="btn-tambah" style="background:var(--emas);" onclick="gantiPassword()">🔑 Ganti</button>
+                    <button class="btn-tambah" style="background:var(--emas);" onclick="gantiPassword()"><i data-lucide="key" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;"></i>Ganti</button>
                 </div>
             </div>
         </div>
@@ -1251,7 +1251,7 @@
         </div>
         <div class="modal-footer">
             <button class="btn-batal-m" onclick="tutupModal('modalEdit')">Batal</button>
-            <button class="btn-simpan" onclick="simpanEdit()">💾 Simpan</button>
+            <button class="btn-simpan" onclick="simpanEdit()"><i data-lucide="save" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;"></i>Simpan</button>
         </div>
     </div>
 </div>
@@ -1275,7 +1275,7 @@
 <!-- MODAL KONFIRMASI MODERN -->
 <div id="modalKonfirmasi" class="modal-confirm-overlay">
     <div class="modal-confirm-box">
-        <div class="modal-confirm-icon" id="confirmIcon">🗑️</div>
+        <div class="modal-confirm-icon" id="confirmIcon"><i data-lucide="alert-triangle" style="width:30px;height:30px;color:var(--merah);"></i></div>
         <h3 id="confirmTitle">Konfirmasi Hapus</h3>
         <p id="confirmDesc">Apakah Anda yakin ingin menghapus data ini?</p>
         <div id="confirmSafetyWrap" class="confirm-safety-box">
@@ -1294,7 +1294,7 @@
 <!-- MODAL GANTI PASSWORD MANDIRI -->
 <div id="modalGantiPassword" class="modal-pwd-overlay">
     <div class="modal-pwd-box">
-        <h3>🔑 Ganti Password Akun</h3>
+        <h3><i data-lucide="key" style="width:18px;height:18px;vertical-align:-3px;margin-right:6px;color:var(--hijau-mid);"></i>Ganti Password Akun</h3>
         <div class="sub">Ubah password akun Anda ({{ admin_username }})</div>
         <div class="form-group">
             <label>Password Lama</label>
@@ -1344,7 +1344,15 @@ function filterPengguna() {
         const nama = (card.querySelector('.nama')?.textContent || '').toLowerCase();
         const peran = (card.dataset.peran || '').toLowerCase();
         const matchText = !q || nama.includes(q);
-        const matchPeran = peranAktif === 'semua' || peran === peranAktif.toLowerCase();
+        const pAktif = peranAktif.toLowerCase();
+        let matchPeran = (pAktif === 'semua');
+        if (!matchPeran) {
+            if (pAktif === 'umum') {
+                matchPeran = peran.includes('umum');
+            } else {
+                matchPeran = (peran === pAktif || peran.includes(pAktif));
+            }
+        }
         if (matchText && matchPeran) {
             card.style.display = '';
             visible++;
@@ -1449,10 +1457,10 @@ function tampilAlert(tipe, pesan) {
 // ===== CUSTOM MODAL KONFIRMASI =====
 let pendingConfirmAction = null;
 
-function bukaKonfirmasi({ title, desc, icon = '🗑️', requireCheck = false, onConfirm }) {
+function bukaKonfirmasi({ title, desc, icon = '<i data-lucide="trash-2" style="width:30px;height:30px;color:var(--merah);"></i>', requireCheck = false, onConfirm }) {
     document.getElementById('confirmTitle').textContent = title || 'Konfirmasi Tindakan';
     document.getElementById('confirmDesc').textContent = desc || 'Apakah Anda yakin ingin melanjutkan?';
-    document.getElementById('confirmIcon').textContent = icon;
+    document.getElementById('confirmIcon').innerHTML = icon; if(window.lucide) lucide.createIcons();
     
     const safetyWrap = document.getElementById('confirmSafetyWrap');
     const safetyCheck = document.getElementById('confirmSafetyCheck');
@@ -1494,7 +1502,7 @@ function hapusData(id) {
     bukaKonfirmasi({
         title: 'Hapus Data Percakapan?',
         desc: `Data percakapan #${id} akan dihapus permanen dari sistem database.`,
-        icon: '🗑️',
+        icon: '<i data-lucide="trash-2" style="width:30px;height:30px;color:var(--merah);"></i>',
         requireCheck: false,
         onConfirm: async () => {
             try {
@@ -1582,9 +1590,9 @@ async function simpanEdit() {
 
 // ===== RIWAYAT PENGGUNA =====
 async function lihatRiwayat(nama) {
-    document.getElementById('riwayatJudul').textContent=`📋 Riwayat: ${nama}`;
+    document.getElementById('riwayatJudul').innerHTML=`<i data-lucide="clipboard-list" style="width:16px;height:16px;vertical-align:-2px;margin-right:5px;"></i>Riwayat: ${escHtml(nama)}`; if(window.lucide) lucide.createIcons();
     document.getElementById('riwayatBody').innerHTML='<div style="text-align:center;color:#aaa;padding:40px;">⏳ Memuat data...</div>';
-    document.getElementById('modalRiwayat').classList.add('show');
+    document.getElementById('modalRiwayat').classList.add('show'); if(window.lucide) setTimeout(()=>lucide.createIcons(), 10);
 
     try {
         const r=await fetch(`/pengguna-riwayat?nama=${encodeURIComponent(nama)}`);
@@ -1604,15 +1612,15 @@ async function lihatRiwayat(nama) {
 
         let html=`
         <div class="user-stat-grid">
-            <div class="user-stat"><div class="num">${chats.length}</div><div class="lbl">💬 Chat</div></div>
-            <div class="user-stat"><div class="num">${kuiss.length}</div><div class="lbl">🎯 Kuis</div></div>
+            <div class="user-stat"><div class="num">${chats.length}</div><div class="lbl"><i data-lucide="message-square" style="width:11px;height:11px;vertical-align:-1px;margin-right:3px;"></i>Chat</div></div>
+            <div class="user-stat"><div class="num">${kuiss.length}</div><div class="lbl"><i data-lucide="help-circle" style="width:11px;height:11px;vertical-align:-1px;margin-right:3px;"></i>Kuis</div></div>
             <div class="user-stat"><div class="num">${avgR}</div><div class="lbl">⭐ Avg Rating</div></div>
         </div>`;
 
         if(kuiss.length>0){
             const akurasi=benar+salah>0?Math.round(benar/(benar+salah)*100):'-';
             html+=`<div class="kuis-stat-bar">
-                <span style="font-size:13px;font-weight:700;color:var(--hijau-tua);">🎯 Statistik Kuis</span>
+                <span style="font-size:13px;font-weight:700;color:var(--hijau-tua);"><i data-lucide="award" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;"></i>Statistik Kuis</span>
                 <span class="tag tag-benar">✓ ${benar} Benar</span>
                 <span class="tag tag-salah">✗ ${salah} Salah</span>
                 <span style="font-size:12px;color:#555;">Akurasi: <b>${akurasi}%</b></span>
@@ -1629,8 +1637,8 @@ async function lihatRiwayat(nama) {
         data.forEach(item=>{
             const jenisKls=item.is_kuis?'kuis':'chat';
             const jenisTag=item.is_kuis
-                ?`<span class="tag tag-kuis">🎯 ${escHtml(item.topik_kuis||'Kuis')} · ${escHtml(item.level_kuis||'')}</span>`
-                :`<span class="tag tag-chat">💬 Chat</span>`;
+                ?`<span class="tag tag-kuis"><i data-lucide="help-circle" style="width:11px;height:11px;vertical-align:-1px;margin-right:3px;"></i>${escHtml(item.topik_kuis||'Kuis')} · ${escHtml(item.level_kuis||'')}</span>`
+                :`<span class="tag tag-chat"><i data-lucide="message-square" style="width:11px;height:11px;vertical-align:-1px;margin-right:3px;"></i>Chat</span>`;
             const hasilTag=item.is_kuis
                 ?(item.skor_kuis===1?'<span class="tag tag-benar">✓ Benar</span>':item.skor_kuis===0?'<span class="tag tag-salah">✗ Salah</span>':'')
                 :(item.rating?`<span style="color:#f5a623;font-size:13px;">${'★'.repeat(item.rating)}</span>`:'');
@@ -1640,7 +1648,7 @@ async function lihatRiwayat(nama) {
                 <div class="riwayat-q">${escHtml(item.pertanyaan)}</div>
                 <div class="riwayat-a">${escHtml(item.jawaban)}</div>
                 <div class="riwayat-aksi">
-                    <button class="btn-aksi btn-hapus" onclick="hapusDariModal(${item.id})">🗑 Hapus</button>
+                    <button class="btn-aksi btn-hapus" onclick="hapusDariModal(${item.id})"><i data-lucide="trash-2" style="width:11px;height:11px;vertical-align:-1px;margin-right:3px;"></i>Hapus</button>
                 </div>
             </div>`;
         });
@@ -1668,7 +1676,7 @@ function hapusDariModal(id) {
     bukaKonfirmasi({
         title: 'Hapus Item Riwayat?',
         desc: `Data #${id} akan dihapus secara permanen.`,
-        icon: '🗑️',
+        icon: '<i data-lucide="trash-2" style="width:30px;height:30px;color:var(--merah);"></i>',
         requireCheck: false,
         onConfirm: async () => {
             try {
@@ -1770,14 +1778,14 @@ async function tambahAdmin() {
             const today = new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'2-digit',year:'numeric'});
             card.innerHTML = `
                 <div class="info">
-                    <div class="admin-avatar">👤</div>
+                    <div class="admin-avatar"><i data-lucide="user-check" style="width:18px;height:18px;color:var(--hijau-mid);"></i></div>
                     <div>
                         <div class="username">${escHtml(username)}</div>
                         <div class="sejak">Dibuat ${today}</div>
                         <span class="tag tag-admin-role" style="margin-top:4px;">Admin</span>
                     </div>
                 </div>
-                <button class="btn-aksi btn-hapus" onclick="hapusAdmin(${d.id},'${escHtml(username)}')">🗑 Hapus</button>`;
+                <button class="btn-aksi btn-hapus" onclick="hapusAdmin(${d.id},'${escHtml(username)}')"><i data-lucide="trash-2" style="width:12px;height:12px;vertical-align:-1px;margin-right:3px;"></i>Hapus</button>`;
             grid.appendChild(card);
         } else {
             showToast(d.error || 'Gagal menambahkan admin.', 'error');
@@ -1791,7 +1799,7 @@ function hapusAdmin(id, username) {
     bukaKonfirmasi({
         title: 'Hapus Akun Admin?',
         desc: `Akun admin "${username}" akan dicabut aksesnya dan dihapus secara permanen.`,
-        icon: '👤',
+        icon: '<i data-lucide="user-x" style="width:30px;height:30px;color:var(--merah);"></i>',
         requireCheck: false,
         onConfirm: async () => {
             try {

@@ -603,8 +603,8 @@
         .btn-modal-mulai:not(:disabled):hover { background:var(--hijau-tua); }
 
         /* WELCOME SCREEN */
-        .welcome-screen { display:flex; flex-direction:column; align-items:center; justify-content:center; flex:1; padding:32px 20px; text-align:center; }
-        .welcome-card { background:#fff; border-radius:24px; padding:36px 32px; box-shadow:0 4px 24px rgba(26,74,46,0.10); max-width:520px; width:100%; border:1px solid rgba(82,183,136,0.15); }
+        .welcome-screen { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:18px 16px 8px; text-align:center; width:100%; flex-shrink:0; }
+        .welcome-card { background:#fff; border-radius:24px; padding:28px 24px 22px; box-shadow:0 4px 24px rgba(26,74,46,0.08); max-width:540px; width:100%; border:1px solid rgba(82,183,136,0.18); margin:0 auto; }
         .welcome-arab { font-family:'Traditional Arabic','Arial Unicode MS',serif; font-size:32px; color:var(--hijau-tua); direction:rtl; line-height:1.8; margin-bottom:16px; display:block; }
         .welcome-card h2 { font-size:18px; color:var(--hijau-tua); font-weight:700; margin-bottom:8px; }
         .welcome-card p { font-size:12.5px; color:#777; line-height:1.7; margin-bottom:4px; }
@@ -840,7 +840,7 @@
 </div>
 
 <div class="loading" id="loading">
-    <div style="width:30px;height:30px;background:var(--hijau-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;">🕌</div>
+    <div style="width:30px;height:30px;background:#ffffff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.12);overflow:hidden;padding:2px;"><img src="/static/img/logo-icon.png" style="width:100%;height:100%;object-fit:contain;" alt="PratamaAI"></div>
     <div class="loading-bub"><div class="dots"><span></span><span></span><span></span></div></div>
 </div>
 
@@ -912,6 +912,17 @@
 </div>
 
 <script>
+    // ===== UTILITY HELPERS =====
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
     // ===== STATE =====
     let userData = null;
     let modeKuis = false;
@@ -934,8 +945,6 @@
     // ===== WELCOME CHIP =====
     function kirimChip(teks) {
         if (!userData) return;
-        const ws = document.getElementById('welcomeScreen');
-        if (ws) { ws.style.transition='opacity .3s'; ws.style.opacity='0'; setTimeout(()=>ws.remove(),300); }
         tambahBubbleUser(teks);
         kirimKeAI(teks, true);
     }
@@ -979,7 +988,11 @@
         const extra = document.getElementById('inputExtra').value.trim();
         userData = { nama, peran: peranDipilih, extra };
         document.getElementById('overlay').style.display = 'none';
-        document.getElementById('headerUser').innerHTML = `<i data-lucide="user" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;"></i>${escapeHtml(nama)} · ${escapeHtml(peranDipilih)}`; if (window.lucide) lucide.createIcons();
+        document.getElementById('headerUser').innerHTML = `<i data-lucide="user" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;"></i>${escapeHtml(nama)} · ${escapeHtml(peranDipilih)}`; 
+        if (window.lucide) lucide.createIcons();
+
+// Welcome card tetap dipertahankan di atas agar pengantar & chip pertanyaan cepat selalu ada
+
         const konteks = extra ? `${peranDipilih} dari ${extra}` : peranDipilih;
         const sapaan = `Pengguna baru telah login. Nama: ${nama}, Peran: ${konteks}. Sapa dengan salam islami yang hangat, sebut namanya, dan tanya ada yang bisa dibantu hari ini. Ini adalah sapaan pertama, jadi gunakan salam lengkap.`;
         await kirimKeAI(sapaan, false);
@@ -1254,7 +1267,7 @@ Lakukan penilaian:
             <div class="angka">${kuisSkor}/${kuisTotalSoal}</div>
             <div class="label">Skor: ${persen}%</div>
             <div class="pesan">${pesan}</div>
-            <div><span class="btn-ulangi" onclick="mulaiKuis()">🔄 Kuis Lagi</span></div>`;
+            <div><span class="btn-ulangi" onclick="mulaiKuis()"><i data-lucide="rotate-ccw" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;"></i>Kuis Lagi</span></div>`;
         wrap.appendChild(nama);
         wrap.appendChild(skor);
         area.appendChild(wrap);
@@ -1330,8 +1343,7 @@ Lakukan penilaian:
         input.style.height = ''; // Reset tinggi ke ukuran awal (42px di PC, 40px di HP)
         input.style.overflowY = 'hidden';
 
-        const ws = document.getElementById('welcomeScreen');
-        if (ws) { ws.style.transition='opacity .3s'; ws.style.opacity='0'; setTimeout(()=>ws.remove(),300); }
+// Welcome card tetap dipertahankan di atas
 
         if (modeKuis && kuisTahap === 'berlangsung') {
             if (kuisTipe === 'pilgan') {
@@ -1399,6 +1411,7 @@ Lakukan penilaian:
 
             // Sinkronkan dalil Al-Qur'an dengan Mushaf Resmi Kemenag RI
             sinkronkanMushafKemenag(bub);
+            if (window.lucide) setTimeout(() => lucide.createIcons(), 15);
 
             if (rowId && tampilUser && !modeKuis) {
                 tambahRating(wrap, rowId);
@@ -1695,9 +1708,12 @@ Lakukan penilaian:
                         if (!badge) {
                             badge = document.createElement('div');
                             badge.className = 'badge-kemenag';
-                            badge.innerHTML = `✨ Terverifikasi Mushaf Standar Kemenag RI · QS. ${namaSurah}: ${noAyat}`;
+                            badge.innerHTML = `<i data-lucide="badge-check" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;color:#2d6a4f;"></i>Terverifikasi Mushaf Standar Kemenag RI · QS. ${escapeHtml(namaSurah)}: ${noAyat}`;
                             const body = card.querySelector('.dalil-body');
-                            if (body) body.appendChild(badge);
+                            if (body) {
+                                body.appendChild(badge);
+                                if (window.lucide) setTimeout(() => lucide.createIcons(), 10);
+                            }
                         }
                     }
                 }
@@ -1716,13 +1732,13 @@ Lakukan penilaian:
                 window.activeAudio.pause();
                 btn.classList.remove('playing');
                 const ic = btn.querySelector('.btn-icon');
-                if (ic) ic.textContent = '▶';
+                if (ic) { ic.innerHTML = '<i data-lucide="play" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;"></i>'; if(window.lucide) lucide.createIcons(); }
                 return;
             } else {
                 window.activeAudio.play();
                 btn.classList.add('playing');
                 const ic = btn.querySelector('.btn-icon');
-                if (ic) ic.textContent = '⏸';
+                if (ic) { ic.innerHTML = '<i data-lucide="pause" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;"></i>'; if(window.lucide) lucide.createIcons(); }
                 return;
             }
         }
@@ -1732,7 +1748,7 @@ Lakukan penilaian:
             if (window.activeAudioBtn) {
                 window.activeAudioBtn.classList.remove('playing');
                 const ic = window.activeAudioBtn.querySelector('.btn-icon');
-                if (ic) ic.textContent = '▶';
+                if (ic) { ic.innerHTML = '<i data-lucide="play" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;"></i>'; if(window.lucide) lucide.createIcons(); }
             }
         }
 
@@ -1752,7 +1768,7 @@ Lakukan penilaian:
 
         btn.classList.add('playing');
         const ic = btn.querySelector('.btn-icon');
-        if (ic) ic.textContent = '⏸';
+        if (ic) { ic.innerHTML = '<i data-lucide="pause" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;"></i>'; if(window.lucide) lucide.createIcons(); }
 
         audio.play().catch(e => {
             btn.classList.remove('playing');
@@ -1761,7 +1777,7 @@ Lakukan penilaian:
 
         audio.onended = () => {
             btn.classList.remove('playing');
-            if (ic) ic.textContent = '▶';
+            if (ic) { ic.innerHTML = '<i data-lucide="play" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;"></i>'; if(window.lucide) lucide.createIcons(); }
             window.activeAudio = null;
             window.activeAudioBtn = null;
         };
@@ -1773,7 +1789,7 @@ Lakukan penilaian:
         const sub   = document.getElementById('tafsirSub');
         const isi   = document.getElementById('tafsirIsi');
 
-        judul.textContent = `📜 Tafsir QS. ${namaSurah}: ${noAyat}`;
+        judul.innerHTML = `<i data-lucide="book-marked" style="width:18px;height:18px;vertical-align:-3px;margin-right:6px;color:var(--hijau-mid);"></i>Tafsir QS. ${escapeHtml(namaSurah)}: ${noAyat}`; if (window.lucide) lucide.createIcons();
         sub.textContent   = `Kementerian Agama RI · Surah ke-${noSurah}`;
         isi.innerHTML     = `<div style="text-align:center;padding:36px;color:#888;"><div class="dots" style="margin-bottom:8px;"><span></span><span></span><span></span></div>Memuat tafsir Kemenag RI...</div>`;
         modal.classList.add('aktif');
@@ -1856,7 +1872,7 @@ Lakukan penilaian:
                     let dalilCardAttr = '';
                     if (qref) {
                         dalilCardAttr = ` data-surah="${qref.nomor}" data-ayat="${qref.ayatAwal}" data-namasurah="${qref.namaSurah.replace(/"/g, '&quot;')}"`;
-                        sumberBadge = `<span class="sumber sumber-klik" onclick="bukaModalMurottal(${qref.nomor}, ${qref.ayatAwal})" title="Klik untuk lihat Surah & Ayat lengkap">📖 ${sumber} <span style="font-size:10px;opacity:.9;background:rgba(255,255,255,0.28);padding:1px 6px;border-radius:10px;margin-left:4px;">↗ Buka Ayat Lengkap</span></span>`;
+                        sumberBadge = `<span class="sumber sumber-klik" onclick="bukaModalMurottal(${qref.nomor}, ${qref.ayatAwal})" title="Klik untuk lihat Surah & Ayat lengkap"><i data-lucide="book-open" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;"></i>${sumber} <span style="font-size:10px;opacity:.9;background:rgba(255,255,255,0.28);padding:1px 6px;border-radius:10px;margin-left:4px;">↗ Buka Ayat Lengkap</span></span>`;
                         actionHtml = `<div class="dalil-actions">
                             <button class="btn-dalil-act" onclick="putarMurottal(${qref.nomor}, ${qref.ayatAwal}, this)">
                                 <span class="btn-icon"><i data-lucide="play" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;"></i></span> Putar Murottal (QS. ${qref.namaSurah}: ${qref.ayatAwal})
@@ -1866,7 +1882,7 @@ Lakukan penilaian:
                             </button>
                         </div>`;
                     } else if (sumber) {
-                        sumberBadge = `<span class="sumber">📖 ${sumber}</span>`;
+                        sumberBadge = `<span class="sumber"><i data-lucide="book-open" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;"></i>${sumber}</span>`;
                     }
                     html += `<div class="dalil-card"${dalilCardAttr}>
                         <div class="arab-wrap"><span class="arab-teks">${arabTeks}</span></div>
@@ -1890,17 +1906,17 @@ Lakukan penilaian:
                 let extraBtns = '';
                 let sumberHtml = '';
                 if (qref) {
-                    sumberHtml = `<span class="sumber sumber-klik" onclick="bukaModalMurottal(${qref.nomor}, ${qref.ayatAwal})" title="Klik untuk lihat Surah & Ayat lengkap">📖 ${rawSum} <span style="font-size:10px;opacity:.9;background:rgba(255,255,255,0.28);padding:1px 6px;border-radius:10px;margin-left:4px;">↗ Buka Ayat Lengkap</span></span>`;
+                    sumberHtml = `<span class="sumber sumber-klik" onclick="bukaModalMurottal(${qref.nomor}, ${qref.ayatAwal})" title="Klik untuk lihat Surah & Ayat lengkap"><i data-lucide="book-open" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;"></i>${rawSum} <span style="font-size:10px;opacity:.9;background:rgba(255,255,255,0.28);padding:1px 6px;border-radius:10px;margin-left:4px;">↗ Buka Ayat Lengkap</span></span>`;
                     extraBtns = `<div class="dalil-actions" style="margin-top:6px;border-top:none;padding-top:0;">
                         <button class="btn-dalil-act" onclick="putarMurottal(${qref.nomor}, ${qref.ayatAwal}, this)">
-                            <span class="btn-icon">▶</span> Putar Murottal (QS. ${qref.namaSurah}: ${qref.ayatAwal})
+                            <span class="btn-icon"><i data-lucide="play" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;"></i></span> Putar Murottal (QS. ${qref.namaSurah}: ${qref.ayatAwal})
                         </button>
                         <button class="btn-dalil-act" onclick="bukaModalTafsir(${qref.nomor}, ${qref.ayatAwal}, '${qref.namaSurah.replace(/'/g, "\\'")}')">
-                            📜 Baca Tafsir
+                            <i data-lucide="book-marked" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;"></i> Baca Tafsir
                         </button>
                     </div>`;
                 } else {
-                    sumberHtml = `<span class="sumber" style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:var(--hijau-mid);background:var(--hijau-pale);padding:4px 12px;border-radius:20px;">📖 ${rawSum}</span>`;
+                    sumberHtml = `<span class="sumber" style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:var(--hijau-mid);background:var(--hijau-pale);padding:4px 12px;border-radius:20px;"><i data-lucide="book-open" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;"></i>${rawSum}</span>`;
                 }
                 html += `<div style="margin:6px 0 12px;">
                     ${sumberHtml}
@@ -1964,8 +1980,6 @@ Lakukan penilaian:
             </div>`;
         if (userData) {
             const sapaan = `Sapa kembali pengguna bernama ${userData.nama} dengan hangat setelah reset percakapan. Gunakan salam islami.`;
-            const ws = document.getElementById('welcomeScreen');
-            if (ws) ws.remove();
             await kirimKeAI(sapaan, false);
             sudahSalam = true;
         }
@@ -2392,9 +2406,9 @@ Lakukan penilaian:
                 <option value="">Ke Ayat...</option>
             </select>
             <select class="murottal-select select-qari" id="selectQariMurottal" onchange="gantiQariMurottal(this.value)">
-                <option value="05">🎙️ Misyari Rasyid</option>
-                <option value="03">🎙️ As-Sudais</option>
-                <option value="01">🎙️ Al-Juhany</option>
+                <option value="05">Qari Misyari Rasyid</option>
+                <option value="03">Qari As-Sudais</option>
+                <option value="01">Qari Al-Juhany</option>
             </select>
         </div>
 
@@ -2418,9 +2432,9 @@ Lakukan penilaian:
             </div>
         </div>
 
-        <span class="modal-label" style="margin-bottom:8px;">📜 Teks Arab, Latin & Terjemahan:</span>
+        <span class="modal-label" style="margin-bottom:8px;"><i data-lucide="book-open" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;"></i>Teks Arab, Latin & Terjemahan:</span>
         <div class="murottal-ayat-list" id="murottalAyatList">
-            <div style="text-align:center;padding:20px;color:#888;">Memuat ayat... ⏳</div>
+            <div style="text-align:center;padding:20px;color:#888;"><i data-lucide="loader" style="width:16px;height:16px;vertical-align:-3px;margin-right:6px;" class="spin"></i>Memuat ayat...</div>
         </div>
     </div>
 </div>
@@ -2613,10 +2627,10 @@ function renderAyatList(ayats, noSurah, namaSurah, targetAyat) {
                 <span class="mai-no">Ayat ${a.nomorAyat}</span>
                 <div style="display:flex;gap:6px;">
                     <button class="btn-dalil-act" onclick="putarMurottal(${noSurah}, ${a.nomorAyat}, this)">
-                        <span class="btn-icon">▶</span> Putar
+                        <span class="btn-icon"><i data-lucide="play" style="width:13px;height:13px;vertical-align:-1px;margin-right:3px;"></i></span> Putar
                     </button>
                     <button class="btn-dalil-act" onclick="bukaModalTafsir(${noSurah}, ${a.nomorAyat}, '${namaSurah.replace(/'/g, "\'")}')">
-                        📜 Tafsir
+                        <i data-lucide="book-marked" style="width:13px;height:13px;vertical-align:-1px;margin-right:3px;"></i> Tafsir
                     </button>
                 </div>
             </div>
@@ -2624,7 +2638,7 @@ function renderAyatList(ayats, noSurah, namaSurah, targetAyat) {
             <div style="font-size:12px;font-style:italic;color:#666;line-height:1.6;">${a.teksLatin || ''}</div>
             <div class="mai-arti">${a.teksIndonesia || ''}</div>
         </div>
-    `).join('');
+    `).join(''); if (window.lucide) setTimeout(() => lucide.createIcons(), 10);
 
     if (targetAyat) {
         setTimeout(() => {
@@ -2819,7 +2833,7 @@ async function prosesHitungWaris() {
 
     const btn = document.getElementById('btnDoHitungWaris');
     btn.disabled = true;
-    btn.textContent = 'Menghitung Faraidh... ⏳';
+    btn.innerHTML = '<i data-lucide="loader" style="width:16px;height:16px;vertical-align:-2px;margin-right:5px;" class="spin"></i>Menghitung Faraidh...'; if (window.lucide) lucide.createIcons();
 
     const payload = {
         total_harta: totalHarta,
@@ -2847,7 +2861,7 @@ async function prosesHitungWaris() {
         });
         const json = await res.json();
         btn.disabled = false;
-        btn.textContent = '⚖️ Hitung Pembagian Waris Sekarang';
+        btn.innerHTML = '<i data-lucide="scale" style="width:16px;height:16px;vertical-align:-2px;margin-right:5px;"></i>Hitung Pembagian Waris Sekarang'; if (window.lucide) lucide.createIcons();
 
         if (json.status !== 'ok') {
             alert(json.message || 'Gagal menghitung waris.');
@@ -2857,7 +2871,7 @@ async function prosesHitungWaris() {
         tampilkanHasilWaris(json);
     } catch (e) {
         btn.disabled = false;
-        btn.textContent = '⚖️ Hitung Pembagian Waris Sekarang';
+        btn.innerHTML = '<i data-lucide="scale" style="width:16px;height:16px;vertical-align:-2px;margin-right:5px;"></i>Hitung Pembagian Waris Sekarang'; if (window.lucide) lucide.createIcons();
         alert('Terjadi kesalahan koneksi saat menghitung waris.');
     }
 }
@@ -2877,7 +2891,7 @@ function tampilkanHasilWaris(data) {
         catBox.style.display = 'block';
         catBox.innerHTML = `
             ${r.catatan_wasiat ? `<div>⚠️ ${r.catatan_wasiat}</div>` : ''}
-            ${r.catatan_kaidah ? `<div>📌 <b>Kaidah Mawaris:</b> ${r.catatan_kaidah}</div>` : ''}
+            ${r.catatan_kaidah ? `<div><i data-lucide="info" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;color:var(--hijau-mid);"></i><b>Kaidah Mawaris:</b> ${r.catatan_kaidah}</div>` : ''}
         `;
     } else {
         catBox.style.display = 'none';

@@ -900,15 +900,18 @@ def export_csv():
     semua = Percakapan.query.order_by(Percakapan.waktu).all()
     lines = ["ID,Sesi,Nama,Peran,Jenis,Topik Kuis,Level Kuis,Skor Kuis,Pertanyaan,Jawaban,Rating,Waktu"]
     for p in semua:
-        q     = p.pertanyaan.replace('"','""')
-        a     = p.jawaban.replace('"','""')
+        q     = (p.pertanyaan or "").replace('"','""')
+        a     = (p.jawaban or "").replace('"','""')
         r     = p.rating if p.rating else ""
-        w     = p.waktu.strftime("%Y-%m-%d %H:%M:%S")
+        w     = p.waktu.strftime("%Y-%m-%d %H:%M:%S") if p.waktu else ""
         jenis = "Kuis" if p.is_kuis else "Chat"
         topik = p.topik_kuis or ""
         level = p.level_kuis or ""
         skor  = p.skor_kuis if p.skor_kuis is not None else ""
-        lines.append(f'{p.id},"{p.sesi_id[:8]}","{p.nama_user}","{p.peran_user}","{jenis}","{topik}","{level}",{skor},"{q}","{a}",{r},"{w}"')
+        sesi  = p.sesi_id[:8] if p.sesi_id else "-"
+        nama  = (p.nama_user or "Anonim").replace('"','""')
+        peran = (p.peran_user or "").replace('"','""')
+        lines.append(f'{p.id},"{sesi}","{nama}","{peran}","{jenis}","{topik}","{level}",{skor},"{q}","{a}",{r},"{w}"')
     return Response("\n".join(lines), mimetype="text/csv",
         headers={"Content-Disposition":"attachment; filename=data_pratamaai.csv"})
 
@@ -931,14 +934,15 @@ def export_pdf():
             pdf.set_fill_color(220,240,220)
             pdf.cell(0,8,f"Pertanyaan {i}:",ln=True,fill=True)
             pdf.set_font("Helvetica","",10)
-            pdf.multi_cell(0,6,p.pertanyaan)
+            clean_q = (p.pertanyaan or "").encode("latin-1","replace").decode("latin-1")
+            pdf.multi_cell(0,6,clean_q)
             pdf.ln(2)
             pdf.set_font("Helvetica","B",11)
             pdf.set_fill_color(240,240,240)
             pdf.cell(0,8,"Jawaban PratamaAI:",ln=True,fill=True)
             pdf.set_font("Helvetica","",10)
-            clean = p.jawaban.encode("latin-1","replace").decode("latin-1")
-            pdf.multi_cell(0,6,clean)
+            clean_a = (p.jawaban or "").encode("latin-1","replace").decode("latin-1")
+            pdf.multi_cell(0,6,clean_a)
             if p.rating:
                 pdf.set_font("Helvetica","I",9)
                 pdf.cell(0,6,f"Rating: {p.rating}/5",ln=True)
