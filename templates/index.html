@@ -11,6 +11,7 @@
     <link rel="icon" type="image/png" sizes="192x192" href="/static/img/icon-192.png?v=5">
     <link rel="apple-touch-icon" sizes="180x180" href="/static/img/icon-192.png?v=5">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="/static/js/lucide.min.js"></script>
     <style>
         :root {
             --hijau-tua: #1a4a2e;
@@ -672,22 +673,29 @@
             .btn-menu { padding: 0 12px; height: 40px; font-size: 11.5px; border-radius: 20px; }
             .murottal-select.select-ayat { max-width: none; flex: 1; }
             .murottal-select.select-qari { max-width: none; flex: 1; }
+            /* MODAL / POP-UP FLOATING DI HP (Tengah Layar & Nyaman Dilihat) */
             .pusat-overlay {
-                padding: 0 !important;
-                align-items: flex-end !important;
-                overflow-x: hidden !important;
+                padding: 16px !important;
+                align-items: center !important;
+                justify-content: center !important;
+                overflow-y: auto !important;
             }
             .pusat-box-wrap {
-                max-width: 100% !important;
+                max-width: 480px !important;
                 width: 100% !important;
                 padding: 0 !important;
-                overflow-x: hidden !important;
+                border-radius: 24px !important;
+                max-height: 84vh !important;
+                overflow: hidden !important;
+                box-shadow: 0 20px 50px rgba(0,0,0,0.28) !important;
+                margin: auto !important;
             }
             .pusat-box {
-                border-radius: 24px 24px 0 0 !important;
-                padding: 20px 16px !important;
-                padding-bottom: max(20px, env(safe-area-inset-bottom, 20px)) !important;
-                max-height: 85vh !important;
+                border-radius: 24px !important;
+                padding: 20px 18px !important;
+                padding-bottom: 20px !important;
+                max-height: 84vh !important;
+                overflow-y: auto !important;
                 overflow-x: hidden !important;
             }
             .pusat-grid {
@@ -699,8 +707,8 @@
                 border-radius: 16px !important;
             }
             .pk-icon-circle {
-                width: 40px !important;
-                height: 40px !important;
+                width: 42px !important;
+                height: 42px !important;
                 font-size: 20px !important;
             }
             .pusat-header-top h3 {
@@ -714,14 +722,26 @@
             .welcome-card h2 { font-size: 15px; }
             .chip-btn { font-size: 11px; padding: 5px 11px; }
 
-            /* Modal fullscreen di HP */
-            .modal-overlay { padding: 0; align-items: flex-end; }
+            /* Pop-up / Dialog di HP: Terapung di Tengah Layar Proporsional */
+            .modal-overlay {
+                padding: 16px !important;
+                align-items: center !important;
+                justify-content: center !important;
+                overflow-y: auto !important;
+            }
             .modal-box {
-                border-radius: 20px 20px 0 0;
-                max-width: 100%;
-                max-height: 88vh;
-                padding: 22px 18px;
-                padding-bottom: max(22px, env(safe-area-inset-bottom, 22px));
+                border-radius: 24px !important;
+                max-width: 480px !important;
+                width: 100% !important;
+                max-height: 85vh !important;
+                padding: 24px 20px !important;
+                box-shadow: 0 20px 50px rgba(0,0,0,0.28) !important;
+                margin: auto !important;
+            }
+            #modalSegeraHadir .modal-box {
+                max-width: 350px !important;
+                width: 100% !important;
+                padding: 28px 22px 24px !important;
             }
 
             /* Kuis grid 1 kolom di HP kecil */
@@ -732,6 +752,15 @@
 
             /* Footer tidak ditampilkan di HP */
             .footer { display: none; }
+        }
+
+        /* LUCIDE VECTOR ICONS */
+        i[data-lucide], svg.lucide {
+            display: inline-block;
+            vertical-align: middle;
+            stroke-width: 2px;
+            stroke: currentColor;
+            fill: none;
         }
 
         /* iPhone X+ safe area */
@@ -757,9 +786,9 @@
         <input type="text" id="inputNama" placeholder="Masukkan nama Anda..." />
         <label>Saya adalah</label>
         <div class="bubble-group" id="grupPeran">
-            <div class="bubble-pilih" onclick="pilihPeran('Pengguna Umum', this)">👤 Pengguna Umum</div>
-            <div class="bubble-pilih" onclick="pilihPeran('Siswa', this)">🎒 Siswa</div>
-            <div class="bubble-pilih" onclick="pilihPeran('Mahasiswa', this)">🎓 Mahasiswa</div>
+            <div class="bubble-pilih" onclick="pilihPeran('Pengguna Umum', this)"><i data-lucide="user" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;"></i>Pengguna Umum</div>
+            <div class="bubble-pilih" onclick="pilihPeran('Siswa', this)"><i data-lucide="backpack" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;"></i>Siswa</div>
+            <div class="bubble-pilih" onclick="pilihPeran('Mahasiswa', this)"><i data-lucide="graduation-cap" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;"></i>Mahasiswa</div>
         </div>
         <div id="extraField" style="display:none;">
             <label id="extraLabel">Nama Sekolah</label>
@@ -767,7 +796,7 @@
         </div>
         <button class="btn-mulai" id="btnMulai" onclick="mulaiChat()" disabled>Mulai Belajar →</button>
         <div class="auth-admin-link">
-            <a href="/admin/login">🔐 Masuk sebagai Admin / Pengajar →</a>
+            <a href="/admin/login"><i data-lucide="shield-check" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;"></i>Masuk sebagai Admin / Pengajar →</a>
         </div>
     </div>
 </div>
@@ -782,11 +811,11 @@
         </div>
     </div>
     <div class="header-right">
-        <span class="kuis-badge" id="kuisBadge">🎯 Kuis Aktif</span>
+        <span class="kuis-badge" id="kuisBadge"><i data-lucide="award" style="width:12px;height:12px;vertical-align:-1px;margin-right:4px;"></i>Kuis Aktif</span>
         <div class="header-user" id="headerUser"></div>
-        <button class="btn-hdr" onclick="exportPDF()" title="Unduh PDF">⬇<span class="lbl"> PDF</span></button>
-        <button class="btn-hdr" onclick="resetChat()" title="Reset percakapan">↺<span class="lbl"> Reset</span></button>
-        <a class="btn-hdr btn-admin" href="/admin/login" title="Admin Panel">🔐<span class="lbl"> Admin</span></a>
+        <button class="btn-hdr" onclick="exportPDF()" title="Unduh PDF"><i data-lucide="file-down" style="width:14px;height:14px;"></i><span class="lbl" style="margin-left:4px;">PDF</span></button>
+        <button class="btn-hdr" onclick="resetChat()" title="Reset percakapan"><i data-lucide="rotate-ccw" style="width:14px;height:14px;"></i><span class="lbl" style="margin-left:4px;">Reset</span></button>
+        <a class="btn-hdr btn-admin" href="/admin/login" title="Admin Panel"><i data-lucide="shield-check" style="width:14px;height:14px;"></i><span class="lbl" style="margin-left:4px;">Admin</span></a>
     </div>
 </div>
 
@@ -818,8 +847,8 @@
 <!-- INPUT (AUTO-EXPANDING TEXTAREA) -->
 <div class="input-area">
     <textarea id="inputPertanyaan" rows="1" placeholder="Tanyakan seputar Islam..."></textarea>
-    <button class="btn-menu" onclick="bukaPusatFitur()">✨ <span class="lbl">Menu</span></button>
-    <button class="btn-kirim" id="btnKirim">➤</button>
+    <button class="btn-menu" onclick="bukaPusatFitur()"><i data-lucide="sparkles" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;"></i><span class="lbl">Menu</span></button>
+    <button class="btn-kirim" id="btnKirim"><i data-lucide="send" style="width:16px;height:16px;"></i></button>
 </div>
 
 <div class="footer">
@@ -829,24 +858,24 @@
 <!-- MODAL KUIS -->
 <div class="modal-overlay" id="modalKuis">
     <div class="modal-box">
-        <h3>🎯 Mulai Kuis Islam</h3>
+        <h3><i data-lucide="award" style="width:20px;height:20px;vertical-align:-3px;margin-right:6px;color:var(--hijau-mid);"></i>Mulai Kuis Islam</h3>
         <div class="sub">Pilih topik, jumlah soal, tingkat kesulitan, dan tipe soal</div>
 
-        <span class="modal-label">📚 Pilih Topik</span>
+        <span class="modal-label"><i data-lucide="book-open" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;"></i>Pilih Topik</span>
         <div class="kuis-grid" id="kuisTopikGrid">
-            <div class="kuis-opt" onclick="pilihTopikModal('Fiqih', this)">📖 Fiqih</div>
-            <div class="kuis-opt" onclick="pilihTopikModal('Aqidah', this)">🌙 Aqidah</div>
-            <div class="kuis-opt" onclick="pilihTopikModal('Akhlak', this)">💎 Akhlak</div>
-            <div class="kuis-opt" onclick="pilihTopikModal('Sejarah Islam', this)">🏛️ Sejarah Islam</div>
-            <div class="kuis-opt" onclick="pilihTopikModal('Al-Quran & Hadist', this)">📜 Al-Quran & Hadist</div>
-            <div class="kuis-opt" onclick="pilihTopikModal('Pengetahuan Islam Umum', this)">🌟 Pengetahuan Umum</div>
+            <div class="kuis-opt" onclick="pilihTopikModal('Fiqih', this)"><i data-lucide="scale" style="width:15px;height:15px;vertical-align:-2px;margin-right:5px;"></i>Fiqih</div>
+            <div class="kuis-opt" onclick="pilihTopikModal('Aqidah', this)"><i data-lucide="shield" style="width:15px;height:15px;vertical-align:-2px;margin-right:5px;"></i>Aqidah</div>
+            <div class="kuis-opt" onclick="pilihTopikModal('Akhlak', this)"><i data-lucide="heart" style="width:15px;height:15px;vertical-align:-2px;margin-right:5px;"></i>Akhlak</div>
+            <div class="kuis-opt" onclick="pilihTopikModal('Sejarah Islam', this)"><i data-lucide="landmark" style="width:15px;height:15px;vertical-align:-2px;margin-right:5px;"></i>Sejarah Islam</div>
+            <div class="kuis-opt" onclick="pilihTopikModal('Al-Quran & Hadist', this)"><i data-lucide="book" style="width:15px;height:15px;vertical-align:-2px;margin-right:5px;"></i>Al-Quran & Hadist</div>
+            <div class="kuis-opt" onclick="pilihTopikModal('Pengetahuan Islam Umum', this)"><i data-lucide="globe" style="width:15px;height:15px;vertical-align:-2px;margin-right:5px;"></i>Pengetahuan Umum</div>
         </div>
 
-        <span class="modal-label">🔢 Jumlah Soal</span>
+        <span class="modal-label"><i data-lucide="list-ordered" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;"></i>Jumlah Soal</span>
         <div class="level-row" id="kuisJumlahRow">
-            <div class="level-opt" onclick="pilihJumlahModal(5, this)">5️⃣<br><small>5 Soal</small></div>
-            <div class="level-opt" onclick="pilihJumlahModal(10, this)">🔟<br><small>10 Soal</small></div>
-            <div class="level-opt" id="jumlahCustomOpt" onclick="pilihJumlahCustom(this)">✏️<br><small>Custom</small></div>
+            <div class="level-opt" onclick="pilihJumlahModal(5, this)"><span style="font-size:16px;font-weight:700;">5</span><br><small>5 Soal</small></div>
+            <div class="level-opt" onclick="pilihJumlahModal(10, this)"><span style="font-size:16px;font-weight:700;">10</span><br><small>10 Soal</small></div>
+            <div class="level-opt" id="jumlahCustomOpt" onclick="pilihJumlahCustom(this)"><i data-lucide="edit-3" style="width:16px;height:16px;"></i><br><small>Custom</small></div>
         </div>
         <div id="customJumlahWrap" style="display:none;margin-bottom:14px;">
             <input type="number" id="inputJumlahCustom" min="1" max="50" placeholder="Masukkan jumlah soal (1-50)"
@@ -854,22 +883,22 @@
                 oninput="validasiCustomJumlah(this)">
         </div>
 
-        <span class="modal-label">🎯 Tingkat Kesulitan</span>
+        <span class="modal-label"><i data-lucide="gauge" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;"></i>Tingkat Kesulitan</span>
         <div class="level-row" id="kuisLevelRow">
-            <div class="level-opt" onclick="pilihLevelModal('Mudah', this)">😊<br><small>Mudah</small></div>
-            <div class="level-opt" onclick="pilihLevelModal('Menengah', this)">🤔<br><small>Menengah</small></div>
-            <div class="level-opt" onclick="pilihLevelModal('Sulit', this)">🔥<br><small>Sulit</small></div>
+            <div class="level-opt" onclick="pilihLevelModal('Mudah', this)"><i data-lucide="smile" style="width:18px;height:18px;color:#2e7d32;"></i><br><small>Mudah</small></div>
+            <div class="level-opt" onclick="pilihLevelModal('Menengah', this)"><i data-lucide="zap" style="width:18px;height:18px;color:#e65100;"></i><br><small>Menengah</small></div>
+            <div class="level-opt" onclick="pilihLevelModal('Sulit', this)"><i data-lucide="flame" style="width:18px;height:18px;color:#c62828;"></i><br><small>Sulit</small></div>
         </div>
 
-        <span class="modal-label">📝 Tipe Soal</span>
+        <span class="modal-label"><i data-lucide="check-square" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;"></i>Tipe Soal</span>
         <div class="tipe-row" id="kuisTipeRow">
             <div class="tipe-opt" onclick="pilihTipeModal('pilgan', this)">
-                <span class="tipe-ikon">🔘</span>
+                <span class="tipe-ikon"><i data-lucide="check-circle" style="width:18px;height:18px;"></i></span>
                 <div class="tipe-label">Pilihan Ganda</div>
                 <div class="tipe-desc">Pilih jawaban A/B/C/D</div>
             </div>
             <div class="tipe-opt" onclick="pilihTipeModal('esai', this)">
-                <span class="tipe-ikon">✍️</span>
+                <span class="tipe-ikon"><i data-lucide="pen-tool" style="width:18px;height:18px;"></i></span>
                 <div class="tipe-label">Esai</div>
                 <div class="tipe-desc">Jawab dengan kalimat sendiri</div>
             </div>
@@ -950,7 +979,7 @@
         const extra = document.getElementById('inputExtra').value.trim();
         userData = { nama, peran: peranDipilih, extra };
         document.getElementById('overlay').style.display = 'none';
-        document.getElementById('headerUser').textContent = `👤 ${nama} · ${peranDipilih}`;
+        document.getElementById('headerUser').innerHTML = `<i data-lucide="user" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;"></i>${escapeHtml(nama)} · ${escapeHtml(peranDipilih)}`; if (window.lucide) lucide.createIcons();
         const konteks = extra ? `${peranDipilih} dari ${extra}` : peranDipilih;
         const sapaan = `Pengguna baru telah login. Nama: ${nama}, Peran: ${konteks}. Sapa dengan salam islami yang hangat, sebut namanya, dan tanya ada yang bisa dibantu hari ini. Ini adalah sapaan pertama, jadi gunakan salam lengkap.`;
         await kirimKeAI(sapaan, false);
@@ -972,6 +1001,7 @@
         document.getElementById('inputJumlahCustom').value = '';
         document.getElementById('btnMulaiKuis').disabled = true;
         document.getElementById('modalKuis').classList.add('aktif');
+        if (window.lucide) setTimeout(() => lucide.createIcons(), 10);
     }
 
     function pilihTopikModal(topik, el) {
@@ -1829,10 +1859,10 @@ Lakukan penilaian:
                         sumberBadge = `<span class="sumber sumber-klik" onclick="bukaModalMurottal(${qref.nomor}, ${qref.ayatAwal})" title="Klik untuk lihat Surah & Ayat lengkap">📖 ${sumber} <span style="font-size:10px;opacity:.9;background:rgba(255,255,255,0.28);padding:1px 6px;border-radius:10px;margin-left:4px;">↗ Buka Ayat Lengkap</span></span>`;
                         actionHtml = `<div class="dalil-actions">
                             <button class="btn-dalil-act" onclick="putarMurottal(${qref.nomor}, ${qref.ayatAwal}, this)">
-                                <span class="btn-icon">▶</span> Putar Murottal (QS. ${qref.namaSurah}: ${qref.ayatAwal})
+                                <span class="btn-icon"><i data-lucide="play" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;"></i></span> Putar Murottal (QS. ${qref.namaSurah}: ${qref.ayatAwal})
                             </button>
                             <button class="btn-dalil-act" onclick="bukaModalTafsir(${qref.nomor}, ${qref.ayatAwal}, '${qref.namaSurah.replace(/'/g, "\\'")}')">
-                                📜 Baca Tafsir
+                                <i data-lucide="book-marked" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;"></i> Baca Tafsir
                             </button>
                         </div>`;
                     } else if (sumber) {
@@ -1985,7 +2015,7 @@ Lakukan penilaian:
             <!-- HEADER -->
             <div class="pusat-header-top">
                 <div class="pht-text-wrap">
-                    <span class="pht-badge">✨ PUSAT LAYANAN PAI</span>
+                    <span class="pht-badge"><i data-lucide="sparkles" style="width:12px;height:12px;vertical-align:-1px;margin-right:4px;"></i>PUSAT LAYANAN PAI</span>
                     <h3>Layanan & Modul Islami</h3>
                     <p class="sub">Pilih modul pembelajaran, asisten fiqih, atau media Al-Qur'an yang Anda butuhkan</p>
                 </div>
@@ -1994,10 +2024,10 @@ Lakukan penilaian:
 
             <!-- TAB KATEGORI FILTER (RESPONSIF - WRAP ALAMI TANPA SCROLL SAMPING) -->
             <div class="pusat-kategori-tabs">
-                <button class="pkt-tab aktif" onclick="filterPusatKategori('semua', this)">🌟 Semua</button>
-                <button class="pkt-tab" onclick="filterPusatKategori('quran', this)">📖 Al-Qur'an & Tajwid</button>
-                <button class="pkt-tab" onclick="filterPusatKategori('fiqih', this)">⚖️ Fiqih & Ibadah</button>
-                <button class="pkt-tab" onclick="filterPusatKategori('latihan', this)">🎯 Kuis & Uji PAI</button>
+                <button class="pkt-tab aktif" onclick="filterPusatKategori('semua', this)"><i data-lucide="layout-grid" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px;"></i>Semua</button>
+                <button class="pkt-tab" onclick="filterPusatKategori('quran', this)"><i data-lucide="book-open" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px;"></i>Al-Qur'an & Tajwid</button>
+                <button class="pkt-tab" onclick="filterPusatKategori('fiqih', this)"><i data-lucide="scale" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px;"></i>Fiqih & Ibadah</button>
+                <button class="pkt-tab" onclick="filterPusatKategori('latihan', this)"><i data-lucide="award" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px;"></i>Kuis & Uji PAI</button>
             </div>
 
             <!-- GRID 8 LAYANAN -->
@@ -2005,7 +2035,7 @@ Lakukan penilaian:
                 
                 <!-- 1. Kuis PAI -->
                 <div class="pusat-kartu" data-kat="latihan" onclick="bukaDariPusat('kuis')">
-                    <div class="pk-icon-circle coral">🎯</div>
+                    <div class="pk-icon-circle coral"><i data-lucide="award" style="width:22px;height:22px;"></i></div>
                     <div class="pk-info">
                         <div class="pk-title-row">
                             <span class="pk-judul">Kuis PAI</span>
@@ -2017,7 +2047,7 @@ Lakukan penilaian:
 
                 <!-- 2. Kalkulator Waris -->
                 <div class="pusat-kartu emas" data-kat="fiqih" onclick="bukaDariPusat('waris')">
-                    <div class="pk-icon-circle jade">⚖️</div>
+                    <div class="pk-icon-circle jade"><i data-lucide="scale" style="width:22px;height:22px;"></i></div>
                     <div class="pk-info">
                         <div class="pk-title-row">
                             <span class="pk-judul">Kalkulator Waris</span>
@@ -2029,7 +2059,7 @@ Lakukan penilaian:
 
                 <!-- 3. Murottal 30 Juz -->
                 <div class="pusat-kartu" data-kat="quran" onclick="bukaDariPusat('murottal')">
-                    <div class="pk-icon-circle sky">📖</div>
+                    <div class="pk-icon-circle sky"><i data-lucide="book-open" style="width:22px;height:22px;"></i></div>
                     <div class="pk-info">
                         <div class="pk-title-row">
                             <span class="pk-judul">Murottal 30 Juz</span>
@@ -2041,7 +2071,7 @@ Lakukan penilaian:
 
                 <!-- 4. Tafsir Kemenag -->
                 <div class="pusat-kartu" data-kat="quran" onclick="bukaDariPusat('tafsir')">
-                    <div class="pk-icon-circle purple">📜</div>
+                    <div class="pk-icon-circle purple"><i data-lucide="book-marked" style="width:22px;height:22px;"></i></div>
                     <div class="pk-info">
                         <div class="pk-title-row">
                             <span class="pk-judul">Tafsir Kemenag</span>
@@ -2052,20 +2082,20 @@ Lakukan penilaian:
                 </div>
 
                 <!-- 5. Tajwid & Tahsin AI -->
-                <div class="pusat-kartu emas" data-kat="quran latihan" onclick="bukaDariPusat('tajwid')">
-                    <div class="pk-icon-circle gold">🎙️</div>
+                <div class="pusat-kartu" data-kat="quran latihan" onclick="bukaDariPusat('tajwid')">
+                    <div class="pk-icon-circle jade"><i data-lucide="mic" style="width:22px;height:22px;"></i></div>
                     <div class="pk-info">
                         <div class="pk-title-row">
                             <span class="pk-judul">Tajwid & Tahsin AI</span>
-                            <span class="pk-badge flagship">🌟 Unggulan</span>
+                            <span class="pk-badge segera">Segera</span>
                         </div>
-                        <div class="pk-desc">Koreksi lafaz makhraj & kaidah tajwid via mic</div>
+                        <div class="pk-desc">Koreksi lafaz makhraj & kaidah hukum tajwid</div>
                     </div>
                 </div>
 
                 <!-- 6. Kitab Kuning / Turots -->
                 <div class="pusat-kartu" data-kat="fiqih" onclick="bukaDariPusat('kitab')">
-                    <div class="pk-icon-circle wood">📚</div>
+                    <div class="pk-icon-circle wood"><i data-lucide="library" style="width:22px;height:22px;"></i></div>
                     <div class="pk-info">
                         <div class="pk-title-row">
                             <span class="pk-judul">Kitab Kuning</span>
@@ -2077,7 +2107,7 @@ Lakukan penilaian:
 
                 <!-- 7. Doa & Dzikir -->
                 <div class="pusat-kartu" data-kat="fiqih" onclick="bukaDariPusat('doa')">
-                    <div class="pk-icon-circle teal">🤲</div>
+                    <div class="pk-icon-circle teal"><i data-lucide="heart" style="width:22px;height:22px;"></i></div>
                     <div class="pk-info">
                         <div class="pk-title-row">
                             <span class="pk-judul">Doa & Dzikir</span>
@@ -2089,7 +2119,7 @@ Lakukan penilaian:
 
                 <!-- 8. Jadwal Shalat -->
                 <div class="pusat-kartu" data-kat="fiqih" onclick="bukaDariPusat('shalat')">
-                    <div class="pk-icon-circle indigo">🕌</div>
+                    <div class="pk-icon-circle indigo"><i data-lucide="compass" style="width:22px;height:22px;"></i></div>
                     <div class="pk-info">
                         <div class="pk-title-row">
                             <span class="pk-judul">Jadwal Shalat</span>
@@ -2103,7 +2133,7 @@ Lakukan penilaian:
 
             <!-- FOOTER HELPER -->
             <div class="pusat-footer-tip">
-                <span class="pft-icon">💬</span>
+                <span class="pft-icon"><i data-lucide="message-square" style="width:18px;height:18px;"></i></span>
                 <span class="pft-text"><b>Butuh penjelasan materi lebih mendalam?</b> Tanyakan langsung di kolom chat AI bersama PratamaAI.</span>
             </div>
 
@@ -2113,11 +2143,11 @@ Lakukan penilaian:
 
 <!-- ===== MODAL SEGERA HADIR ===== -->
 <div class="modal-overlay" id="modalSegeraHadir">
-    <div class="modal-box" style="max-width:340px;text-align:center;">
-        <div style="font-size:48px;margin-bottom:14px;" id="segeraIkon">🚧</div>
-        <h3 id="segeraJudul" style="margin-bottom:8px;">Segera Hadir</h3>
-        <p style="font-size:13px;color:#777;line-height:1.7;margin-bottom:20px;" id="segeraDesc">Fitur ini sedang dalam pengembangan. Nantikan pembaruannya!</p>
-        <button class="btn-modal-mulai" style="width:100%;" onclick="document.getElementById('modalSegeraHadir').classList.remove('aktif')">Oke, Paham!</button>
+    <div class="modal-box" style="max-width:350px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,0.25);">
+        <div id="segeraIkon" style="margin-bottom:8px;"></div>
+        <h3 id="segeraJudul" style="margin-bottom:8px;font-size:17px;color:var(--hijau-tua);font-weight:700;">Segera Hadir</h3>
+        <p style="font-size:13px;color:#64748b;line-height:1.65;margin-bottom:22px;" id="segeraDesc">Fitur ini sedang dalam pengembangan. Nantikan pembaruannya!</p>
+        <button class="btn-modal-mulai" style="width:100%;padding:11px 18px;border-radius:12px;" onclick="document.getElementById('modalSegeraHadir').classList.remove('aktif')">Oke, Paham!</button>
     </div>
 </div>
 
@@ -2126,7 +2156,7 @@ Lakukan penilaian:
     <div class="modal-box waris-box">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
             <div>
-                <h3 style="font-size:16.5px;color:var(--hijau-tua);font-weight:700;">⚖️ Kalkulator Waris Islam (Faraidh)</h3>
+                <h3 style="font-size:16.5px;color:var(--hijau-tua);font-weight:700;"><i data-lucide="scale" style="width:16px;height:16px;vertical-align:-2px;margin-right:5px;"></i>Kalkulator Waris Islam (Faraidh)</h3>
                 <div class="sub" style="margin-bottom:0;margin-top:2px;">Sesuai Kompilasi Hukum Islam (KHI) & Fiqih Syafi'iyyah</div>
             </div>
             <button class="pusat-close" style="position:static;" onclick="tutupModalWaris()" title="Tutup">✕</button>
@@ -2134,7 +2164,7 @@ Lakukan penilaian:
 
         <div id="warisFormWrap">
             <!-- SECTION 1: HARTA & PENGURANG -->
-            <div class="waris-sec-title">💰 1. Harta Peninggalan & Pengurang</div>
+            <div class="waris-sec-title"><i data-lucide="coins" style="width:15px;height:15px;vertical-align:-2px;margin-right:5px;"></i>1. Harta Peninggalan & Pengurang</div>
             <div class="waris-grid-2">
                 <div class="waris-field">
                     <label>Total Harta Peninggalan (Rp) <span style="color:#e74c3c;">*</span></label>
@@ -2167,16 +2197,16 @@ Lakukan penilaian:
             </div>
 
             <!-- SECTION 2: PEWARIS & AHLI WARIS -->
-            <div class="waris-sec-title" style="margin-top:14px;">👥 2. Pewaris & Ahli Waris yang Masih Hidup</div>
+            <div class="waris-sec-title" style="margin-top:14px;"><i data-lucide="users" style="width:15px;height:15px;vertical-align:-2px;margin-right:5px;"></i>2. Pewaris & Ahli Waris yang Masih Hidup</div>
             
             <div style="margin-bottom:12px;">
                 <label style="font-size:12px;font-weight:600;color:#555;display:block;margin-bottom:6px;">Pewaris yang Meninggal Dunia:</label>
                 <div class="gender-toggle-row">
                     <button type="button" class="btn-gender aktif" id="btnGenderPria" onclick="pilihPewarisGender('laki-laki')">
-                        👨 Laki-laki (Suami / Ayah)
+                        <i data-lucide="user" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;"></i>Laki-laki (Suami / Ayah)
                     </button>
                     <button type="button" class="btn-gender" id="btnGenderWanita" onclick="pilihPewarisGender('perempuan')">
-                        👩 Perempuan (Istri / Ibu)
+                        <i data-lucide="user" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;"></i>Perempuan (Istri / Ibu)
                     </button>
                 </div>
             </div>
@@ -2311,7 +2341,7 @@ Lakukan penilaian:
             </div>
 
             <div class="waris-dalil-card">
-                <b>📖 Landasan Fiqih Mawaris:</b>
+                <b><i data-lucide="book-open" style="width:14px;height:14px;vertical-align:-2px;margin-right:5px;"></i>Landasan Fiqih Mawaris:</b>
                 <p style="margin-top:4px;font-size:12px;line-height:1.6;color:#333;">
                     Perhitungan didasarkan pada ketentuan nash Al-Qur'an Surat An-Nisa ayat 11–12, hadits riwayat Bukhari-Muslim, serta Kompilasi Hukum Islam (KHI) Buku II Bab II.
                 </p>
@@ -2322,7 +2352,7 @@ Lakukan penilaian:
                     ← Hitung Ulang
                 </button>
                 <button type="button" class="btn-modal-mulai" style="flex:1.6;" onclick="konsultasiWarisKeAI()">
-                    💬 Konsultasi ke AI →
+                    <i data-lucide="message-square-quote" style="width:14px;height:14px;vertical-align:-2px;margin-right:5px;"></i>Konsultasi ke AI →
                 </button>
             </div>
         </div>
@@ -2332,7 +2362,7 @@ Lakukan penilaian:
     <div class="modal-box tafsir-box">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
             <div>
-                <h3 id="tafsirJudul" style="font-size:16px;color:var(--hijau-tua);font-weight:700;">📜 Tafsir Al-Qur'an (Kemenag RI)</h3>
+                <h3 id="tafsirJudul" style="font-size:16px;color:var(--hijau-tua);font-weight:700;"><i data-lucide="book-marked" style="width:16px;height:16px;vertical-align:-2px;margin-right:5px;"></i>Tafsir Al-Qur'an (Kemenag RI)</h3>
                 <div class="sub" id="tafsirSub" style="margin-bottom:0;margin-top:2px;">Kementerian Agama Republik Indonesia</div>
             </div>
             <button class="pusat-close" style="position:static;" onclick="tutupModalTafsir()" title="Tutup">✕</button>
@@ -2348,7 +2378,7 @@ Lakukan penilaian:
     <div class="modal-box murottal-box">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
             <div>
-                <h3 style="font-size:16px;color:var(--hijau-tua);font-weight:700;">📖 Murottal Al-Qur'an 30 Juz</h3>
+                <h3 style="font-size:16px;color:var(--hijau-tua);font-weight:700;"><i data-lucide="book-open" style="width:16px;height:16px;vertical-align:-2px;margin-right:5px;"></i>Murottal Al-Qur'an 30 Juz</h3>
                 <div class="sub" style="margin-bottom:0;margin-top:2px;">Dengarkan lantunan ayat suci per surah atau per ayat</div>
             </div>
             <button class="pusat-close" style="position:static;" onclick="tutupModalMurottal()" title="Tutup">✕</button>
@@ -2375,7 +2405,7 @@ Lakukan penilaian:
                 <span style="font-size:11.5px;opacity:.9;background:rgba(255,255,255,0.18);padding:3px 9px;border-radius:10px;" id="mpQariNama">Misyari Rasyid</span>
             </div>
             <div class="mp-controls">
-                <button class="mp-btn-play" id="mpBtnPlayFull" onclick="togglePlayFullSurah()">▶</button>
+                <button class="mp-btn-play" id="mpBtnPlayFull" onclick="togglePlayFullSurah()"><i data-lucide="play" style="width:18px;height:18px;margin-left:2px;"></i></button>
                 <div class="mp-progress-wrap">
                     <div class="mp-progress-bar" id="mpProgressBar" onclick="seekFullSurah(event)">
                         <div class="mp-progress-fill" id="mpProgressFill"></div>
@@ -2421,6 +2451,7 @@ window.bukaModalMurottal = function(targetSurah, targetAyat) {
     loadSurahMurottal(parseInt(sel ? sel.value : 1, 10), targetAyat);
 };
 function bukaModalMurottal(targetSurah, targetAyat) {
+    if (window.lucide) setTimeout(() => lucide.createIcons(), 10);
     window.bukaModalMurottal(targetSurah, targetAyat);
 }
 
@@ -2615,6 +2646,7 @@ function lompatKeAyatMurottal(nomorAyat) {
 
 // ===== PUSAT FITUR =====
 function bukaPusatFitur() {
+    if (window.lucide) setTimeout(() => lucide.createIcons(), 10);
     document.getElementById('pusatFitur').classList.add('aktif');
 }
 
@@ -2644,17 +2676,36 @@ function bukaDariPusat(fitur) {
         return;
     }
     const info = {
-        doa:     { ikon:'🤲', judul:'Doa & Dzikir Harian',   desc:'Koleksi doa & dzikir harian (Hisnul Muslim) lengkap dengan lafaz Arab, transliterasi Latin, terjemahan, dan audio pelafalan sedang dipersiapkan.' },
-        shalat:  { ikon:'🕌', judul:'Jadwal Shalat Kemenag RI', desc:'Jadwal shalat akurat se-Indonesia bersumber langsung dari Bimas Islam Kemenag RI (termasuk waktu Imsak & hitung mundur adzan) siap diaktifkan!' },
-        tajwid:  { ikon:'🎙️', judul:'Latihan Tahsin & Koreksi Tajwid AI', desc:'Fitur evaluasi tajwid interaktif & rekaman suara via mic (Groq Whisper AI) sedang dipersiapkan sebagai fitur inovasi unggulan tesis Magister PAI Mas Ibnu!' },
-        kitab:   { ikon:'📚', judul:'Perpustakaan Kitab Kuning / Turots', desc:'Koleksi 21 kitab klasik turots pesantren (Fathul Qorib, Safinatun Najah, Arbain Nawawi, Bulughul Maram, dll.) sedang disiapkan untuk santri & akademisi PAI.' }
+        doa:     { 
+            ikon: '<div class="pk-icon-circle teal" style="width:58px;height:58px;margin:0 auto 12px;border-radius:18px;display:inline-flex;align-items:center;justify-content:center;"><i data-lucide="heart" style="width:28px;height:28px;"></i></div>', 
+            judul: 'Doa & Dzikir Harian',   
+            desc: 'Koleksi doa & dzikir harian (Hisnul Muslim) lengkap dengan lafaz Arab, transliterasi Latin, dan terjemahan sedang dipersiapkan.' 
+        },
+        shalat:  { 
+            ikon: '<div class="pk-icon-circle indigo" style="width:58px;height:58px;margin:0 auto 12px;border-radius:18px;display:inline-flex;align-items:center;justify-content:center;"><i data-lucide="compass" style="width:28px;height:28px;"></i></div>', 
+            judul: 'Jadwal Shalat Kemenag RI', 
+            desc: 'Jadwal shalat akurat seluruh wilayah Indonesia bersumber resmi dari Kementerian Agama RI sedang disiapkan.' 
+        },
+        tajwid:  { 
+            ikon: '<div class="pk-icon-circle jade" style="width:58px;height:58px;margin:0 auto 12px;border-radius:18px;display:inline-flex;align-items:center;justify-content:center;"><i data-lucide="mic" style="width:28px;height:28px;"></i></div>', 
+            judul: 'Latihan Tahsin & Koreksi Tajwid AI', 
+            desc: 'Fitur evaluasi tajwid interaktif dan latihan pelafalan makharijul huruf via rekaman suara mikrofon sedang dalam tahap persiapan sistem.' 
+        },
+        kitab:   { 
+            ikon: '<div class="pk-icon-circle wood" style="width:58px;height:58px;margin:0 auto 12px;border-radius:18px;display:inline-flex;align-items:center;justify-content:center;"><i data-lucide="library" style="width:28px;height:28px;"></i></div>', 
+            judul: 'Perpustakaan Kitab Kuning / Turots', 
+            desc: 'Koleksi 21 kitab klasik turots pesantren (Fathul Qorib, Safinatun Najah, Arbain Nawawi, dll.) sedang disiapkan untuk santri & akademisi PAI.' 
+        }
     };
     const d = info[fitur];
     if (d) {
-        document.getElementById('segeraIkon').textContent   = d.ikon;
+        document.getElementById('segeraIkon').innerHTML    = d.ikon;
         document.getElementById('segeraJudul').textContent  = d.judul;
         document.getElementById('segeraDesc').textContent   = d.desc;
-        setTimeout(() => { document.getElementById('modalSegeraHadir').classList.add('aktif'); }, 220);
+        setTimeout(() => { 
+            document.getElementById('modalSegeraHadir').classList.add('aktif'); 
+            if (window.lucide) lucide.createIcons();
+        }, 150);
     }
 }
 
@@ -2687,6 +2738,7 @@ let warisCounters = {
 let lastHasilWaris = null;
 
 function bukaModalWaris() {
+    if (window.lucide) setTimeout(() => lucide.createIcons(), 10);
     const modal = document.getElementById('modalWaris');
     if (modal) modal.classList.add('aktif');
     kembaliKeFormWaris();
@@ -2893,4 +2945,5 @@ document.getElementById('modalWaris').addEventListener('click', function(e) {
 });
 </script>
 
+<script>if(window.lucide) lucide.createIcons();</script>
 </body>

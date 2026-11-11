@@ -11,6 +11,7 @@
     <link rel="icon" type="image/png" sizes="192x192" href="/static/img/icon-192.png?v=5">
     <link rel="apple-touch-icon" sizes="180x180" href="/static/img/icon-192.png?v=5">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="/static/js/lucide.min.js"></script>
     <style>
         :root {
             --hijau-tua:#1a4a2e; --hijau-mid:#2d6a4f; --hijau-light:#52b788;
@@ -94,6 +95,15 @@
         .btn-hapus:hover{background:#ffcdd2;}
         .btn-hijau{background:var(--hijau-pale);color:var(--hijau-tua);}
         .btn-hijau:hover{background:#c8e6d4;}
+
+        /* LUCIDE VECTOR ICONS */
+        i[data-lucide], svg.lucide {
+            display: inline-block;
+            vertical-align: middle;
+            stroke-width: 2px;
+            stroke: currentColor;
+            fill: none;
+        }
 
         /* PENGGUNA CARDS */
         .pengguna-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;}
@@ -785,7 +795,7 @@
         </div>
         <h1>Admin Panel · PratamaAI</h1>
         <div class="header-user-badge">
-            👤 {{ admin_username }}
+            <i data-lucide="user" style="width:13px;height:13px;vertical-align:-1px;margin-right:3px;"></i>{{ admin_username }}
             {% if admin_role == 'owner' %}
             <span class="role-badge">Owner</span>
             {% else %}
@@ -794,20 +804,20 @@
         </div>
     </div>
     <div class="header-actions">
-        <button class="btn btn-outline" onclick="bukaModalGantiPassword()">🔑 Ganti Password</button>
-        <a href="/export-csv" class="btn btn-emas">⬇ Export CSV</a>
-        <a href="/" class="btn btn-outline">← Kembali</a>
-        <a href="/admin/logout" class="btn btn-merah">🔓 Logout</a>
+        <button class="btn btn-outline" onclick="bukaModalGantiPassword()"><i data-lucide="key" style="width:13px;height:13px;vertical-align:-1px;margin-right:3px;"></i>Ganti Password</button>
+        <a href="/export-csv" class="btn btn-emas"><i data-lucide="download" style="width:13px;height:13px;vertical-align:-1px;margin-right:3px;"></i>Export CSV</a>
+        <a href="/" class="btn btn-outline"><i data-lucide="arrow-left" style="width:13px;height:13px;vertical-align:-1px;margin-right:3px;"></i>Kembali</a>
+        <a href="/admin/logout" class="btn btn-merah"><i data-lucide="log-out" style="width:13px;height:13px;vertical-align:-1px;margin-right:3px;"></i>Logout</a>
     </div>
 </div>
 
 <div class="tabs">
-    <div class="tab aktif" onclick="gantiTab('dashboard',this)">📊 Dashboard</div>
-    <div class="tab" onclick="gantiTab('pengguna',this)">👥 Pengguna <span class="badge">{{ pengguna_list|length }}</span></div>
-    <div class="tab" onclick="gantiTab('percakapan',this)">💬 Percakapan <span class="badge">{{ total }}</span></div>
-    <div class="tab" onclick="gantiTab('kuis',this)">🎯 Kuis <span class="badge">{{ total_kuis }}</span></div>
+    <div class="tab aktif" onclick="gantiTab('dashboard',this)"><i data-lucide="layout-dashboard" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;"></i>Dashboard</div>
+    <div class="tab" onclick="gantiTab('pengguna',this)"><i data-lucide="users" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;"></i>Pengguna <span class="badge">{{ pengguna_list|length }}</span></div>
+    <div class="tab" onclick="gantiTab('percakapan',this)"><i data-lucide="messages-square" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;"></i>Percakapan <span class="badge">{{ total }}</span></div>
+    <div class="tab" onclick="gantiTab('kuis',this)"><i data-lucide="help-circle" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;"></i>Kuis <span class="badge">{{ total_kuis }}</span></div>
     {% if admin_role == 'owner' %}
-    <div class="tab" onclick="gantiTab('kelola-admin',this)">🛡️ Kelola Admin <span class="badge badge-emas">Owner</span></div>
+    <div class="tab" onclick="gantiTab('kelola-admin',this)"><i data-lucide="shield" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;"></i>Kelola Admin <span class="badge badge-emas">Owner</span></div>
     {% endif %}
 </div>
 
@@ -819,18 +829,18 @@
         <!-- HERO BANNER RISET & MONITORING -->
         <div class="admin-hero">
             <div class="hero-left">
-                <div class="hero-badge">🎓 Riset Tesis Magister PAI · UIN Sultan Maulana Hasanuddin Banten</div>
+                <div class="hero-badge"><i data-lucide="graduation-cap" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;"></i>Riset Tesis Magister PAI · UIN Sultan Maulana Hasanuddin Banten</div>
                 <h2 class="hero-title">Pusat Analitik & Pembelajaran AI</h2>
                 <p class="hero-sub">Monitoring komprehensif interaksi pembelajaran siswa, evaluasi materi fiqih & aqidah, serta pemanfaatan asisten AI secara real-time.</p>
                 <div class="hero-meta">
                     <span class="meta-chip"><span class="dot-live"></span> Engine: <b>Hybrid Groq & Gemini (Multi-Key)</b></span>
-                    <span class="meta-chip">🤖 Model: <b>Qwen 27B · Fast LPU</b></span>
-                    <span class="meta-chip">🛡️ Operator: <b>{{ admin_username }} ({{ admin_role|title }})</b></span>
+                    <span class="meta-chip"><i data-lucide="cpu" style="width:12px;height:12px;vertical-align:-1px;margin-right:4px;"></i>Model: <b>Qwen 27B · Fast LPU</b></span>
+                    <span class="meta-chip"><i data-lucide="shield-check" style="width:12px;height:12px;vertical-align:-1px;margin-right:4px;"></i>Operator: <b>{{ admin_username }} ({{ admin_role|title }})</b></span>
                 </div>
             </div>
             <div class="hero-right">
                 <a href="/export-csv" class="hero-btn-export">
-                    <span class="hbe-icon">📊</span>
+                    <span class="hbe-icon"><i data-lucide="bar-chart-3" style="width:24px;height:24px;color:#103b22;"></i></span>
                     <div>
                         <div class="hbe-title">Export Dataset Riset</div>
                         <div class="hbe-desc">Format CSV untuk SPSS / Excel</div>
@@ -844,7 +854,7 @@
             <!-- 1. Total Chat -->
             <div class="stat-card-ex emerald">
                 <div class="sc-top">
-                    <div class="sc-icon-wrap">💬</div>
+                    <div class="sc-icon-wrap"><i data-lucide="messages-square" style="width:22px;height:22px;"></i></div>
                     <span class="sc-tag">+{{ hari_ini }} Hari Ini</span>
                 </div>
                 <div class="sc-angka">{{ total }}</div>
@@ -855,7 +865,7 @@
             <!-- 2. Partisipan Riset -->
             <div class="stat-card-ex blue">
                 <div class="sc-top">
-                    <div class="sc-icon-wrap">👥</div>
+                    <div class="sc-icon-wrap"><i data-lucide="users" style="width:22px;height:22px;"></i></div>
                     <span class="sc-tag">{{ total_sesi }} Sesi</span>
                 </div>
                 <div class="sc-angka">{{ total_pengguna }}</div>
@@ -866,7 +876,7 @@
             <!-- 3. Evaluasi Kuis -->
             <div class="stat-card-ex amber">
                 <div class="sc-top">
-                    <div class="sc-icon-wrap">🎯</div>
+                    <div class="sc-icon-wrap"><i data-lucide="award" style="width:22px;height:22px;"></i></div>
                     <span class="sc-tag">{{ persen_lulus }}% Akurasi</span>
                 </div>
                 <div class="sc-angka">{{ total_kuis }}</div>
@@ -877,7 +887,7 @@
             <!-- 4. Kepuasan Pengguna / CSAT -->
             <div class="stat-card-ex gold">
                 <div class="sc-top">
-                    <div class="sc-icon-wrap">⭐</div>
+                    <div class="sc-icon-wrap"><i data-lucide="star" style="width:22px;height:22px;"></i></div>
                     <span class="sc-tag">{{ rated }} Responden</span>
                 </div>
                 <div class="sc-angka">{{ avg_rating }} <small>/ 5.0 ★</small></div>
@@ -894,7 +904,7 @@
                 <!-- Demografi Responden Tesis -->
                 <div class="section" style="margin-bottom:18px;">
                     <div class="section-head">
-                        <h2>👥 Demografi Partisipan Tesis</h2>
+                        <h2><i data-lucide="users" style="width:16px;height:16px;vertical-align:-2px;margin-right:5px;"></i>Demografi Partisipan Tesis</h2>
                         <span>{{ total_pengguna }} Total Pengguna</span>
                     </div>
 
@@ -914,17 +924,17 @@
                     <div class="demografi-cards">
                         <div class="dem-card-mini siswa">
                             <div class="val">{{ peran_counts['Siswa'] }}</div>
-                            <div class="sub">🎒 Siswa</div>
+                            <div class="sub"><i data-lucide="backpack" style="width:12px;height:12px;vertical-align:-1px;margin-right:3px;"></i>Siswa</div>
                             <span class="pct">{{ pct_siswa }}%</span>
                         </div>
                         <div class="dem-card-mini mhs">
                             <div class="val">{{ peran_counts['Mahasiswa'] }}</div>
-                            <div class="sub">🎓 Mahasiswa</div>
+                            <div class="sub"><i data-lucide="graduation-cap" style="width:12px;height:12px;vertical-align:-1px;margin-right:3px;"></i>Mahasiswa</div>
                             <span class="pct">{{ pct_mhs }}%</span>
                         </div>
                         <div class="dem-card-mini umum">
                             <div class="val">{{ peran_counts['Umum'] }}</div>
-                            <div class="sub">👤 Umum</div>
+                            <div class="sub"><i data-lucide="user" style="width:12px;height:12px;vertical-align:-1px;margin-right:3px;"></i>Umum</div>
                             <span class="pct">{{ pct_umum }}%</span>
                         </div>
                     </div>
@@ -933,7 +943,7 @@
                 <!-- Distribusi Rating Kepuasan -->
                 <div class="section">
                     <div class="section-head">
-                        <h2>⭐ Distribusi Rating Kepuasan</h2>
+                        <h2><i data-lucide="star" style="width:16px;height:16px;vertical-align:-2px;margin-right:5px;"></i>Distribusi Rating Kepuasan</h2>
                         <span>{{ rated }} dari {{ total }} dinilai</span>
                     </div>
                     {% set maks=[1] %}{% for i in range(1,6) %}{% if rating_dist[i]>maks[0] %}{% set _=maks.append(rating_dist[i]) %}{% endif %}{% endfor %}
@@ -954,7 +964,7 @@
                 <!-- Kuis per Topik -->
                 <div class="section" style="margin-bottom:18px;">
                     <div class="section-head">
-                        <h2>🎯 Pemahaman Materi PAI per Topik</h2>
+                        <h2><i data-lucide="book-check" style="width:16px;height:16px;vertical-align:-2px;margin-right:5px;"></i>Pemahaman Materi PAI per Topik</h2>
                         <span>{{ total_kuis }} Soal Diuji</span>
                     </div>
                     {% if kuis_per_topik %}
@@ -978,7 +988,7 @@
                 <!-- Live Feed Aktivitas Terkini -->
                 <div class="section">
                     <div class="section-head">
-                        <h2>⚡ Aktivitas Pembelajaran Terkini</h2>
+                        <h2><i data-lucide="activity" style="width:16px;height:16px;vertical-align:-2px;margin-right:5px;"></i>Aktivitas Pembelajaran Terkini</h2>
                         <span>Real-time Feed</span>
                     </div>
                     {% if aktivitas_terkini %}
@@ -986,7 +996,7 @@
                         {% for act in aktivitas_terkini %}
                         <div class="activity-item">
                             <div class="act-avatar">
-                                {% if act.is_kuis %}🎯{% else %}💬{% endif %}
+                                {% if act.is_kuis %}<i data-lucide="help-circle" style="width:16px;height:16px;"></i>{% else %}<i data-lucide="message-square" style="width:16px;height:16px;"></i>{% endif %}
                             </div>
                             <div class="act-body">
                                 <div class="act-head">
@@ -1022,7 +1032,7 @@
             {% if pengguna_list %}
             <div class="search-filter-wrap">
                 <div class="search-box">
-                    <span class="search-icon">🔍</span>
+                    <span class="search-icon"><i data-lucide="search" style="width:14px;height:14px;color:#888;"></i></span>
                     <input type="text" id="inputCariPengguna" placeholder="Cari nama pengguna..." oninput="filterPengguna()">
                 </div>
                 <div class="filter-pills" id="filterPeranPills">
@@ -1046,7 +1056,7 @@
                         <span class="stat-mini">🎯 {{ p.jumlah_kuis }}</span>
                         <span class="stat-mini">🕐 {{ p.terakhir_aktif.strftime('%d/%m/%y') }}</span>
                     </div>
-                    <button class="hapus-pengguna-btn" onclick="event.stopPropagation();hapusPengguna('{{ p.nama_user|replace("'","\\'") }}')">🗑 Hapus Semua Data</button>
+                    <button class="hapus-pengguna-btn" onclick="event.stopPropagation();hapusPengguna('{{ p.nama_user|replace("'","\\'") }}')"><i data-lucide="trash-2" style="width:12px;height:12px;vertical-align:-1px;margin-right:3px;"></i>Hapus Semua Data</button>
                 </div>
                 {% endfor %}
             </div>
@@ -1062,7 +1072,7 @@
             {% if terbaru %}
             <div class="search-filter-wrap">
                 <div class="search-box">
-                    <span class="search-icon">🔍</span>
+                    <span class="search-icon"><i data-lucide="search" style="width:14px;height:14px;color:#888;"></i></span>
                     <input type="text" id="inputCariPercakapan" placeholder="Cari pertanyaan, jawaban, atau nama..." oninput="filterPercakapan()">
                 </div>
                 <div class="filter-pills" id="filterRatingPills">
@@ -1120,7 +1130,7 @@
             {% if kuis_terbaru %}
             <div class="search-filter-wrap">
                 <div class="search-box">
-                    <span class="search-icon">🔍</span>
+                    <span class="search-icon"><i data-lucide="search" style="width:14px;height:14px;color:#888;"></i></span>
                     <input type="text" id="inputCariKuis" placeholder="Cari soal kuis, topik, atau nama..." oninput="filterKuis()">
                 </div>
                 <div class="filter-pills" id="filterKuisPills">
@@ -1311,6 +1321,7 @@ function gantiTab(nama, el) {
     document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('aktif'));
     document.getElementById('tab-'+nama).classList.add('aktif');
     el.classList.add('aktif');
+    if (window.lucide) setTimeout(() => lucide.createIcons(), 10);
 }
 
 function tutupModal(id) { document.getElementById(id).classList.remove('show'); }
@@ -1817,5 +1828,6 @@ document.querySelectorAll('table').forEach(function(t){
     });
 });
 </script>
+<script>if(window.lucide) lucide.createIcons();</script>
 </body>
 </html>

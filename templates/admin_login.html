@@ -11,6 +11,7 @@
     <link rel="icon" type="image/png" sizes="192x192" href="/static/img/icon-192.png?v=5">
     <link rel="apple-touch-icon" sizes="180x180" href="/static/img/icon-192.png?v=5">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="/static/js/lucide.min.js"></script>
     <style>
         :root {
             --hijau-tua: #1a4a2e;
@@ -192,6 +193,15 @@
             gap: 8px;
         }
 
+        /* LUCIDE VECTOR ICONS */
+        i[data-lucide], svg.lucide {
+            display: inline-block;
+            vertical-align: middle;
+            stroke-width: 2px;
+            stroke: currentColor;
+            fill: none;
+        }
+
         /* Tombol login */
         .btn-login {
             width: 100%;
@@ -255,7 +265,7 @@
 
         {% if error %}
         <div class="alert-error">
-            <span>⚠️</span> {{ error }}
+            <span><i data-lucide="alert-circle" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;"></i></span> {{ error }}
         </div>
         {% endif %}
 
@@ -263,14 +273,14 @@
             <div class="form-group">
                 <label>Username</label>
                 <div class="input-wrap">
-                    <span class="icon">👤</span>
+                    <span class="icon"><i data-lucide="user" style="width:16px;height:16px;"></i></span>
                     <input type="text" name="username" placeholder="Masukkan username..." autocomplete="username" required autofocus>
                 </div>
             </div>
             <div class="form-group">
                 <label>Password</label>
                 <div class="input-wrap">
-                    <span class="icon">🔒</span>
+                    <span class="icon"><i data-lucide="lock" style="width:16px;height:16px;"></i></span>
                     <input type="password" name="password" placeholder="Masukkan password..." autocomplete="current-password" required>
                 </div>
             </div>
@@ -278,7 +288,7 @@
         </form>
 
         <div class="kembali">
-            <a href="/">← Kembali ke PratamaAI</a>
+            <a href="/"><i data-lucide="arrow-left" style="width:13px;height:13px;vertical-align:-1px;margin-right:4px;"></i>Kembali ke PratamaAI</a>
         </div>
     </div>
 
@@ -287,5 +297,6 @@
     </div>
 </div>
 
+<script>if(window.lucide) lucide.createIcons();</script>
 </body>
 </html>
